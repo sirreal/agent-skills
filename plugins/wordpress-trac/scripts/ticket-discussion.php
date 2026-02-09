@@ -3,7 +3,7 @@
 /**
  * Fetch WordPress Trac ticket discussion (comments) as markdown.
  *
- * Usage: wp-trac-ticket-discussion.php <ticket-number>
+ * Usage: ticket-discussion.php <ticket-number>
  */
 
 if ($argc < 2) {

@@ -3,7 +3,7 @@
 /**
  * Fetch WordPress Trac ticket info as markdown.
  *
- * Usage: wp-trac-ticket.php <ticket-number>
+ * Usage: ticket.php <ticket-number>
  */
 
 if ($argc < 2) {
