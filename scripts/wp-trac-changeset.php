@@ -6,6 +6,13 @@
  * Usage: wp-trac-changeset.php <changeset-number>
  */
 
+// Check PHP version requirement for Dom\HTMLDocument
+if (version_compare(PHP_VERSION, '8.4.0', '<')) {
+    fwrite(STDERR, "Error: This script requires PHP 8.4 or higher (for Dom\\HTMLDocument support).\n");
+    fwrite(STDERR, "Current PHP version: " . PHP_VERSION . "\n");
+    exit(1);
+}
+
 if ($argc < 2) {
     fwrite(STDERR, "Usage: wp-trac-changeset.php <changeset-number>\n");
     exit(1);
