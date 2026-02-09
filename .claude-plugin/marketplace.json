@@ -1,0 +1,19 @@
+{
+  "name": "sirreal",
+  "owner": {
+    "name": "Jon Surrell",
+    "email": "sirreal@users.noreply.github.com"
+  },
+  "metadata": {
+      "description": "Agent skills: WordPress Trac."
+  },
+  "plugins": [
+    {
+      "name": "wordpress-trac",
+      "source": "./plugins/wordpress-trac",
+      "description": "Tools for working with WordPress Trac tickets, changesets, and searches",
+      "license": "GPL-2.0-or-later",
+      "keywords": ["WordPress", "Trac", "Changeset", "ticket", "core"]
+    }
+  ]
+}

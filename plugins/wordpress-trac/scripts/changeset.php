@@ -3,7 +3,7 @@
 /**
  * Fetch WordPress Trac changeset info as markdown.
  *
- * Usage: wp-trac-changeset.php <changeset-number>
+ * Usage: changeset.php <changeset-number>
  */
 
 // Check PHP version requirement for Dom\HTMLDocument

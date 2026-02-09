@@ -3,11 +3,11 @@
 /**
  * Fetch WordPress Trac query results as markdown table.
  *
- * Usage: wp-trac-search.php [options]
+ * Usage: search.php [options]
  */
 
 $help = <<<'HELP'
-wp-trac-search.php [options]
+search.php [options]
 
 Filter options (exact match):
   --component=VALUE    Filter by component
