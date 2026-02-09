@@ -208,9 +208,10 @@ if (empty($rows)) {
     exit(0);
 }
 
-// Escape pipe characters for markdown table cells
+// Escape special characters for markdown table cells
 function escape_cell($value) {
-    return str_replace('|', '\\|', $value);
+    // Escape backslashes first, then pipes
+    return str_replace(['\\', '|'], ['\\\\', '\\|'], $value);
 }
 
 // Create lowercase header lookup map

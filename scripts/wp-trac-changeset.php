@@ -84,7 +84,9 @@ function convertHTML(Dom\Element $node): string {
                     $result .= "\n\n" . convertHTML($child) . "\n\n";
                     break;
                 case 'CODE':
-                    $result .= "`{$child->textContent}`";
+                    // Escape backticks in inline code
+                    $code = str_replace('`', '\\`', $child->textContent);
+                    $result .= "`{$code}`";
                     break;
                 case 'A':
                     $href = $child->getAttribute( 'href' );
@@ -94,6 +96,10 @@ function convertHTML(Dom\Element $node): string {
                         $href = "https://core.trac.wordpress.org{$href}";
                     }
                     if ( ! empty( $href ) && ! empty( $text ) ) {
+                        // Escape markdown special chars in link text: [], (), \
+                        $text = str_replace(['\\', '[', ']', '(', ')'], ['\\\\', '\\[', '\\]', '\\(', '\\)'], $text);
+                        // Escape parentheses in URLs
+                        $href = str_replace(['(', ')'], ['%28', '%29'], $href);
                         $result .= "[{$text}]({$href})";
                     } else {
                         $result .= $text;
