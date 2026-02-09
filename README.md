@@ -75,3 +75,7 @@ Run the script with `--help` for full documentation:
 ```bash
 ./scripts/wp-trac-search.php --help
 ```
+
+## License
+
+This project is licensed under the GNU General Public License v2.0 or later (GPLv2+). See the [LICENSE](LICENSE) file for details.
