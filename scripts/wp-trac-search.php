@@ -95,9 +95,17 @@ if ($argc < 2 || isset($options['help'])) {
 // Build URL from options or use --url directly
 if (isset($options['url'])) {
     $url = $options['url'];
-    // Validate URL starts with Trac query endpoint
-    if (strpos($url, 'https://core.trac.wordpress.org/query') !== 0) {
-        fwrite(STDERR, "Error: URL must start with https://core.trac.wordpress.org/query\n");
+    // Validate URL is a valid Trac query URL - use parse_url for security
+    $parsed = parse_url($url);
+    if ($parsed === false 
+        || !isset($parsed['scheme']) 
+        || $parsed['scheme'] !== 'https'
+        || !isset($parsed['host'])
+        || $parsed['host'] !== 'core.trac.wordpress.org'
+        || !isset($parsed['path'])
+        || $parsed['path'] !== '/query'
+    ) {
+        fwrite(STDERR, "Error: URL must be https://core.trac.wordpress.org/query\n");
         exit(1);
     }
 } else {
@@ -156,9 +164,18 @@ $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_FILE, $stream);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($ch, CURLOPT_USERAGENT, 'wp-trac-search/1.0');
-curl_exec($ch);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+$result = curl_exec($ch);
 $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-unset($ch);
+curl_close($ch);
+
+if ($result === false) {
+    fwrite(STDERR, "Error: Failed to fetch query results\n");
+    exit(1);
+}
 
 if ($http_code < 200 || $http_code >= 300) {
     fwrite(STDERR, "Error: Could not fetch query results (HTTP {$http_code})\n");

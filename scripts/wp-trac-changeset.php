@@ -14,8 +14,8 @@ if ($argc < 2) {
 // Strip leading 'r' or 'R' if present (e.g., r61418 -> 61418)
 $changeset_num = ltrim($argv[1], 'rR');
 
-// Validate changeset number is numeric
-if (!ctype_digit($changeset_num)) {
+// Validate changeset number is numeric and reasonable length
+if (!ctype_digit($changeset_num) || strlen($changeset_num) > 10) {
     fwrite(STDERR, "Error: Invalid changeset number: {$argv[1]}\n");
     exit(1);
 }
@@ -27,9 +27,18 @@ $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($ch, CURLOPT_USERAGENT, 'wp-trac-changeset/1.0');
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
 $html = curl_exec($ch);
 $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-unset($ch);
+curl_close($ch);
+
+if ($html === false) {
+    fwrite(STDERR, "Error: Failed to fetch changeset data\n");
+    exit(1);
+}
 
 if ($http_code < 200 || $http_code >= 300) {
     fwrite(STDERR, "Error: Could not fetch changeset r{$changeset_num} (HTTP {$http_code})\n");
