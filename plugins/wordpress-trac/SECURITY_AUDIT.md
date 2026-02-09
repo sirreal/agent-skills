@@ -1,7 +1,7 @@
 # Security Audit Report
 
 **Date**: 2026-02-09  
-**Repository**: wordpress-trac-skills  
+**Repository**: agent-skills (wordpress-trac plugin)  
 **Auditor**: GitHub Copilot Security Agent
 
 ## Executive Summary
@@ -23,7 +23,7 @@ curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 
 ### 2. Insufficient SSRF Protection (HIGH)
 **Severity**: High  
-**File**: `scripts/wp-trac-search.php`  
+**File**: `scripts/search.php`  
 **Issue**: URL validation used `strpos()` which is vulnerable to bypasses. A malicious user could potentially craft URLs to access unintended resources.
 
 **Fix**: Replaced string matching with proper URL parsing and strict validation:
@@ -55,7 +55,7 @@ curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);   // 10 second connection timeout
 
 ### 4. Insufficient Input Validation (MEDIUM)
 **Severity**: Medium  
-**Files Affected**: `wp-trac-ticket.php`, `wp-trac-changeset.php`, `wp-trac-ticket-discussion.php`  
+**Files Affected**: `ticket.php`, `changeset.php`, `ticket-discussion.php`  
 **Issue**: Ticket and changeset numbers were validated as numeric but had no maximum length restriction, potentially allowing extremely large numbers.
 
 **Fix**: Added length validation:
@@ -68,7 +68,7 @@ if (!ctype_digit($ticket_num) || strlen($ticket_num) > 10) {
 
 ### 5. Markdown Injection in Link Text (MEDIUM)
 **Severity**: Medium  
-**Files Affected**: `wp-trac-changeset.php`, `wp-trac-ticket-discussion.php`  
+**Files Affected**: `changeset.php`, `ticket-discussion.php`  
 **Issue**: Special markdown characters in link text were not escaped, potentially breaking markdown formatting or enabling injection attacks.
 
 **Fix**: Added proper escaping for markdown special characters:
@@ -78,7 +78,7 @@ $text = str_replace(['\\', '[', ']', '(', ')'], ['\\\\', '\\[', '\\]', '\\(', '\
 
 ### 6. Markdown Injection in URLs (MEDIUM)
 **Severity**: Medium  
-**Files Affected**: `wp-trac-changeset.php`, `wp-trac-ticket-discussion.php`  
+**Files Affected**: `changeset.php`, `ticket-discussion.php`  
 **Issue**: Parentheses in URLs were not escaped, potentially breaking markdown link syntax.
 
 **Fix**: URL-encoded parentheses:
@@ -88,7 +88,7 @@ $href = str_replace(['(', ')'], ['%28', '%29'], $href);
 
 ### 7. Markdown Injection in Code Blocks (LOW)
 **Severity**: Low  
-**Files Affected**: `wp-trac-changeset.php`, `wp-trac-ticket-discussion.php`  
+**Files Affected**: `changeset.php`, `ticket-discussion.php`  
 **Issue**: Backticks in inline code were not escaped.
 
 **Fix**: Added backtick escaping:
@@ -99,7 +99,7 @@ $code = str_replace('`', '\\`', $child->textContent);
 ## Correctness Issues Fixed
 
 ### 1. Improper Resource Cleanup
-**Files Affected**: `wp-trac-ticket.php`, `wp-trac-search.php`  
+**Files Affected**: `ticket.php`, `search.php`  
 **Issue**: curl handles were freed using `unset($ch)` instead of `curl_close($ch)`.
 
 **Fix**: Changed to proper cleanup:
@@ -121,7 +121,7 @@ if ($result === false) {
 ```
 
 ### 3. Incomplete Markdown Table Escaping
-**File**: `wp-trac-search.php`  
+**File**: `search.php`  
 **Issue**: Only pipe characters were escaped in table cells, not backslashes.
 
 **Fix**: Added backslash escaping:
