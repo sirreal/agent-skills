@@ -1,7 +1,7 @@
 ---
 description: Search WordPress Trac tickets
 allowed-tools:
-  - Bash(${CLAUDE_PLUGIN_ROOT}/scripts/wp-trac-search.php:*)
+  - Bash(${CLAUDE_PLUGIN_ROOT}/scripts/wp-trac-search.php *)
 argument-hint: <description of what to search for>
 context: fork
 ---
