@@ -7,6 +7,6 @@
     "email": "sirreal@users.noreply.github.com"
   },
   "repository": "https://github.com/sirreal/wordpress-trac-skills",
-  "license": "MIT",
+  "license": "GPL-2.0-or-later",
   "keywords": ["wordpress", "trac", "tickets", "core"]
 }

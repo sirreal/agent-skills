@@ -1,12 +1,16 @@
 ---
-description: Look up a WordPress Trac ticket (#123 or https://core.trac.wordpress.org/ticket/123)
+description: Look up a WordPress Trac ticket (#30000 or https://core.trac.wordpress.org/ticket/30000)
 allowed-tools:
   - Bash(${CLAUDE_PLUGIN_ROOT}/scripts/ticket.php:*)
-argument-hint: <ticket-number>
+argument-hint: [--discussion] <ticket-number>
 ---
 
-Fetch and display WordPress Trac ticket #$1 using:
+Look up WordPress Trac ticket information.
 
-```sh
-${CLAUDE_PLUGIN_ROOT}/scripts/ticket.php $1
-```
+If no ticket number was provided, ask the user which ticket they want to look up.
+
+When ready, run:
+- Basic info: `${CLAUDE_PLUGIN_ROOT}/scripts/ticket.php <ticket-number>`
+- With comments: `${CLAUDE_PLUGIN_ROOT}/scripts/ticket.php --discussion <ticket-number>`
+
+Use `--discussion` when the user asks about "discussion", "comments", or "conversation" on a ticket.
