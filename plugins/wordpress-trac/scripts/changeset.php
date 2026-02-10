@@ -6,10 +6,18 @@
  * Usage: changeset.php <changeset-number>
  */
 
-// Check PHP version requirement for Dom\HTMLDocument
-if (version_compare(PHP_VERSION, '8.4.0', '<')) {
-    fwrite(STDERR, "Error: This script requires PHP 8.4 or higher (for Dom\\HTMLDocument support).\n");
+// Check for required curl extension
+if (!extension_loaded('curl')) {
+    fwrite(STDERR, "Error: This script requires the curl extension.\n");
+    fwrite(STDERR, "Please install or enable the curl extension for PHP.\n");
+    exit(1);
+}
+
+// Check for required Dom\HTMLDocument class
+if (!class_exists('Dom\\HTMLDocument')) {
+    fwrite(STDERR, "Error: This script requires the Dom\\HTMLDocument class (available in PHP 8.4+).\n");
     fwrite(STDERR, "Current PHP version: " . PHP_VERSION . "\n");
+    fwrite(STDERR, "Please upgrade to PHP 8.4 or higher.\n");
     exit(1);
 }
 
