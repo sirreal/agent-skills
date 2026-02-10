@@ -14,9 +14,9 @@ A Claude Code plugin for working with WordPress Trac tickets, changesets, and se
 Look up a WordPress Trac ticket by number or URL.
 
 ```
-/wordpress-trac:ticket 12345
-/wordpress-trac:ticket #12345
-/wordpress-trac:ticket https://core.trac.wordpress.org/ticket/12345
+/wordpress-trac:ticket 30000
+/wordpress-trac:ticket #30000
+/wordpress-trac:ticket https://core.trac.wordpress.org/ticket/30000
 ```
 
 ### `/wordpress-trac:ticket-discussion <ticket-number>`
@@ -24,7 +24,7 @@ Look up a WordPress Trac ticket by number or URL.
 Look up comments/discussion on a WordPress Trac ticket.
 
 ```
-/wordpress-trac:ticket-discussion 12345
+/wordpress-trac:ticket-discussion 30000
 ```
 
 ### `/wordpress-trac:changeset <changeset-number>`
@@ -32,9 +32,9 @@ Look up comments/discussion on a WordPress Trac ticket.
 Look up a WordPress Trac changeset by number.
 
 ```
-/wordpress-trac:changeset 61418
-/wordpress-trac:changeset r61418
-/wordpress-trac:changeset [61418]
+/wordpress-trac:changeset 41062
+/wordpress-trac:changeset r27195
+/wordpress-trac:changeset [26851]
 ```
 
 ### `/wordpress-trac:search <description>`
