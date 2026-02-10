@@ -19,12 +19,10 @@ Look up a WordPress Trac ticket by number or URL.
 /wordpress-trac:ticket https://core.trac.wordpress.org/ticket/30000
 ```
 
-### `/wordpress-trac:ticket-discussion <ticket-number>`
-
-Look up comments/discussion on a WordPress Trac ticket.
+The ticket command supports `--discussion` to include comments:
 
 ```
-/wordpress-trac:ticket-discussion 30000
+/wordpress-trac:ticket --discussion 30000
 ```
 
 ### `/wordpress-trac:changeset <changeset-number>`
