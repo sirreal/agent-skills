@@ -59,3 +59,24 @@ Run the script with `--help` for full documentation:
 ```bash
 ./scripts/search.php --help
 ```
+
+### `/wordpress-trac:timeline <time period and/or author>`
+
+Browse WordPress Trac timeline activity. Useful for seeing what you or others have worked on.
+
+```
+/wordpress-trac:timeline my activity last 2 weeks
+/wordpress-trac:timeline what did saxmatt work on in January 2005
+/wordpress-trac:timeline all trac activity yesterday
+```
+
+The timeline command supports:
+- `--from=YYYY-MM-DD` - End date (default: today)
+- `--daysback=N` - Days to look back (1-90, default: 30)
+- `--author=USER` - Filter by author (repeat for multiple)
+
+Run the script with `--help` for full documentation:
+
+```bash
+./scripts/timeline.php --help
+```
