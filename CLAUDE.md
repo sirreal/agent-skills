@@ -34,6 +34,7 @@ plugins/
 ./plugins/wordpress-trac/scripts/ticket.php 62345
 ./plugins/wordpress-trac/scripts/changeset.php 59734
 ./plugins/wordpress-trac/scripts/search.php "status=new component=Editor"
+./plugins/wordpress-trac/scripts/timeline.php --author=jonsurrell --daysback=14
 ```
 
 **Test plugin locally:**
@@ -54,4 +55,5 @@ allowed-tools:
 **Scripts** fetch from `core.trac.wordpress.org` using:
 - TSV API (`?format=tab`) for structured ticket data
 - HTML parsing with `Dom\HTMLDocument` for changesets/comments
+- RSS API (`/timeline?format=rss`) for activity feeds
 - Trac wiki → markdown conversion for descriptions
