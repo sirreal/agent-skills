@@ -15,6 +15,10 @@ In Claude Code, run:
 
 ### [wordpress-trac](./plugins/wordpress-trac/)
 
-Tools for working with WordPress Trac tickets, changesets, and searches.
+Tools for working with WordPress Trac tickets, changesets, searches, and timeline activity.
 
 **Prerequisites:** PHP 8.4+, curl extension
+
+## License
+
+This project is licensed under the GPL-2.0-or-later. See [LICENSE](./LICENSE) for details.

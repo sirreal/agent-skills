@@ -6,13 +6,15 @@
 
 ## Executive Summary
 
-This security audit identified and fixed **7 security vulnerabilities** and **3 correctness issues** across 4 PHP scripts in the repository. All identified issues have been remediated.
+This security audit identified and fixed **7 security vulnerabilities** and **3 correctness issues** across all PHP scripts in the repository. All identified issues have been remediated.
+
+**Note**: The original audit covered 4 scripts. Since then, `ticket-discussion.php` has been merged into `ticket.php`, and a new `timeline.php` script has been added. All scripts now include the security fixes.
 
 ## Security Vulnerabilities Fixed
 
 ### 1. Missing SSL/TLS Verification (CRITICAL)
 **Severity**: High  
-**Files Affected**: All 4 PHP scripts  
+**Files Affected**: All PHP scripts (ticket.php, changeset.php, search.php, timeline.php)  
 **Issue**: curl requests were made without SSL certificate verification, making them vulnerable to Man-in-the-Middle (MITM) attacks.
 
 **Fix**: Added the following curl options to all HTTP requests:
@@ -44,7 +46,7 @@ if ($parsed === false
 
 ### 3. Missing Request Timeouts (MEDIUM)
 **Severity**: Medium  
-**Files Affected**: All 4 PHP scripts  
+**Files Affected**: All PHP scripts (ticket.php, changeset.php, search.php, timeline.php)  
 **Issue**: curl requests had no timeout settings, potentially causing the process to hang indefinitely.
 
 **Fix**: Added connection and execution timeouts:
@@ -55,8 +57,10 @@ curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);   // 10 second connection timeout
 
 ### 4. Insufficient Input Validation (MEDIUM)
 **Severity**: Medium  
-**Files Affected**: `ticket.php`, `changeset.php`, `ticket-discussion.php`  
+**Files Affected**: `ticket.php`, `changeset.php`  
 **Issue**: Ticket and changeset numbers were validated as numeric but had no maximum length restriction, potentially allowing extremely large numbers.
+
+**Note**: The functionality previously in `ticket-discussion.php` has been merged into `ticket.php`.
 
 **Fix**: Added length validation:
 ```php
@@ -68,7 +72,7 @@ if (!ctype_digit($ticket_num) || strlen($ticket_num) > 10) {
 
 ### 5. Markdown Injection in Link Text (MEDIUM)
 **Severity**: Medium  
-**Files Affected**: `changeset.php`, `ticket-discussion.php`  
+**Files Affected**: `changeset.php`, `ticket.php` (includes former ticket-discussion functionality)  
 **Issue**: Special markdown characters in link text were not escaped, potentially breaking markdown formatting or enabling injection attacks.
 
 **Fix**: Added proper escaping for markdown special characters:
@@ -78,7 +82,7 @@ $text = str_replace(['\\', '[', ']', '(', ')'], ['\\\\', '\\[', '\\]', '\\(', '\
 
 ### 6. Markdown Injection in URLs (MEDIUM)
 **Severity**: Medium  
-**Files Affected**: `changeset.php`, `ticket-discussion.php`  
+**Files Affected**: `changeset.php`, `ticket.php` (includes former ticket-discussion functionality)  
 **Issue**: Parentheses in URLs were not escaped, potentially breaking markdown link syntax.
 
 **Fix**: URL-encoded parentheses:
@@ -88,7 +92,7 @@ $href = str_replace(['(', ')'], ['%28', '%29'], $href);
 
 ### 7. Markdown Injection in Code Blocks (LOW)
 **Severity**: Low  
-**Files Affected**: `changeset.php`, `ticket-discussion.php`  
+**Files Affected**: `changeset.php`, `ticket.php` (includes former ticket-discussion functionality)  
 **Issue**: Backticks in inline code were not escaped.
 
 **Fix**: Added backtick escaping:
@@ -108,7 +112,7 @@ curl_close($ch);
 ```
 
 ### 2. Missing curl Error Handling
-**Files Affected**: All 4 PHP scripts  
+**Files Affected**: All PHP scripts (ticket.php, changeset.php, search.php, timeline.php)  
 **Issue**: Only HTTP status codes were checked; curl execution failures were not detected.
 
 **Fix**: Added curl error detection:

@@ -1,5 +1,5 @@
 ---
-description: Look up a WordPress Trac changeset ([123], r123, or https://core.trac.wordpress.org/changeset/123)
+description: Look up a WordPress Trac changeset ([41062], r41062, or https://core.trac.wordpress.org/changeset/41062)
 allowed-tools:
   - Bash(${CLAUDE_PLUGIN_ROOT}/scripts/changeset.php:*)
 argument-hint: <changeset-number>

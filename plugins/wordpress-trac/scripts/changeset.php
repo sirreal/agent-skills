@@ -11,7 +11,7 @@ if ($argc < 2) {
     exit(1);
 }
 
-// Strip leading 'r' or 'R' if present (e.g., r61418 -> 61418)
+// Strip leading 'r' or 'R' if present (e.g., r26851 -> 26851)
 $changeset_num = ltrim($argv[1], 'rR');
 
 // Validate changeset number is numeric and reasonable length
