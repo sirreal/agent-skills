@@ -7,6 +7,16 @@ A Claude Code plugin for working with WordPress Trac tickets, changesets, and se
 - PHP 8.4+ (required for `Dom\HTMLDocument`)
 - curl extension enabled
 
+## Demo
+
+```
+Tell me about trac ticket 30,000
+```
+
+> Ticket #30000 is a joke/commemorative ticket from the WordPress 4.1 milestone era. It references the "Alot" meme from Hyperbole and a Half (a comic about the common misspelling of "a lot") with an image attachment.
+>
+> The ticket is closed and was filed under the WordPress.org Site component. It's essentially a playful marker celebrating the project reaching 30,000 tickets, similar to how projects sometimes note round-number milestones. The reference to #30005 and Mike Nolan suggests there was some coordination around these milestone ticket numbers.
+
 ## Commands
 
 ### `/wordpress-trac:ticket <ticket-number>`
