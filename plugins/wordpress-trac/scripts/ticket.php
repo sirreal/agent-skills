@@ -14,8 +14,8 @@ if ($argc < 2) {
 // Strip leading # if present
 $ticket_num = ltrim($argv[1], '#');
 
-// Validate ticket number is numeric
-if (!ctype_digit($ticket_num)) {
+// Validate ticket number is numeric and reasonable length
+if (!ctype_digit($ticket_num) || strlen($ticket_num) > 10) {
     fwrite(STDERR, "Error: Invalid ticket number: {$ticket_num}\n");
     exit(1);
 }
@@ -28,9 +28,18 @@ $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_FILE, $stream);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($ch, CURLOPT_USERAGENT, 'wp-trac-ticket/1.0');
-curl_exec($ch);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+$result = curl_exec($ch);
 $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-unset($ch);
+curl_close($ch);
+
+if ($result === false) {
+    fwrite(STDERR, "Error: Failed to fetch ticket data\n");
+    exit(1);
+}
 
 if ($http_code < 200 || $http_code >= 300) {
     fwrite(STDERR, "Error: Could not fetch ticket #{$ticket_num}\n");
