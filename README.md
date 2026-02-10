@@ -18,3 +18,7 @@ In Claude Code, run:
 Tools for working with WordPress Trac tickets, changesets, and searches.
 
 **Prerequisites:** PHP 8.4+, curl extension
+
+## License
+
+This project is licensed under the GPL-2.0-or-later. See [LICENSE](./LICENSE) for details.
