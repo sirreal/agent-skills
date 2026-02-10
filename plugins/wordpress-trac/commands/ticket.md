@@ -5,13 +5,12 @@ allowed-tools:
 argument-hint: [--discussion] <ticket-number>
 ---
 
-Fetch and display WordPress Trac ticket information.
+Look up WordPress Trac ticket information.
 
-- Basic ticket info: `/ticket 12345`
-- Ticket discussion/comments: `/ticket --discussion 12345`
+If no ticket number was provided, ask the user which ticket they want to look up.
 
-When the user asks about "discussion", "comments", or "conversation" on a ticket, use `--discussion`.
+When ready, run:
+- Basic info: `${CLAUDE_PLUGIN_ROOT}/scripts/ticket.php <ticket-number>`
+- With comments: `${CLAUDE_PLUGIN_ROOT}/scripts/ticket.php --discussion <ticket-number>`
 
-```sh
-${CLAUDE_PLUGIN_ROOT}/scripts/ticket.php $ARGS
-```
+Use `--discussion` when the user asks about "discussion", "comments", or "conversation" on a ticket.
