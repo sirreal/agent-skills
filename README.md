@@ -4,11 +4,9 @@ A collection of Claude Code plugins.
 
 ## Installation
 
-In Claude Code, run:
-
-```
-/plugin marketplace add sirreal/agent-skills
-/plugin install wordpress-trac@sirreal
+```sh
+claude plugin marketplace add sirreal/agent-skills
+claude plugin install wordpress-trac@sirreal
 ```
 
 ## Plugins

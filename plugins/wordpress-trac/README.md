@@ -2,6 +2,13 @@
 
 A Claude Code plugin for working with WordPress Trac tickets, changesets, and searches.
 
+## Installation
+
+```sh
+claude plugin marketplace add sirreal/agent-skills
+claude plugin install wordpress-trac@sirreal
+```
+
 ## Prerequisites
 
 - PHP 8.4+ (required for `Dom\HTMLDocument`)
