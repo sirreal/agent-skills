@@ -13,7 +13,9 @@ Query WordPress Trac timeline for: $1
 
 The timeline script fetches activity from WordPress Trac.
 
-Run `${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-timeline/scripts/timeline.php --help` for full documentation.
+## Script documentation guide
+
+!`${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-timeline/scripts/timeline.php --help`
 
 ## Parameters
 
@@ -47,5 +49,5 @@ Today's date is used to calculate dates. Convert relative dates to explicit para
 
 1. Parse the user's request to identify time period and author(s)
 2. Calculate `--from` and `--daysback` from relative dates
-3. Run: `${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-timeline/scripts/timeline.php [arguments]`
+3. Run: !`echo "${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-timeline/scripts/timeline.php"` [arguments]
 4. Present the timeline results

@@ -9,5 +9,5 @@ argument-hint: <changeset-number>
 Fetch and display WordPress Trac changeset $1 using:
 
 ```sh
-${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-changeset/scripts/changeset.php $1
+!`echo "${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-changeset/scripts/changeset.php"` $1
 ```

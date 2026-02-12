@@ -12,8 +12,6 @@ Search WordPress Trac tickets for: $1
 # Script documentation:
 
 Search will be performed by using a command line script.
-The script MUST BE invoked directly as `${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-search/scripts/search.php`.
-NEVER use `php` to call the script.
 
 ## Script documentation guide
 
@@ -42,7 +40,7 @@ When translating natural language to CLI arguments:
 
 1. Parse the user's description to identify filters and search terms
 2. Build the correct CLI arguments using the documented options
-3. Run: `${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-search/scripts/search.php [arguments]`
+3. Run: !`echo "${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-search/scripts/search.php"` [arguments]
 4. Review results - it's expected to try several different queries to find good results
 5. Try different combinations: broader/narrower searches, different text terms, with/without component filters
 6. Return the final results
