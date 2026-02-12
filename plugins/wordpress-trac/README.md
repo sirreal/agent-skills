@@ -24,42 +24,42 @@ Tell me about trac ticket 30,000
 >
 > The ticket is closed and was filed under the WordPress.org Site component. It's essentially a playful marker celebrating the project reaching 30,000 tickets, similar to how projects sometimes note round-number milestones. The reference to #30005 and Mike Nolan suggests there was some coordination around these milestone ticket numbers.
 
-## Commands
+## Skills
 
-### `/wordpress-trac:ticket <ticket-number>`
+### `/wp-trac-ticket <ticket-number>`
 
 Look up a WordPress Trac ticket by number or URL.
 
 ```
-/wordpress-trac:ticket 30000
-/wordpress-trac:ticket #30000
-/wordpress-trac:ticket https://core.trac.wordpress.org/ticket/30000
+/wp-trac-ticket 30000
+/wp-trac-ticket #30000
+/wp-trac-ticket https://core.trac.wordpress.org/ticket/30000
 ```
 
 The ticket command supports `--discussion` to include comments:
 
 ```
-/wordpress-trac:ticket --discussion 30000
+/wp-trac-ticket --discussion 30000
 ```
 
-### `/wordpress-trac:changeset <changeset-number>`
+### `/wp-trac-changeset <changeset-number>`
 
 Look up a WordPress Trac changeset by number.
 
 ```
-/wordpress-trac:changeset 41062
-/wordpress-trac:changeset r27195
-/wordpress-trac:changeset [26851]
+/wp-trac-changeset 41062
+/wp-trac-changeset r27195
+/wp-trac-changeset [26851]
 ```
 
-### `/wordpress-trac:search <description>`
+### `/wp-trac-search <description>`
 
 Search WordPress Trac tickets using natural language or specific filters.
 
 ```
-/wordpress-trac:search open HTML API tickets
-/wordpress-trac:search closed REST API bugs
-/wordpress-trac:search tickets about block editor
+/wp-trac-search open HTML API tickets
+/wp-trac-search closed REST API bugs
+/wp-trac-search tickets about block editor
 ```
 
 The search command supports various filters:
@@ -75,14 +75,14 @@ Run the script with `--help` for full documentation:
 ./scripts/search.php --help
 ```
 
-### `/wordpress-trac:timeline <time period and/or author>`
+### `/wp-trac-timeline <time period and/or author>`
 
 Browse WordPress Trac timeline activity. Useful for seeing what you or others have worked on.
 
 ```
-/wordpress-trac:timeline my activity last 2 weeks
-/wordpress-trac:timeline what did saxmatt work on in January 2005
-/wordpress-trac:timeline all trac activity yesterday
+/wp-trac-timeline my activity last 2 weeks
+/wp-trac-timeline what did saxmatt work on in January 2005
+/wp-trac-timeline all trac activity yesterday
 ```
 
 The timeline command supports:
