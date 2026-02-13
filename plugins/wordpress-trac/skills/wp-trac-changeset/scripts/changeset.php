@@ -6,6 +6,21 @@
  * Usage: changeset.php <changeset-number>
  */
 
+// Check for required curl extension
+if (!extension_loaded('curl')) {
+    fwrite(STDERR, "Error: This script requires the curl extension.\n");
+    fwrite(STDERR, "Please install or enable the curl extension for PHP.\n");
+    exit(1);
+}
+
+// Check for required Dom\HTMLDocument class
+if (!class_exists('Dom\\HTMLDocument')) {
+    fwrite(STDERR, "Error: This script requires the Dom\\HTMLDocument class (available in PHP 8.4+).\n");
+    fwrite(STDERR, "Current PHP version: " . PHP_VERSION . "\n");
+    fwrite(STDERR, "Please upgrade to PHP 8.4 or higher.\n");
+    exit(1);
+}
+
 if ($argc < 2) {
     fwrite(STDERR, "Usage: wp-trac-changeset.php <changeset-number>\n");
     exit(1);
