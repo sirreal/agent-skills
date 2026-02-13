@@ -5,22 +5,21 @@
     "email": "sirreal@users.noreply.github.com"
   },
   "metadata": {
-      "description": "Sirreal's Claude plugins.",
-      "pluginRoot": "./plugins"
+      "description": "Sirreal's Claude plugins."
   },
   "plugins": [
     {
       "source": "./plugins/wordpress-trac",
       "name": "wordpress-trac",
-      "version": "3.0.1",
+      "version": "3.0.2",
       "description": "Tools for working with WordPress Trac tickets, changesets, and searches",
       "license": "GPL-2.0-or-later",
       "keywords": ["WordPress", "Trac", "Changeset", "ticket", "core"],
       "skills": [
-        "./skills/wp-trac-ticket",
-        "./skills/wp-trac-changeset",
-        "./skills/wp-trac-search",
-        "./skills/wp-trac-timeline"
+        "./plugins/wordpress-trac/skills/wp-trac-ticket",
+        "./plugins/wordpress-trac/skills/wp-trac-changeset",
+        "./plugins/wordpress-trac/skills/wp-trac-search",
+        "./plugins/wordpress-trac/skills/wp-trac-timeline"
       ]
     },
     {
