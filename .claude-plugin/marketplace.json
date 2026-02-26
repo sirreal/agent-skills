@@ -11,15 +11,15 @@
     {
       "source": "./plugins/wordpress-trac",
       "name": "wordpress-trac",
-      "version": "3.0.2",
+      "version": "3.0.3",
       "description": "Tools for working with WordPress Trac tickets, changesets, and searches",
       "license": "GPL-2.0-or-later",
       "keywords": ["WordPress", "Trac", "Changeset", "ticket", "core"],
       "skills": [
-        "./plugins/wordpress-trac/skills/wp-trac-ticket",
-        "./plugins/wordpress-trac/skills/wp-trac-changeset",
-        "./plugins/wordpress-trac/skills/wp-trac-search",
-        "./plugins/wordpress-trac/skills/wp-trac-timeline"
+        "${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-ticket",
+        "${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-changeset",
+        "${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-search",
+        "${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-timeline"
       ]
     },
     {
