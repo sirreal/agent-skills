@@ -14,13 +14,7 @@
       "version": "3.0.3",
       "description": "Tools for working with WordPress Trac tickets, changesets, and searches",
       "license": "GPL-2.0-or-later",
-      "keywords": ["WordPress", "Trac", "Changeset", "ticket", "core"],
-      "skills": [
-        "${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-ticket",
-        "${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-changeset",
-        "${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-search",
-        "${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-timeline"
-      ]
+      "keywords": ["WordPress", "Trac", "Changeset", "ticket", "core"]
     },
     {
       "source": "./plugins/phptools-lsp",
