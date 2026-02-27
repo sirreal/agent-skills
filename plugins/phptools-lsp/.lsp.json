@@ -1,0 +1,13 @@
+{
+  "php": {
+    "command": "devsense-php-ls",
+    "args": ["--stdio"],
+    "extensionToLanguage": {
+      ".php": "php"
+    },
+    "transport": "stdio",
+    "initializationOptions": {},
+    "settings": {},
+    "maxRestarts": 3
+  }
+}

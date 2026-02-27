@@ -1,6 +1,6 @@
 # Security Audit Report
 
-**Date**: 2026-02-09  
+**Date**: 2026-02-09 (Updated: 2026-02-27)  
 **Repository**: agent-skills (wordpress-trac plugin)  
 **Auditor**: GitHub Copilot Security Agent
 
@@ -8,13 +8,18 @@
 
 This security audit identified and fixed **7 security vulnerabilities** and **3 correctness issues** across all PHP scripts in the repository. All identified issues have been remediated.
 
-**Note**: The original audit covered 4 scripts. Since then, `ticket-discussion.php` has been merged into `ticket.php`, and a new `timeline.php` script has been added. All scripts now include the security fixes.
+**Note**: The original audit covered 4 scripts. The repository has been restructured multiple times:
+- First: `ticket-discussion.php` was merged into `ticket.php`
+- Then: A new `timeline.php` script was added
+- Latest: All scripts moved to skills-based structure (`skills/wp-trac-{name}/scripts/`)
+
+All scripts now include the security fixes in their new locations.
 
 ## Security Vulnerabilities Fixed
 
 ### 1. Missing SSL/TLS Verification (CRITICAL)
 **Severity**: High  
-**Files Affected**: All PHP scripts (ticket.php, changeset.php, search.php, timeline.php)  
+**Files Affected**: All PHP scripts in `skills/wp-trac-{ticket,changeset,search,timeline}/scripts/`  
 **Issue**: curl requests were made without SSL certificate verification, making them vulnerable to Man-in-the-Middle (MITM) attacks.
 
 **Fix**: Added the following curl options to all HTTP requests:
@@ -25,7 +30,7 @@ curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 
 ### 2. Insufficient SSRF Protection (HIGH)
 **Severity**: High  
-**File**: `scripts/search.php`  
+**File**: `skills/wp-trac-search/scripts/search.php`  
 **Issue**: URL validation used `strpos()` which is vulnerable to bypasses. A malicious user could potentially craft URLs to access unintended resources.
 
 **Fix**: Replaced string matching with proper URL parsing and strict validation:
