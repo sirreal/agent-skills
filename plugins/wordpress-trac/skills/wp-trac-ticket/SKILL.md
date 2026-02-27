@@ -1,7 +1,8 @@
 ---
 name: wp-trac-ticket
 description: >-
-  Look up a WordPress Trac ticket by number (30000) or see the comments and discussion
+  Look up a WordPress Trac ticket by number (#30000), URL
+  (https://core.trac.wordpress.org/ticket/30000), or see the comments and discussion
   on a ticket. Use when the user asks about a trac ticket, wants ticket details,
   status, description, or asks to see the comments, discussion, or conversation on a
   ticket.
