@@ -28,8 +28,8 @@ if ($ticket_num === null) {
     exit(1);
 }
 
-// Validate ticket number is numeric
-if (!ctype_digit($ticket_num)) {
+// Validate ticket number is numeric and reasonable length
+if (!ctype_digit($ticket_num) || strlen($ticket_num) > 10) {
     fwrite(STDERR, "Error: Invalid ticket number: {$ticket_num}\n");
     exit(1);
 }
@@ -42,9 +42,18 @@ if ($discussion_mode) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_USERAGENT, 'wp-trac-ticket/1.0');
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
     $rss = curl_exec($ch);
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    unset($ch);
+    curl_close($ch);
+
+    if ($rss === false) {
+        fwrite(STDERR, "Error: Failed to fetch ticket discussion data\n");
+        exit(1);
+    }
 
     if ($http_code < 200 || $http_code >= 300) {
         fwrite(STDERR, "Error: Could not fetch ticket #{$ticket_num} discussion (HTTP {$http_code})\n");
@@ -131,7 +140,9 @@ function convertXMLNode(SimpleXMLElement $node): string {
                 $result .= "\n\n" . ($inner ?: $text) . "\n\n";
                 break;
             case 'code':
-                $result .= "`{$text}`";
+                // Escape backticks in inline code
+                $code = str_replace('`', '\\`', $text);
+                $result .= "`{$code}`";
                 break;
             case 'pre':
                 $class = (string)$child['class'];
@@ -148,6 +159,10 @@ function convertXMLNode(SimpleXMLElement $node): string {
                     $href = "https://core.trac.wordpress.org{$href}";
                 }
                 if (!empty($href) && !empty($linkText)) {
+                    // Escape markdown special chars in link text: [], (), \
+                    $linkText = str_replace(['\\', '[', ']', '(', ')'], ['\\\\', '\\[', '\\]', '\\(', '\\)'], $linkText);
+                    // Escape parentheses in URLs
+                    $href = str_replace(['(', ')'], ['%28', '%29'], $href);
                     $result .= "[{$linkText}]({$href})";
                 } else {
                     $result .= $linkText;
@@ -198,9 +213,18 @@ $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_FILE, $stream);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($ch, CURLOPT_USERAGENT, 'wp-trac-ticket/1.0');
-curl_exec($ch);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+$result = curl_exec($ch);
 $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-unset($ch);
+curl_close($ch);
+
+if ($result === false) {
+    fwrite(STDERR, "Error: Failed to fetch ticket data\n");
+    exit(1);
+}
 
 if ($http_code < 200 || $http_code >= 300) {
     fwrite(STDERR, "Error: Could not fetch ticket #{$ticket_num}\n");
