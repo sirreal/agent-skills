@@ -1,6 +1,11 @@
 ---
 name: wp-trac-search
-description: Search WordPress Trac tickets
+description: >-
+  Search and filter WordPress Trac tickets on core.trac.wordpress.org. Use when the
+  user wants to find tickets, search for bugs, query open or closed tickets, filter
+  by component (e.g., "HTML API", "Editor", "REST API"), or search by status,
+  milestone, owner, reporter, type, or keywords. Example queries: "find open HTML API
+  tickets", "search for closed editor bugs", "tickets assigned to jonsurrell".
 allowed-tools:
   - Bash(${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-search/scripts/search.php:*)
 argument-hint: <description of what to search for>
@@ -9,15 +14,13 @@ context: fork
 
 Search WordPress Trac tickets for: $1
 
-# Script documentation:
+If no search criteria were provided, ask the user what they want to search for.
 
-Search will be performed by using a command line script.
-
-## Script documentation guide
+## Script reference
 
 !`${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-search/scripts/search.php --help`
 
-# Translation Guide
+## Translation guide
 
 When translating natural language to CLI arguments:
 
@@ -28,7 +31,7 @@ When translating natural language to CLI arguments:
 - Use --summary for text search in ticket title
 - Use --description for text search in ticket body
 
-# Examples
+## Examples
 
 | User request | CLI arguments |
 |--------------|---------------|
@@ -36,11 +39,11 @@ When translating natural language to CLI arguments:
 | "closed REST API bugs" | --component="REST API" --status=closed --type="defect (bug)" |
 | "tickets about block editor" | --summary="block editor" --description="block editor" |
 
-# Instructions
+## Instructions
 
 1. Parse the user's description to identify filters and search terms
 2. Build the correct CLI arguments using the documented options
 3. Run: !`echo "${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-search/scripts/search.php"` [arguments]
-4. Review results - it's expected to try several different queries to find good results
+4. Review results — try several different queries to find good results
 5. Try different combinations: broader/narrower searches, different text terms, with/without component filters
 6. Return the final results
