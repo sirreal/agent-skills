@@ -11,8 +11,8 @@ if ($argc < 2) {
     exit(1);
 }
 
-// Strip leading 'r' or 'R' if present (e.g., r26851 -> 26851)
-$changeset_num = trim(ltrim($argv[1], 'rR'), '[]');
+// Strip brackets and leading 'r' or 'R' (e.g., [r26851] -> 26851)
+$changeset_num = preg_replace('/^\[?r?(\d+)\]?$/i', '$1', $argv[1]);
 
 // Validate changeset number is numeric
 if (!ctype_digit($changeset_num)) {
