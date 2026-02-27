@@ -12,14 +12,8 @@ timeline.php [options]
 Options:
   --from=YYYY-MM-DD   End date for timeline (default: today)
   --daysback=N        Number of days to look back (1-90, default: 30)
-  --author=USER       Filter by author (repeat for multiple)
-                      Omit for all authors
+  --author=USER       Filter by author (repeat for multiple, omit for all)
   --help              Show this help
-
-Examples:
-  timeline.php --author=jonsurrell --daysback=14
-  timeline.php --from=2023-01-15 --daysback=7 --author=saxmatt --author=ryan
-  timeline.php --daysback=30
 HELP;
 
 $longopts = [

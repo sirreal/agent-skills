@@ -1,6 +1,11 @@
 ---
 name: wp-trac-timeline
-description: Browse WordPress Trac timeline activity
+description: >-
+  Browse WordPress Trac timeline activity feed. Use when the user asks about recent
+  WordPress core Trac activity, commits, ticket changes, or what a specific author
+  has been working on. Matches queries like "recent trac activity", "what has USER
+  done on trac", "WordPress core commits this week", "show me USER's trac
+  contributions".
 allowed-tools:
   - Bash(${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-timeline/scripts/timeline.php:*)
 argument-hint: <time period and/or author>
@@ -9,21 +14,11 @@ context: fork
 
 Query WordPress Trac timeline for: $1
 
-# Script documentation
-
-The timeline script fetches activity from WordPress Trac.
-
-## Script documentation guide
+## Script reference
 
 !`${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-timeline/scripts/timeline.php --help`
 
-## Parameters
-
-- `--from=YYYY-MM-DD` - End date (default: today)
-- `--daysback=N` - Days to look back (default: 30)
-- `--author=USER` - Filter by author (repeat for multiple)
-
-## Date Calculation
+## Date calculation
 
 Today's date is used to calculate dates. Convert relative dates to explicit parameters:
 
@@ -45,7 +40,7 @@ Today's date is used to calculate dates. Convert relative dates to explicit para
 | "all trac activity yesterday" | `--daysback=1` |
 | "jonsurrell's commits this month" | `--author=jonsurrell --daysback=30` |
 
-# Instructions
+## Instructions
 
 1. Parse the user's request to identify time period and author(s)
 2. Calculate `--from` and `--daysback` from relative dates
