@@ -6,6 +6,13 @@
  * Usage: timeline.php [options]
  */
 
+// Check for required curl extension
+if (!extension_loaded('curl')) {
+    fwrite(STDERR, "Error: This script requires the curl extension.\n");
+    fwrite(STDERR, "Please install or enable the curl extension for PHP.\n");
+    exit(1);
+}
+
 $help = <<<'HELP'
 timeline.php [options]
 
