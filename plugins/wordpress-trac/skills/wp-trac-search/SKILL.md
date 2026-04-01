@@ -2,9 +2,10 @@
 name: wp-trac-search
 description: >-
   Search and filter WordPress Trac tickets on core.trac.wordpress.org. Use when the
-  user wants to find tickets, search for bugs, query open or closed tickets, filter
-  by component (e.g., "HTML API", "Editor", "REST API"), or search by status,
-  milestone, owner, reporter, type, or keywords. Example queries: "find open HTML API
+  user wants to find tickets matching criteria, search for bugs, query open or closed
+  tickets, filter by component (e.g., "HTML API", "Editor", "REST API"), or search by
+  status, milestone, owner, reporter, type, or keywords. NOT for looking up a single
+  ticket by number — use wp-trac-ticket for that. Example queries: "find open HTML API
   tickets", "search for closed editor bugs", "tickets assigned to jonsurrell".
 allowed-tools:
   - Bash(${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-search/scripts/search.php:*)

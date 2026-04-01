@@ -1,14 +1,14 @@
 ---
 name: wp-trac-ticket
 description: >-
-  Look up a WordPress Trac ticket by number (#30000), URL
-  (https://core.trac.wordpress.org/ticket/30000), or see the comments and discussion
-  on a ticket. Use when the user asks about a trac ticket, wants ticket details,
-  status, description, or asks to see the comments, discussion, or conversation on a
-  ticket.
+  Look up a specific WordPress Trac ticket by its number to see details (status,
+  component, type, milestone, description) or discussion/comments. Accepts #62345,
+  62345, or https://core.trac.wordpress.org/ticket/62345. Use whenever the user
+  references a specific ticket number or wants to read a particular ticket's
+  comments/discussion. Do NOT use wp-trac-search for single ticket lookups.
 allowed-tools:
   - Bash(${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-ticket/scripts/ticket.php:*)
-argument-hint: [--discussion] <ticket-number>
+argument-hint: "[--discussion] <ticket-number>"
 ---
 
 Look up WordPress Trac ticket information.
