@@ -6,6 +6,13 @@
  * Usage: ticket.php [--discussion] <ticket-number>
  */
 
+// Check for required curl extension
+if (!extension_loaded('curl')) {
+    fwrite(STDERR, "Error: This script requires the curl extension.\n");
+    fwrite(STDERR, "Please install or enable the curl extension for PHP.\n");
+    exit(1);
+}
+
 // Parse arguments
 $discussion_mode = false;
 $ticket_num = null;
