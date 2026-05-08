@@ -6,6 +6,21 @@
  * Usage: ticket.php [--discussion] <ticket-number>
  */
 
+function trac_apply_cookie($ch): void {
+    $file = getenv('TRAC_COOKIE_FILE');
+    if ($file === false || $file === '') {
+        $home = getenv('XDG_CONFIG_HOME') ?: (getenv('HOME') . '/.config');
+        $file = $home . '/wp-trac/cookie';
+    }
+    if (!is_readable($file)) {
+        return;
+    }
+    $cookie = trim(file_get_contents($file));
+    if ($cookie !== '') {
+        curl_setopt($ch, CURLOPT_COOKIE, $cookie);
+    }
+}
+
 // Parse arguments
 $discussion_mode = false;
 $ticket_num = null;
@@ -42,6 +57,7 @@ if ($discussion_mode) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_USERAGENT, 'wp-trac-ticket/1.0');
+    trac_apply_cookie($ch);
     $rss = curl_exec($ch);
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     unset($ch);
@@ -198,6 +214,7 @@ $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_FILE, $stream);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($ch, CURLOPT_USERAGENT, 'wp-trac-ticket/1.0');
+trac_apply_cookie($ch);
 curl_exec($ch);
 $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 unset($ch);

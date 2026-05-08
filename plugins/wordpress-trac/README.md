@@ -14,6 +14,27 @@ claude plugin install wordpress-trac@sirreal
 - PHP 8.4+ (required for `Dom\HTMLDocument`)
 - curl extension enabled
 
+## Authentication
+
+Trac filters some unauthenticated requests. To use your browser session, save
+the raw `Cookie:` request header to `~/.config/wp-trac/cookie`:
+
+1. Log in to <https://core.trac.wordpress.org/> in your browser.
+2. Open devtools → Network → click any request to `core.trac.wordpress.org`.
+3. Copy the value of the `Cookie:` request header (typically includes
+   `trac_auth`, `trac_form_token`, and a session cookie).
+4. Save it to the cookie file with restrictive permissions:
+
+   ```sh
+   mkdir -p ~/.config/wp-trac
+   umask 077 && cat > ~/.config/wp-trac/cookie  # paste, then Ctrl-D
+   ```
+
+The path honors `$XDG_CONFIG_HOME` (so `$XDG_CONFIG_HOME/wp-trac/cookie` if
+set), and `$TRAC_COOKIE_FILE` overrides the location entirely. If the file is
+missing or empty, scripts run anonymously. Cookies expire with the browser
+session — re-paste when requests start failing.
+
 ## Demo
 
 ```
