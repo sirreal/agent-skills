@@ -3,7 +3,7 @@
 /**
  * Fetch WordPress Trac ticket info as markdown.
  *
- * Usage: ticket.php [--discussion] <ticket-number>
+ * Usage: ticket.php [--discussion | --prs] <ticket-number>
  */
 
 function trac_apply_cookie($ch): void {
@@ -206,6 +206,96 @@ function convertXMLNode(SimpleXMLElement $node): string {
 
     // Clean up excessive whitespace
     return preg_replace('/\n{3,}/', "\n\n", trim($result, " \t\n\r\f"));
+}
+
+// PR mode: fetch associated PRs from api.wordpress.org and render markdown
+if ($mode === 'prs') {
+    $url = "https://api.wordpress.org/dotorg/trac/pr/?trac=core&ticket={$ticket_num}";
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_USERAGENT, 'wp-trac-ticket/1.0');
+    trac_apply_cookie($ch);
+    $body = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    unset($ch);
+
+    if ($http_code < 200 || $http_code >= 300) {
+        fwrite(STDERR, "Error: Could not fetch PRs for ticket #{$ticket_num} (HTTP {$http_code})\n");
+        exit(1);
+    }
+
+    $prs = json_decode($body, true);
+    if (!is_array($prs)) {
+        fwrite(STDERR, "Error: Could not parse PR response for ticket #{$ticket_num}\n");
+        exit(1);
+    }
+
+    echo "# Trac Ticket #{$ticket_num} Pull Requests\n\n";
+
+    if (count($prs) === 0) {
+        echo "_No pull requests found._\n";
+        exit(0);
+    }
+
+    // Sort: open first, then closed; within each group by updated_at desc.
+    usort($prs, function ($a, $b) {
+        $aOpen = (($a['state'] ?? '') === 'open') ? 0 : 1;
+        $bOpen = (($b['state'] ?? '') === 'open') ? 0 : 1;
+        if ($aOpen !== $bOpen) {
+            return $aOpen - $bOpen;
+        }
+        return strcmp($b['updated_at'] ?? '', $a['updated_at'] ?? '');
+    });
+
+    foreach ($prs as $pr) {
+        $number    = $pr['number']       ?? '—';
+        $title     = $pr['title']        ?? '—';
+        $state     = $pr['state']        ?? '—';
+        $author    = $pr['user']['name'] ?? '—';
+        $url       = $pr['html_url']     ?? '—';
+        $created   = substr($pr['created_at'] ?? '', 0, 10) ?: '—';
+        $updated   = substr($pr['updated_at'] ?? '', 0, 10) ?: '—';
+        $closedRaw = $pr['closed_at'] ?? null;
+        $additions = $pr['changes']['additions'] ?? '—';
+        $deletions = $pr['changes']['deletions'] ?? '—';
+        $touches   = !empty($pr['touches_tests']) ? 'yes' : 'no';
+
+        echo "## #{$number} — {$title}\n\n";
+        echo "- **State:** {$state}\n";
+        echo "- **Author:** {$author}\n";
+        echo "- **URL:** {$url}\n";
+        echo "- **Created:** {$created} · **Updated:** {$updated}\n";
+        if ($state === 'closed' && !empty($closedRaw)) {
+            echo "- **Closed:** " . substr($closedRaw, 0, 10) . "\n";
+        }
+        echo "- **Changes:** +{$additions} / -{$deletions} · **Touches tests:** {$touches}\n";
+
+        $checks = $pr['check_runs'] ?? [];
+        if (is_array($checks) && count($checks) > 0) {
+            $parts = [];
+            foreach ($checks as $name => $status) {
+                $parts[] = "{$name}: {$status}";
+            }
+            echo "- **CI:** " . implode(', ', $parts) . "\n";
+        }
+
+        $reviews = $pr['reviews'] ?? [];
+        if (is_array($reviews) && count($reviews) > 0) {
+            $groups = [];
+            foreach ($reviews as $reviewState => $users) {
+                $groups[] = "{$reviewState}: " . implode(', ', (array)$users);
+            }
+            echo "- **Reviews:** " . implode('; ', $groups) . "\n";
+        } else {
+            echo "- **Reviews:** _none_\n";
+        }
+
+        echo "\n";
+    }
+
+    exit(0);
 }
 
 // Fetch ticket data in TSV format, streaming directly to a temp file
