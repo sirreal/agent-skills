@@ -22,12 +22,14 @@ function trac_apply_cookie($ch): void {
 }
 
 // Parse arguments
-$discussion_mode = false;
+$mode = 'basic';
 $ticket_num = null;
 
 for ($i = 1; $i < $argc; $i++) {
     if ($argv[$i] === '--discussion') {
-        $discussion_mode = true;
+        $mode = 'discussion';
+    } elseif ($argv[$i] === '--prs') {
+        $mode = 'prs';
     } elseif ($ticket_num === null) {
         // Extract ticket number from input (handle URLs and # prefix)
         if (preg_match('/ticket\/(\d+)/', $argv[$i], $matches)) {
@@ -39,7 +41,7 @@ for ($i = 1; $i < $argc; $i++) {
 }
 
 if ($ticket_num === null) {
-    fwrite(STDERR, "Usage: ticket.php [--discussion] <ticket-number>\n");
+    fwrite(STDERR, "Usage: ticket.php [--discussion | --prs] <ticket-number>\n");
     exit(1);
 }
 
@@ -50,7 +52,7 @@ if (!ctype_digit($ticket_num)) {
 }
 
 // Discussion mode: fetch RSS and parse comments
-if ($discussion_mode) {
+if ($mode === 'discussion') {
     $url = "https://core.trac.wordpress.org/ticket/{$ticket_num}?format=rss";
 
     $ch = curl_init($url);
