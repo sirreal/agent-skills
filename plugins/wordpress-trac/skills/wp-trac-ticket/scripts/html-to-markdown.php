@@ -29,20 +29,14 @@ function convertXHTMLToMarkdown(string $html): string {
     );
 
     $wrapped = "<div>{$html}</div>";
-    $doc = @Dom\HTMLDocument::createFromString(
-        $wrapped,
-        LIBXML_NOERROR | LIBXML_HTML_NOIMPLIED
-    );
-    if ($doc === false) {
-        fwrite(STDERR, "wp-trac-ticket: warning — failed to parse HTML fragment\n");
+    try {
+        $doc = Dom\HTMLDocument::createFromString($wrapped, LIBXML_HTML_NOIMPLIED);
+    } catch (Dom\HTMLException $e) {
+        fwrite(STDERR, "wp-trac-ticket: failed to parse HTML fragment: {$e->getMessage()}\n");
         return strip_tags($html);
     }
 
     $root = $doc->getElementsByTagName('div')->item(0);
-    if ($root === null) {
-        fwrite(STDERR, "wp-trac-ticket: warning — no root element after parse\n");
-        return strip_tags($html);
-    }
 
     $out = convertDomNode($root, $preBlocks);
     return preg_replace('/\n{3,}/', "\n\n", trim($out, " \t\n\r\f"));
@@ -74,7 +68,7 @@ function convertDomNode(Dom\Node $node, array $preBlocks): string {
                 $result .= '`' . $child->textContent . '`';
                 break;
             case 'pre':
-                $class = $child->getAttribute('class') ?? '';
+                $class = $child->getAttribute('class');
                 $lang = '';
                 if ($class !== '' && preg_match('/\bwiki-code-(\w+)\b/', $class, $matches)) {
                     $lang = $matches[1];
@@ -93,7 +87,7 @@ function convertDomNode(Dom\Node $node, array $preBlocks): string {
                 $result .= "\n\n```{$lang}\n" . trim($raw) . "\n```\n\n";
                 break;
             case 'a':
-                $href = $child->getAttribute('href') ?? '';
+                $href = $child->getAttribute('href');
                 $text = convertDomNode($child, $preBlocks);
                 if ($href !== '' && str_starts_with($href, '/')) {
                     $href = "https://core.trac.wordpress.org{$href}";
