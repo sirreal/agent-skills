@@ -77,6 +77,14 @@ if ($mode === 'discussion') {
         exit(1);
     }
 
+    // Real RSS has a <channel> under <rss>. The Trac auth challenge page
+    // parses as XML but lacks <channel>, which previously silently became
+    // "_No comments found._" — masking a missing cookie as an empty thread.
+    if (!isset($xml->channel)) {
+        fwrite(STDERR, "Error: response for ticket #{$ticket_num} is not RSS — likely auth required (no cookie at \$TRAC_COOKIE_FILE or ~/.config/wp-trac/cookie)\n");
+        exit(1);
+    }
+
     // Register dc namespace for creator
     $namespaces = $xml->getNamespaces(true);
 
