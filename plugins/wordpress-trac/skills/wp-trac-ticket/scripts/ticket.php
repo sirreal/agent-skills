@@ -21,6 +21,8 @@ function trac_apply_cookie($ch): void {
     }
 }
 
+require_once __DIR__ . '/html-to-markdown.php';
+
 // Parse arguments
 $mode = 'basic';
 $ticket_num = null;
@@ -111,101 +113,6 @@ if ($mode === 'discussion') {
     }
 
     exit(0);
-}
-
-/**
- * Convert XHTML string to markdown using SimpleXML.
- */
-function convertXHTMLToMarkdown(string $html): string {
-    $html = trim($html);
-    if (empty($html)) {
-        return '';
-    }
-
-    // Wrap in root element and parse as XML
-    $xml = @simplexml_load_string("<root>{$html}</root>", 'SimpleXMLElement', LIBXML_NOERROR);
-    if ($xml === false) {
-        return strip_tags($html);
-    }
-
-    return convertXMLNode($xml);
-}
-
-/**
- * Recursively convert SimpleXML node to markdown.
- */
-function convertXMLNode(SimpleXMLElement $node): string {
-    $result = '';
-
-    foreach ($node->children() as $name => $child) {
-        $inner = convertXMLNode($child);
-        $text = (string)$child;
-
-        switch (strtolower($name)) {
-            case 'br':
-                $result .= "\n";
-                break;
-            case 'p':
-                $result .= "\n\n" . ($inner ?: $text) . "\n\n";
-                break;
-            case 'code':
-                $result .= "`{$text}`";
-                break;
-            case 'pre':
-                $class = (string)$child['class'];
-                $lang = '';
-                if ($class && preg_match('/\bwiki-code-(\w+)\b/', $class, $matches)) {
-                    $lang = $matches[1];
-                }
-                $result .= "\n\n```{$lang}\n" . trim($text) . "\n```\n\n";
-                break;
-            case 'a':
-                $href = (string)$child['href'];
-                $linkText = $inner ?: $text;
-                if ($href && str_starts_with($href, '/')) {
-                    $href = "https://core.trac.wordpress.org{$href}";
-                }
-                if (!empty($href) && !empty($linkText)) {
-                    $result .= "[{$linkText}]({$href})";
-                } else {
-                    $result .= $linkText;
-                }
-                break;
-            case 'strong':
-            case 'b':
-                $result .= '**' . ($inner ?: $text) . '**';
-                break;
-            case 'em':
-            case 'i':
-                $result .= '_' . ($inner ?: $text) . '_';
-                break;
-            case 'ul':
-            case 'ol':
-                $result .= "\n" . $inner . "\n";
-                break;
-            case 'li':
-                $result .= "- " . ($inner ?: $text) . "\n";
-                break;
-            case 'blockquote':
-                $quoted = $inner ?: $text;
-                $quoted = preg_replace('/^/m', '> ', $quoted);
-                $result .= "\n" . $quoted . "\n";
-                break;
-            default:
-                $result .= $inner ?: $text;
-                break;
-        }
-    }
-
-    // Handle text nodes at this level (mixed content)
-    // SimpleXML doesn't expose text nodes directly, so we check if there's direct text
-    $directText = trim((string)$node);
-    if (!empty($directText) && $node->count() === 0) {
-        $result .= $directText;
-    }
-
-    // Clean up excessive whitespace
-    return preg_replace('/\n{3,}/', "\n\n", trim($result, " \t\n\r\f"));
 }
 
 // PR mode: fetch associated PRs from api.wordpress.org and render markdown
