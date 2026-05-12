@@ -7,7 +7,7 @@
  * to call from CI that may not have Trac credentials.
  */
 
-$script = realpath(__DIR__ . '/../scripts/ticket.php');
+$script = realpath(__DIR__ . '/../../plugins/wordpress-trac/skills/wp-trac-ticket/scripts/ticket.php');
 
 $cookie = getenv('TRAC_COOKIE_FILE') ?: (getenv('HOME') . '/.config/wp-trac/cookie');
 if (!is_readable($cookie)) {

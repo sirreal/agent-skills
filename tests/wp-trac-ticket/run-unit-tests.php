@@ -8,7 +8,7 @@
  * Exit: 0 on all pass, 1 on any failure.
  */
 
-require_once __DIR__ . '/../scripts/html-to-markdown.php';
+require_once __DIR__ . '/../../plugins/wordpress-trac/skills/wp-trac-ticket/scripts/html-to-markdown.php';
 
 $failures = 0;
 $tests = 0;
