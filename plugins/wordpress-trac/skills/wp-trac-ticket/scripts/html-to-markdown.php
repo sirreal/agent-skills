@@ -29,7 +29,9 @@ function convertXHTMLToMarkdown(string $html): string {
     );
 
     $wrapped = "<div>{$html}</div>";
-    $doc = Dom\HTMLDocument::createFromString($wrapped, LIBXML_HTML_NOIMPLIED);
+    // @-suppress non-fatal HTML5 parser warnings (e.g. unexpected-solidus-in-tag
+    // on Trac's self-closing <br/>). Real parse failures still throw.
+    $doc = @Dom\HTMLDocument::createFromString($wrapped, LIBXML_HTML_NOIMPLIED);
     $root = $doc->getElementsByTagName('div')->item(0);
 
     $out = convertDomNode($root, $preBlocks);

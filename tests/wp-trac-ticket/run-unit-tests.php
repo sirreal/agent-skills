@@ -74,7 +74,7 @@ check('T6 pre with nested anchor',
 // T7: deeply nested mixed
 check('T7 blockquote with mixed inline',
     '<blockquote><p>quoted <em>important</em> text</p></blockquote>',
-    ['quoted', 'important', 'text', '>']);
+    ['quoted', '_important_', 'text', '> ']);
 
 // T8: empty paragraph
 check('T8 empty paragraph does not throw or emit null',
