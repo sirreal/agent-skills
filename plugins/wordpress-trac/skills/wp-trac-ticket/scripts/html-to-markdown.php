@@ -2,91 +2,129 @@
 /**
  * Convert XHTML string from Trac RSS to markdown.
  *
- * NOTE: This file is being replaced. Current implementation is the
- * defective SimpleXML-based walker; subsequent tasks rewrite it.
+ * Uses Dom\HTMLDocument (PHP 8.4+) so interleaved text nodes between
+ * element children are preserved — SimpleXML hides text nodes, which
+ * caused widespread silent content loss in comment bodies.
  */
 
 function convertXHTMLToMarkdown(string $html): string {
     $html = trim($html);
-    if (empty($html)) {
+    if ($html === '') {
         return '';
     }
 
-    $xml = @simplexml_load_string("<root>{$html}</root>", 'SimpleXMLElement', LIBXML_NOERROR);
-    if ($xml === false) {
+    $wrapped = "<div>{$html}</div>";
+    $doc = @Dom\HTMLDocument::createFromString(
+        $wrapped,
+        LIBXML_HTML_NOIMPLIED | LIBXML_NOERROR
+    );
+    if ($doc === false) {
+        fwrite(STDERR, "wp-trac-ticket: warning — failed to parse HTML fragment\n");
         return strip_tags($html);
     }
 
-    return convertXMLNode($xml);
+    $root = $doc->getElementsByTagName('div')->item(0);
+    if ($root === null) {
+        fwrite(STDERR, "wp-trac-ticket: warning — no root element after parse\n");
+        return strip_tags($html);
+    }
+
+    $out = convertDomNode($root);
+    return preg_replace('/\n{3,}/', "\n\n", trim($out, " \t\n\r\f"));
 }
 
-function convertXMLNode(SimpleXMLElement $node): string {
+function convertDomNode(Dom\Node $node): string {
     $result = '';
 
-    foreach ($node->children() as $name => $child) {
-        $inner = convertXMLNode($child);
-        $text = (string)$child;
+    foreach ($node->childNodes as $child) {
+        if ($child->nodeType === XML_TEXT_NODE) {
+            $result .= $child->textContent;
+            continue;
+        }
+        if ($child->nodeType !== XML_ELEMENT_NODE) {
+            continue;
+        }
 
-        switch (strtolower($name)) {
+        /** @var Dom\Element $child */
+        $name = strtolower($child->localName);
+
+        switch ($name) {
             case 'br':
                 $result .= "\n";
                 break;
             case 'p':
-                $result .= "\n\n" . ($inner ?: $text) . "\n\n";
+                $result .= "\n\n" . convertDomNode($child) . "\n\n";
                 break;
             case 'code':
-                $result .= "`{$text}`";
+                $result .= '`' . $child->textContent . '`';
                 break;
             case 'pre':
-                $class = (string)$child['class'];
+                $class = $child->getAttribute('class') ?? '';
                 $lang = '';
-                if ($class && preg_match('/\bwiki-code-(\w+)\b/', $class, $matches)) {
+                if ($class !== '' && preg_match('/\bwiki-code-(\w+)\b/', $class, $matches)) {
                     $lang = $matches[1];
                 }
-                $result .= "\n\n```{$lang}\n" . trim($text) . "\n```\n\n";
+                $result .= "\n\n```{$lang}\n" . trim(preFlatten($child)) . "\n```\n\n";
                 break;
             case 'a':
-                $href = (string)$child['href'];
-                $linkText = $inner ?: $text;
-                if ($href && str_starts_with($href, '/')) {
+                $href = $child->getAttribute('href') ?? '';
+                $text = convertDomNode($child);
+                if ($href !== '' && str_starts_with($href, '/')) {
                     $href = "https://core.trac.wordpress.org{$href}";
                 }
-                if (!empty($href) && !empty($linkText)) {
-                    $result .= "[{$linkText}]({$href})";
+                if ($href !== '' && $text !== '') {
+                    $result .= "[{$text}]({$href})";
                 } else {
-                    $result .= $linkText;
+                    $result .= $text;
                 }
                 break;
             case 'strong':
             case 'b':
-                $result .= '**' . ($inner ?: $text) . '**';
+                $result .= '**' . convertDomNode($child) . '**';
                 break;
             case 'em':
             case 'i':
-                $result .= '_' . ($inner ?: $text) . '_';
+                $result .= '_' . convertDomNode($child) . '_';
                 break;
             case 'ul':
             case 'ol':
-                $result .= "\n" . $inner . "\n";
+                $result .= "\n" . convertDomNode($child) . "\n";
                 break;
             case 'li':
-                $result .= "- " . ($inner ?: $text) . "\n";
+                $result .= '- ' . trim(convertDomNode($child)) . "\n";
                 break;
             case 'blockquote':
-                $quoted = $inner ?: $text;
-                $quoted = preg_replace('/^/m', '> ', $quoted);
+                $inner = trim(convertDomNode($child));
+                $quoted = preg_replace('/^/m', '> ', $inner);
                 $result .= "\n" . $quoted . "\n";
                 break;
             default:
-                $result .= $inner ?: $text;
+                $result .= convertDomNode($child);
                 break;
         }
     }
 
-    $directText = trim((string)$node);
-    if (!empty($directText) && $node->count() === 0) {
-        $result .= $directText;
-    }
+    return $result;
+}
 
-    return preg_replace('/\n{3,}/', "\n\n", trim($result, " \t\n\r\f"));
+/**
+ * Flatten a <pre> subtree to plain text while converting <br> to newlines.
+ * Nested elements (Trac auto-links, syntax-highlighting spans) collapse
+ * to their text content — we want the raw code, not its HTML decoration.
+ */
+function preFlatten(Dom\Node $node): string {
+    $out = '';
+    foreach ($node->childNodes as $child) {
+        if ($child->nodeType === XML_TEXT_NODE) {
+            $out .= $child->textContent;
+        } elseif ($child->nodeType === XML_ELEMENT_NODE) {
+            /** @var Dom\Element $child */
+            if (strtolower($child->localName) === 'br') {
+                $out .= "\n";
+            } else {
+                $out .= preFlatten($child);
+            }
+        }
+    }
+    return $out;
 }
