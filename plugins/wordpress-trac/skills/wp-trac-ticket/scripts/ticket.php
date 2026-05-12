@@ -99,7 +99,7 @@ if ($mode === 'discussion') {
             }
 
             // Get description and convert HTML to markdown
-            $description = html_entity_decode((string)$item->description, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $description = (string)$item->description;
             $description = convertXHTMLToMarkdown($description);
 
             // Skip if no meaningful content
