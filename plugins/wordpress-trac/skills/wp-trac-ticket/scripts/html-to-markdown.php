@@ -29,13 +29,7 @@ function convertXHTMLToMarkdown(string $html): string {
     );
 
     $wrapped = "<div>{$html}</div>";
-    try {
-        $doc = Dom\HTMLDocument::createFromString($wrapped, LIBXML_HTML_NOIMPLIED);
-    } catch (Dom\HTMLException $e) {
-        fwrite(STDERR, "wp-trac-ticket: failed to parse HTML fragment: {$e->getMessage()}\n");
-        return strip_tags($html);
-    }
-
+    $doc = Dom\HTMLDocument::createFromString($wrapped, LIBXML_HTML_NOIMPLIED);
     $root = $doc->getElementsByTagName('div')->item(0);
 
     $out = convertDomNode($root, $preBlocks);
