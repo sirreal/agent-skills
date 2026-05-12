@@ -62,7 +62,7 @@ function convertDomNode(Dom\Node $node, array $preBlocks): string {
                 $result .= '`' . $child->textContent . '`';
                 break;
             case 'pre':
-                $class = $child->getAttribute('class');
+                $class = $child->getAttribute('class') ?? '';
                 $lang = '';
                 if ($class !== '' && preg_match('/\bwiki-code-(\w+)\b/', $class, $matches)) {
                     $lang = $matches[1];
@@ -81,7 +81,7 @@ function convertDomNode(Dom\Node $node, array $preBlocks): string {
                 $result .= "\n\n```{$lang}\n" . trim($raw) . "\n```\n\n";
                 break;
             case 'a':
-                $href = $child->getAttribute('href');
+                $href = $child->getAttribute('href') ?? '';
                 $text = convertDomNode($child, $preBlocks);
                 if ($href !== '' && str_starts_with($href, '/')) {
                     $href = "https://core.trac.wordpress.org{$href}";
