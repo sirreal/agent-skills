@@ -2,6 +2,8 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+> **Post-execution note:** During implementation the test runners were relocated from `plugins/wordpress-trac/skills/wp-trac-ticket/tests/` to `tests/wp-trac-ticket/` (repo-root tests dir, so they don't ship to plugin users). Path references below are preserved as historical record of the original plan.
+
 **Goal:** Fix silent content loss in `ticket.php --discussion <n>` so comment bodies render in full, and surface parse failures loudly instead of falling back to `strip_tags`.
 
 **Architecture:** Replace the SimpleXML-based HTML→markdown walker with one built on PHP 8.4's native `Dom\HTMLDocument`, which the rest of this plugin already uses (`changeset.php:55`). DOM exposes interleaved text nodes via `childNodes`, fixing both the mixed-content drop (defect 1) and the `<pre>`-only-first-text-node drop (defect 2). Extract the converter into a small `require_once`-able file so it can be unit-tested without going over the network.

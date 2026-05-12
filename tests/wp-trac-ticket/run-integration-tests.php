@@ -48,7 +48,15 @@ function run(array $args, ?array $envOverride = null): array {
 
 // I1: content-volume sanity for #50040
 $tests++;
-[$len, $out, , ] = run(['--discussion', '50040']);
+[$len, $out, $stderr1, $exit1] = run(['--discussion', '50040']);
+// If the first run failed with a transport-level error (curl/HTTP from
+// the script's "Could not fetch ..." path), Trac/network is unreachable.
+// Honour the docblock's promise and SKIP cleanly instead of cascading
+// every test into FAIL.
+if ($exit1 !== 0 && stripos($stderr1, 'Could not fetch') !== false) {
+    fwrite(STDOUT, "SKIP: Trac unreachable — " . trim($stderr1) . "\n");
+    exit(0);
+}
 if ($len >= 6000) {
     fwrite(STDOUT, "PASS  I1 #50040 discussion length {$len} >= 6000\n");
 } else {
@@ -78,7 +86,7 @@ if (preg_match('/\b(function|define|class)\b/', $out)) {
 // I4: control tickets — each must produce non-trivial output.
 foreach ([29420, 50040] as $ticket) {
     $tests++;
-    [$len, , , ] = run(['--discussion', (string)$ticket]);
+    [$len] = run(['--discussion', (string)$ticket]);
     if ($len >= 500) {
         fwrite(STDOUT, "PASS  I4 #{$ticket} produces {$len} bytes (>=500)\n");
     } else {

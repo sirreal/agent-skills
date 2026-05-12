@@ -4,7 +4,7 @@
  * Unit tests for html-to-markdown.php.
  * Runs T1–T10 from the discussion-truncation handoff.
  *
- * Usage: ./run-unit-tests.php
+ * Usage: ./tests/wp-trac-ticket/run-unit-tests.php (run from repo root)
  * Exit: 0 on all pass, 1 on any failure.
  */
 

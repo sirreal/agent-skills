@@ -81,7 +81,7 @@ if ($mode === 'discussion') {
     // parses as XML but lacks <channel>, which previously silently became
     // "_No comments found._" — masking a missing cookie as an empty thread.
     if (!isset($xml->channel)) {
-        fwrite(STDERR, "Error: response for ticket #{$ticket_num} is not RSS — likely auth required (no cookie at \$TRAC_COOKIE_FILE or ~/.config/wp-trac/cookie)\n");
+        fwrite(STDERR, "Error: response for ticket #{$ticket_num} is not RSS — likely auth required (no cookie at \$TRAC_COOKIE_FILE, \$XDG_CONFIG_HOME/wp-trac/cookie, or ~/.config/wp-trac/cookie)\n");
         exit(1);
     }
 
