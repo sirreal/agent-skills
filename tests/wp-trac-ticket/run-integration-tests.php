@@ -21,8 +21,10 @@ $tests = 0;
 /**
  * Run ticket.php with the given argv; return [stdout-bytes, stdout, stderr, exit-code].
  * Uses proc_open with array argv so there is no shell layer.
+ *
+ * If $envOverride is provided, those keys are merged onto the inherited env.
  */
-function run(array $args): array {
+function run(array $args, ?array $envOverride = null): array {
     global $script;
     $argv = array_merge([$script], $args);
     $descriptors = [
@@ -30,7 +32,8 @@ function run(array $args): array {
         1 => ['pipe', 'w'],
         2 => ['pipe', 'w'],
     ];
-    $proc = proc_open($argv, $descriptors, $pipes);
+    $env = $envOverride === null ? null : array_merge(getenv(), $envOverride);
+    $proc = proc_open($argv, $descriptors, $pipes, null, $env);
     if (!is_resource($proc)) {
         return [0, '', '', -1];
     }
@@ -84,36 +87,30 @@ foreach ([29420, 50040] as $ticket) {
     }
 }
 
-// N2: missing-cookie path. Temporarily rename the real cookie so the script
-// runs unauthenticated, then assert clear failure on STDERR with exit 1.
+// N2: missing-cookie path. Point TRAC_COOKIE_FILE at an empty temp file in
+// the child process so the script runs unauthenticated; the real cookie on
+// disk is never touched.
 $tests++;
-$cookieBak = $cookie . '.bak-' . getmypid();
-if (rename($cookie, $cookieBak)) {
-    // Belt-and-suspenders: ensure we restore the cookie even on fatal error.
-    register_shutdown_function(function () use ($cookieBak, $cookie) {
-        if (file_exists($cookieBak) && !file_exists($cookie)) {
-            rename($cookieBak, $cookie);
-        }
-    });
-    try {
-        [, , $stderr, $exit] = run(['--discussion', '50040']);
-    } finally {
-        rename($cookieBak, $cookie);
-    }
-    // Trac may respond with either HTTP 403 (caught by HTTP-code check) or
-    // an HTML auth-challenge page (caught by the <channel> guard). Both
-    // count as loud, since either way: exit != 0 and a clear STDERR message.
-    $clear = stripos($stderr, 'auth') !== false
-        || stripos($stderr, 'not rss') !== false
-        || stripos($stderr, 'HTTP') !== false;
-    if ($exit !== 0 && $clear) {
-        fwrite(STDOUT, "PASS  N2 missing cookie produces clear error\n");
-    } else {
-        $failures++;
-        fwrite(STDOUT, "FAIL  N2 missing cookie did not produce clear error (exit={$exit}, stderr=" . trim($stderr) . ")\n");
-    }
+$emptyCookie = tempnam(sys_get_temp_dir(), 'wp-trac-empty-');
+try {
+    [, , $stderr, $exit] = run(
+        ['--discussion', '50040'],
+        ['TRAC_COOKIE_FILE' => $emptyCookie]
+    );
+} finally {
+    @unlink($emptyCookie);
+}
+// Trac may respond with either HTTP 403 (caught by HTTP-code check) or
+// an HTML auth-challenge page (caught by the <channel> guard). Both
+// count as loud, since either way: exit != 0 and a clear STDERR message.
+$clear = stripos($stderr, 'auth') !== false
+    || stripos($stderr, 'not rss') !== false
+    || stripos($stderr, 'HTTP') !== false;
+if ($exit !== 0 && $clear) {
+    fwrite(STDOUT, "PASS  N2 missing cookie produces clear error\n");
 } else {
-    fwrite(STDOUT, "SKIP  N2 could not rename cookie file\n");
+    $failures++;
+    fwrite(STDOUT, "FAIL  N2 missing cookie did not produce clear error (exit={$exit}, stderr=" . trim($stderr) . ")\n");
 }
 
 fwrite(STDOUT, "\n{$tests} tests, {$failures} failures\n");
