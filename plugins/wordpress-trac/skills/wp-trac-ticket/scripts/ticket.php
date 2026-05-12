@@ -89,6 +89,16 @@ if ($mode === 'discussion') {
             $dc = $item->children($namespaces['dc'] ?? 'http://purl.org/dc/elements/1.1/');
             $author = (string)$dc->creator;
 
+            // Skip attachment items (title = "attachment set").
+            if ((string)$item->title === 'attachment set') {
+                continue;
+            }
+
+            // Skip prbot comments — PR content is available via --prs.
+            if ($author === 'prbot') {
+                continue;
+            }
+
             // Extract comment number from link
             $link = (string)$item->link;
             $comment_num = '';
