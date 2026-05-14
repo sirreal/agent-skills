@@ -61,9 +61,17 @@ foreach ($panel['all'] as $t) {
 }
 
 $ticket_scores = array_column($scores, 'score', 'ticket');
+// A round is perfect only when every judge reported AND every judge reported
+// no gaps. Don't trust the numeric score alone — a judge that returns
+// `score: 10` while still listing items in any gap bucket has produced an
+// inconsistent verdict; treat that as not-perfect so the harness keeps
+// iterating instead of false-stopping at convergence.
 $perfect = ($missing === []) && count($scores) === count($panel['all']);
 foreach ($scores as $s) {
     if ((int)$s['score'] !== 10) { $perfect = false; break; }
+    foreach (['missing_required', 'missing_important', 'noise_present'] as $tier) {
+        if (!empty($s[$tier])) { $perfect = false; break 2; }
+    }
 }
 
 foreach ($gap_freq as $tier => &$bucket) {
