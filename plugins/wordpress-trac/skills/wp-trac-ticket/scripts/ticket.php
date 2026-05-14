@@ -231,6 +231,13 @@ foreach ($xml->channel->item as $item) {
         $cnum = $m[1];
     }
 
+    // The RSS feed emits an item for description edits whose body re-renders
+    // the current description. The TSV-driven Description section already
+    // shows that content, so emitting it again as a comment is pure noise.
+    if ($cnum === 'description') {
+        continue;
+    }
+
     // Attachment item
     if ($title === 'attachment set') {
         $filename = '';
@@ -241,8 +248,10 @@ foreach ($xml->channel->item as $item) {
         if (preg_match('#</ul>\s*(.+)$#is', $rawDesc, $em)) {
             $extra = trim(convertXHTMLToMarkdown($em[1]));
         }
+        // Encode the filename path segment so spaces and reserved characters
+        // don't break the URL when copy-pasted out of markdown.
         $att_url = $filename
-            ? "https://core.trac.wordpress.org/raw-attachment/ticket/{$ticket_num}/{$filename}"
+            ? "https://core.trac.wordpress.org/raw-attachment/ticket/{$ticket_num}/" . rawurlencode($filename)
             : '';
         $attachments[] = [
             'filename' => $filename,
@@ -289,11 +298,46 @@ foreach ($xml->channel->item as $item) {
     if ($root !== null) {
         $first_ul_consumed = false;
         foreach ($root->childNodes as $child) {
+            $is_field_change_ul = false;
             if (!$first_ul_consumed
                 && $child->nodeType === XML_ELEMENT_NODE
                 && strtolower($child->localName) === 'ul'
-                && $title !== ''
             ) {
+                // Trac field-change markup is always <li><strong>field</strong>...</li>.
+                // A comment that happens to start with a wiki bullet list also
+                // produces a leading <ul>, but those <li>s do NOT start with
+                // <strong>. Probe before consuming so we don't swallow body lists.
+                $is_field_change_ul = true;
+                $saw_li = false;
+                foreach ($child->childNodes as $li) {
+                    if ($li->nodeType !== XML_ELEMENT_NODE) continue;
+                    if (strtolower($li->localName) !== 'li') continue;
+                    $saw_li = true;
+                    $first_elem = null;
+                    foreach ($li->childNodes as $sc) {
+                        if ($sc->nodeType === XML_ELEMENT_NODE) {
+                            $first_elem = $sc;
+                            break;
+                        }
+                        if ($sc->nodeType === XML_TEXT_NODE
+                            && trim($sc->textContent) !== ''
+                        ) {
+                            break;
+                        }
+                    }
+                    if ($first_elem === null
+                        || strtolower($first_elem->localName) !== 'strong'
+                    ) {
+                        $is_field_change_ul = false;
+                        break;
+                    }
+                }
+                if (!$saw_li) {
+                    $is_field_change_ul = false;
+                }
+            }
+
+            if ($is_field_change_ul) {
                 foreach ($child->childNodes as $li) {
                     if ($li->nodeType !== XML_ELEMENT_NODE) continue;
                     if (strtolower($li->localName) !== 'li') continue;
