@@ -1,0 +1,32 @@
+{
+  "description": "Frozen 5-ticket stratification panel for wp-trac-ticket CLI evaluation. Each round adds 5 fresh random open-or-closed Trac tickets to make a panel of 10.",
+  "fixed_panel": [
+    {
+      "ticket": 65171,
+      "strata": "open-short",
+      "note": "Open defect, ~3 RSS items, no PRs, no attachments. Tests minimal-content path."
+    },
+    {
+      "ticket": 45354,
+      "strata": "open-long-attachments-prs",
+      "note": "Open enhancement, ~21 RSS items, 3 attachments, 1 PR. Tests scaling and section interaction."
+    },
+    {
+      "ticket": 62345,
+      "strata": "closed-fixed-changesets",
+      "note": "Closed (fixed) Editor defect, 2 changesets via In-[N] auto-comments. Tests changeset extraction and resolution surfacing."
+    },
+    {
+      "ticket": 65133,
+      "strata": "closed-wiki-macros-multi-changeset",
+      "note": "Closed via two changesets after a reopen, description contains a [[Image(URL)]] wiki macro. Tests image-macro conversion and status churn across multiple closing commits."
+    },
+    {
+      "ticket": 64977,
+      "strata": "recently-modified",
+      "note": "Assigned ticket with recent activity. Tests in-progress-ticket rendering."
+    }
+  ],
+  "fresh_panel_size": 5,
+  "fresh_panel_source": "https://core.trac.wordpress.org/query?status=!closed|closed&col=id&order=changetime&desc=1&max=500&format=tab"
+}
