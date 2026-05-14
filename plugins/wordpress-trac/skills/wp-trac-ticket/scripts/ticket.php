@@ -309,44 +309,12 @@ foreach ($xml->channel->item as $item) {
         }
     }
 
-    // prbot relays GitHub PR activity into the Trac ticket as comments. We
-    // handle two shapes; everything else is pure scaffolding and dropped:
-    //
-    //   A) PR-opening announcement:
-    //        <p><em>This ticket was mentioned in <a>PR #N</a> on <a>repo</a>
-    //          by <a>@user</a>.</em>
-    //          <PR description body>
-    //        </p>
-    //      The body carries the PR description, which is NOT in the
-    //      api.wordpress.org PR endpoint. Strip the <em>preamble</em>,
-    //      re-attribute to the real GitHub user, keep the body.
-    //
-    //   B) Comment forwarded:
-    //        <p><a>@user</a> commented on <a>PR #N</a>:</p>
-    //        <p><comment body></p>
-    //      Strip the first <p>…</p> preamble, re-attribute, keep the body.
+    // prbot relays GitHub PR activity into the Trac ticket as comments. All
+    // such content (PR-opening announcements, forwarded review/discussion
+    // comments) is dropped from Discussion by design — the Pull Requests
+    // section is the canonical surface for PR content.
     if ($author === 'prbot') {
-        if (preg_match(
-            '~^\s*<p>\s*<em>\s*This ticket was mentioned in\s+<a[^>]*>(?:<span[^>]*>[^<]*</span>\s*)?PR\s+\#\d+</a>(?:\s+on\s+<a[^>]*>(?:<span[^>]*>[^<]*</span>\s*)?[^<]+</a>)?\s+by\s+<a[^>]*>(?:<span[^>]*>[^<]*</span>\s*)?@([\w.-]+)</a>\s*\.?\s*</em>\s*~i',
-            $rawDesc,
-            $pm
-        )) {
-            $author  = $pm[1];
-            // The body was inside the same <p> as the <em> preamble. Replace
-            // the matched preamble (which consumed the opening <p>) with a
-            // fresh <p> so the body sits in a well-formed paragraph; the
-            // original closing </p> further down then balances it.
-            $rawDesc = '<p>' . substr($rawDesc, strlen($pm[0]));
-        } elseif (preg_match(
-            '~^\s*<p>\s*<a[^>]*>[^@]*@([\w.-]+)</a>\s+commented on\s+<a[^>]*>(?:<span[^>]*>[^<]*</span>\s*)?PR\s+\#\d+</a>\s*:?\s*</p>\s*~i',
-            $rawDesc,
-            $pm
-        )) {
-            $author  = $pm[1];
-            $rawDesc = substr($rawDesc, strlen($pm[0]));
-        } else {
-            continue;
-        }
+        continue;
     }
 
     $date = $pubDate ? date('Y-m-d', strtotime($pubDate)) : '';

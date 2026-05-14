@@ -25,8 +25,10 @@ or triager would care about. Each one missing from the CLI output is a
   milestone, component, keywords, focuses). CC is explicitly excluded —
   not counted as missing.
 - The ticket description body.
-- Each comment that has prose content (skip pure keyword-bot churn —
-  see Noise tier).
+- Each comment that has prose content (skip pure keyword-bot churn,
+  and skip ALL prbot-authored comments — see Noise tier). Prbot
+  content is intentionally surfaced via the dedicated Pull Requests
+  section, not Discussion.
 - Each attachment listed on the page (filename + uploader at minimum).
 - Each changeset referenced as a "In [N]:" auto-comment on the page.
 - Each pull request linked to the ticket.
@@ -58,11 +60,13 @@ Items that should NOT appear in CLI output. Each occurrence is a −1.
 - Duplicate content (description echoed in a summary line, the same URL
   rendered twice in adjacent metadata fields).
 - Slackbot mention comments ("This ticket was mentioned in Slack...").
-- Prbot-authored scaffolding comments — only the pure-scaffolding form
-  ("This ticket was mentioned in PR #N…") counts as noise. The CLI
-  intentionally re-attributes prbot-FORWARDED GitHub comments
-  ("@user commented on PR #N: …prose") to the real GitHub user and
-  strips the forwarding preamble; those comments are NOT noise.
+- Any prbot-authored comment surviving in Discussion. **All** prbot
+  content is excluded by design — PR-opening announcements, forwarded
+  comments, review summaries, anything attributed to `prbot`. PR content
+  is surfaced via the dedicated Pull Requests section, not relayed
+  through Discussion. Judges must NOT flag a dropped prbot comment as
+  missing-required and must NOT flag a re-attributed prbot comment as
+  expected.
 - Raw Trac wiki syntax that did not convert to markdown: `{{{`, `}}}`,
   `[[BR]]`, `''italic''`, `=== heading ===`, `[wiki:Foo]`.
 - Long URLs duplicated in a comment body when already present in a
