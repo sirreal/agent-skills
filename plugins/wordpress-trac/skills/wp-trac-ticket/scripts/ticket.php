@@ -151,8 +151,12 @@ $description = preg_replace('/^\}\}\}\r?$/m', '```', $description);
 // are inside a fenced block and are left untouched.
 $convert_wiki = function (string $text): string {
     // Trac wiki headings: `= H1 =`, `== H2 ==`, ..., `===== H5 =====`.
+    // Allow leading whitespace — Trac renders indented `== Heading ==` as a
+    // heading too, and indented headings appear in descriptions that were
+    // pasted from outline-style notes. Use [ \t] rather than \s to keep the
+    // match per-line; \s would eat \n and glue the heading to the next line.
     $text = preg_replace_callback(
-        '/^(={1,5})\s+(.+?)\s*=*\s*$/m',
+        '/^[ \t]*(={1,5})[ \t]+(.+?)[ \t]*=*[ \t]*\r?$/m',
         function ($m) {
             return str_repeat('#', strlen($m[1])) . ' ' . $m[2];
         },
@@ -245,21 +249,101 @@ foreach ($xml->channel->item as $item) {
         continue;
     }
 
-    // prbot has two shapes:
-    //   1) Pure scaffolding ("This ticket was mentioned in PR #N…") — drop;
-    //      duplicates content already in the PR endpoint.
-    //   2) Forwarded GitHub PR discussion ("@user commented on PR #N: …prose")
-    //      — substantive content unavailable elsewhere. Re-attribute to the
-    //      real GitHub user and strip the forwarding preamble.
+    // Pre-pass: strip a leading Trac field-change <ul> from the raw HTML
+    // without DOM-parsing first, so that <pre> blocks containing literal PHP
+    // open/close tags survive intact for convertXHTMLToMarkdown's own
+    // pre-aware pipeline.
+    //
+    // Trac's field-change markup is structurally rigid:
+    //   <ul>
+    //     <li><strong>field</strong>: oldval → newval</li>
+    //     ...
+    //   </ul>
+    // where `field` is one of a fixed set of ticket fields. Wiki bullet lists
+    // can also start with <strong> (bold labels), so matching the structure
+    // alone is not enough — we additionally require every <li>'s field name
+    // to be a known Trac field, and the <ul> body to contain only such items.
+    //
+    // This runs BEFORE the prbot and changeset checks because a commit-close
+    // or PR-opening RSS item can emit a field-change <ul> followed by the
+    // narrative payload in the same item; the regexes that detect those
+    // narratives are anchored at the start of the raw description.
+    $known_fields = [
+        'cc', 'component', 'description', 'focuses', 'keywords', 'milestone',
+        'owner', 'priority', 'reporter', 'resolution', 'severity', 'status',
+        'summary', 'type', 'version',
+    ];
+    $field_changes = [];
+
+    if (preg_match('~^\s*<ul(?:\s[^>]*)?>(.*?)</ul>\s*~is', $rawDesc, $um)) {
+        $ul_body  = $um[1];
+        $li_re    = '~<li(?:\s[^>]*)?>\s*<strong>([^<]+)</strong>(.*?)</li>~is';
+        $count    = preg_match_all($li_re, $ul_body, $lis, PREG_SET_ORDER);
+        $residual = trim(preg_replace($li_re, '', $ul_body));
+        if ($count > 0 && $residual === '') {
+            $all_known = true;
+            foreach ($lis as $m) {
+                $field = strtolower(trim($m[1]));
+                if (!in_array($field, $known_fields, true)) {
+                    $all_known = false;
+                    break;
+                }
+            }
+            if ($all_known) {
+                foreach ($lis as $m) {
+                    $field = strtolower(trim($m[1]));
+                    // CC is excluded by design from metadata; do the same here
+                    // so CC churn doesn't surface in Discussion/Changesets.
+                    // Keyword-bot churn is excluded for the same reason.
+                    if ($field === 'keywords' || $field === 'cc') continue;
+                    $entry = preg_replace('/<[^>]+>/', '', $m[0]);
+                    $entry = html_entity_decode(
+                        $entry, ENT_QUOTES | ENT_HTML5, 'UTF-8'
+                    );
+                    $field_changes[$field] = preg_replace(
+                        '/\s+/', ' ', trim($entry)
+                    );
+                }
+                $rawDesc = substr($rawDesc, strlen($um[0]));
+            }
+        }
+    }
+
+    // prbot relays GitHub PR activity into the Trac ticket as comments. We
+    // handle two shapes; everything else is pure scaffolding and dropped:
+    //
+    //   A) PR-opening announcement:
+    //        <p><em>This ticket was mentioned in <a>PR #N</a> on <a>repo</a>
+    //          by <a>@user</a>.</em>
+    //          <PR description body>
+    //        </p>
+    //      The body carries the PR description, which is NOT in the
+    //      api.wordpress.org PR endpoint. Strip the <em>preamble</em>,
+    //      re-attribute to the real GitHub user, keep the body.
+    //
+    //   B) Comment forwarded:
+    //        <p><a>@user</a> commented on <a>PR #N</a>:</p>
+    //        <p><comment body></p>
+    //      Strip the first <p>…</p> preamble, re-attribute, keep the body.
     if ($author === 'prbot') {
         if (preg_match(
-            '~^\s*<p>\s*<a[^>]*>[^@]*@([\w-]+)</a>\s+commented on\s+<a[^>]*>(?:<span[^>]*>[^<]*</span>\s*)?PR\s+\#\d+</a>\s*:?\s*</p>\s*~i',
+            '~^\s*<p>\s*<em>\s*This ticket was mentioned in\s+<a[^>]*>(?:<span[^>]*>[^<]*</span>\s*)?PR\s+\#\d+</a>(?:\s+on\s+<a[^>]*>(?:<span[^>]*>[^<]*</span>\s*)?[^<]+</a>)?\s+by\s+<a[^>]*>(?:<span[^>]*>[^<]*</span>\s*)?@([\w.-]+)</a>\s*\.?\s*</em>\s*~i',
+            $rawDesc,
+            $pm
+        )) {
+            $author  = $pm[1];
+            // The body was inside the same <p> as the <em> preamble. Replace
+            // the matched preamble (which consumed the opening <p>) with a
+            // fresh <p> so the body sits in a well-formed paragraph; the
+            // original closing </p> further down then balances it.
+            $rawDesc = '<p>' . substr($rawDesc, strlen($pm[0]));
+        } elseif (preg_match(
+            '~^\s*<p>\s*<a[^>]*>[^@]*@([\w.-]+)</a>\s+commented on\s+<a[^>]*>(?:<span[^>]*>[^<]*</span>\s*)?PR\s+\#\d+</a>\s*:?\s*</p>\s*~i',
             $rawDesc,
             $pm
         )) {
             $author  = $pm[1];
             $rawDesc = substr($rawDesc, strlen($pm[0]));
-            // fall through to normal comment processing
         } else {
             continue;
         }
@@ -302,65 +386,6 @@ foreach ($xml->channel->item as $item) {
             'extra'    => $extra,
         ];
         continue;
-    }
-
-    // Pre-pass: strip a leading Trac field-change <ul> from the raw HTML
-    // without DOM-parsing first, so that <pre> blocks containing literal PHP
-    // open/close tags survive intact for convertXHTMLToMarkdown's own
-    // pre-aware pipeline.
-    //
-    // Trac's field-change markup is structurally rigid:
-    //   <ul>
-    //     <li><strong>field</strong>: oldval → newval</li>
-    //     ...
-    //   </ul>
-    // where `field` is one of a fixed set of ticket fields. Wiki bullet lists
-    // can also start with <strong> (bold labels), so matching the structure
-    // alone is not enough — we additionally require every <li>'s field name
-    // to be a known Trac field, and the <ul> body to contain only such items.
-    //
-    // This must run before the changeset check because a commit that closes
-    // a ticket emits a field-change <ul> *and* an "In [N]:" paragraph in the
-    // same RSS item.
-    $known_fields = [
-        'cc', 'component', 'description', 'focuses', 'keywords', 'milestone',
-        'owner', 'priority', 'reporter', 'resolution', 'severity', 'status',
-        'summary', 'type', 'version',
-    ];
-    $field_changes = [];
-
-    if (preg_match('~^\s*<ul(?:\s[^>]*)?>(.*?)</ul>\s*~is', $rawDesc, $um)) {
-        $ul_body  = $um[1];
-        $li_re    = '~<li(?:\s[^>]*)?>\s*<strong>([^<]+)</strong>(.*?)</li>~is';
-        $count    = preg_match_all($li_re, $ul_body, $lis, PREG_SET_ORDER);
-        $residual = trim(preg_replace($li_re, '', $ul_body));
-        if ($count > 0 && $residual === '') {
-            $all_known = true;
-            foreach ($lis as $m) {
-                $field = strtolower(trim($m[1]));
-                if (!in_array($field, $known_fields, true)) {
-                    $all_known = false;
-                    break;
-                }
-            }
-            if ($all_known) {
-                foreach ($lis as $m) {
-                    $field = strtolower(trim($m[1]));
-                    // CC is excluded by design from metadata; do the same here
-                    // so CC churn doesn't surface in Discussion/Changesets.
-                    // Keyword-bot churn is excluded for the same reason.
-                    if ($field === 'keywords' || $field === 'cc') continue;
-                    $entry = preg_replace('/<[^>]+>/', '', $m[0]);
-                    $entry = html_entity_decode(
-                        $entry, ENT_QUOTES | ENT_HTML5, 'UTF-8'
-                    );
-                    $field_changes[$field] = preg_replace(
-                        '/\s+/', ' ', trim($entry)
-                    );
-                }
-                $rawDesc = substr($rawDesc, strlen($um[0]));
-            }
-        }
     }
 
     // Changeset auto-comment: anchored "In <a class=changeset>[N]</a>:" at the
