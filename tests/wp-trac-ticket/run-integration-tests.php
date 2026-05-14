@@ -53,7 +53,10 @@ if ($exit1 !== 0 && stripos($stderr1, 'Could not fetch') !== false) {
     fwrite(STDOUT, "SKIP: Trac unreachable — " . trim($stderr1) . "\n");
     exit(0);
 }
-if ($len >= 6000) {
+if ($exit1 !== 0) {
+    $failures++;
+    fwrite(STDOUT, "FAIL  I1 #50040 exited {$exit1} — stderr: " . trim($stderr1) . "\n");
+} elseif ($len >= 6000) {
     fwrite(STDOUT, "PASS  I1 #50040 default output {$len} >= 6000 bytes\n");
 } else {
     $failures++;
@@ -104,22 +107,30 @@ if (strpos($out, '**Reporter:**') !== false && strpos($out, '**Priority:**') !==
 
 // I6: --short omits Discussion and Pull Requests but keeps metadata + description.
 $tests++;
-[, $short_out] = run(['--short', '50040']);
-$has_desc        = strpos($short_out, '## Description') !== false;
-$has_discussion  = strpos($short_out, '## Discussion') !== false;
-$has_prs         = strpos($short_out, '## Pull Requests') !== false;
-if ($has_desc && !$has_discussion && !$has_prs) {
-    fwrite(STDOUT, "PASS  I6 --short emits description, no discussion/PRs\n");
-} else {
+[, $short_out, $short_err, $short_exit] = run(['--short', '50040']);
+if ($short_exit !== 0) {
     $failures++;
-    fwrite(STDOUT, "FAIL  I6 --short emits unexpected sections (desc={$has_desc} discussion={$has_discussion} prs={$has_prs})\n");
+    fwrite(STDOUT, "FAIL  I6 --short exited {$short_exit} — stderr: " . trim($short_err) . "\n");
+} else {
+    $has_desc        = strpos($short_out, '## Description') !== false;
+    $has_discussion  = strpos($short_out, '## Discussion') !== false;
+    $has_prs         = strpos($short_out, '## Pull Requests') !== false;
+    if ($has_desc && !$has_discussion && !$has_prs) {
+        fwrite(STDOUT, "PASS  I6 --short emits description, no discussion/PRs\n");
+    } else {
+        $failures++;
+        fwrite(STDOUT, "FAIL  I6 --short emits unexpected sections (desc={$has_desc} discussion={$has_discussion} prs={$has_prs})\n");
+    }
 }
 
 // I7: control tickets — each must produce non-trivial default output.
 foreach ([29420, 50040] as $ticket) {
     $tests++;
-    [$len_c] = run([(string)$ticket]);
-    if ($len_c >= 500) {
+    [$len_c, , $err_c, $exit_c] = run([(string)$ticket]);
+    if ($exit_c !== 0) {
+        $failures++;
+        fwrite(STDOUT, "FAIL  I7 #{$ticket} exited {$exit_c} — stderr: " . trim($err_c) . "\n");
+    } elseif ($len_c >= 500) {
         fwrite(STDOUT, "PASS  I7 #{$ticket} produces {$len_c} bytes (>=500)\n");
     } else {
         $failures++;
