@@ -1,6 +1,6 @@
 # WordPress Trac Plugin
 
-A Claude Code plugin for working with WordPress Trac tickets, changesets, and searches.
+A Claude Code plugin for working with WordPress Trac.
 
 ## Installation
 
@@ -119,3 +119,21 @@ Run the script with `--help` for full documentation:
 ```bash
 ./scripts/timeline.php --help
 ```
+
+### `/wp-trac-fix <ticket-number>`
+
+Reproduce and attempt a fix for a WordPress core defect from Trac in an
+isolated worktree. Walks through setup, ticket reading, reproduction,
+fixing under a ~100-line cap, and producing a structured outcome report.
+
+**Additional prerequisites (only for `/wp-trac-fix`):**
+
+- A `WordPress/wordpress-develop` clone with an `upstream` remote
+  pointing at `WordPress/wordpress-develop`.
+- `envlite` available on `$PATH`.
+
+```
+/wp-trac-fix 62345
+```
+
+See `skills/wp-trac-fix/SKILL.md` for the full workflow.
