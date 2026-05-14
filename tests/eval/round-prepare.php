@@ -45,8 +45,6 @@ if (is_dir($round_dir)) {
     fwrite(STDERR, "Error: round dir already exists: {$round_dir}\n");
     exit(1);
 }
-mkdir($round_dir . '/cli', 0755, true);
-mkdir($round_dir . '/judges', 0755, true);
 
 $panel = json_decode(file_get_contents($panel_path), true);
 if (!is_array($panel) || !isset($panel['fixed_panel'])) {
@@ -75,16 +73,25 @@ $panel_round = [
     'fresh'   => $fresh,
     'all'     => array_merge($fixed, $fresh),
 ];
-file_put_contents("{$round_dir}/panel.json", json_encode($panel_round, JSON_PRETTY_PRINT) . "\n");
 
+// Fetch all ticket outputs into memory first; only commit to disk once the
+// full round is prepared. Otherwise a single ticket fetch failure leaves the
+// round directory behind and blocks retrying the same round number.
+$cli_outputs = [];
 foreach ($panel_round['all'] as $t) {
-    $out_path = "{$round_dir}/cli/{$t}.md";
     [$rc2, $out2, $err2] = run_proc([$ticket_script, (string)$t]);
     if ($rc2 !== 0) {
         fwrite(STDERR, "Error: ticket.php #{$t} exited {$rc2}: {$err2}\n");
         exit(2);
     }
-    file_put_contents($out_path, $out2);
+    $cli_outputs[$t] = $out2;
+}
+
+mkdir($round_dir . '/cli', 0755, true);
+mkdir($round_dir . '/judges', 0755, true);
+file_put_contents("{$round_dir}/panel.json", json_encode($panel_round, JSON_PRETTY_PRINT) . "\n");
+foreach ($cli_outputs as $t => $out) {
+    file_put_contents("{$round_dir}/cli/{$t}.md", $out);
 }
 
 echo "Round {$round} prepared at {$round_dir}\n";

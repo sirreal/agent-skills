@@ -305,7 +305,10 @@ foreach ($xml->channel->item as $item) {
             if ($all_known) {
                 foreach ($lis as $m) {
                     $field = strtolower(trim($m[1]));
-                    if ($field === 'keywords') continue;
+                    // CC is excluded by design from metadata; do the same here
+                    // so CC churn doesn't surface in Discussion/Changesets.
+                    // Keyword-bot churn is excluded for the same reason.
+                    if ($field === 'keywords' || $field === 'cc') continue;
                     $entry = preg_replace('/<[^>]+>/', '', $m[0]);
                     $entry = html_entity_decode(
                         $entry, ENT_QUOTES | ENT_HTML5, 'UTF-8'
