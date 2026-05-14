@@ -35,10 +35,10 @@ Today's date is used to calculate dates. Convert relative dates to explicit para
 
 | User request | CLI arguments |
 |--------------|---------------|
-| "my activity last 2 weeks" | `--author=jonsurrell --daysback=14` |
+| "my activity last 2 weeks" | `--author=<username> --daysback=14` |
 | "what did saxmatt and ryan do in early 2005" | `--from=2005-01-15 --daysback=15 --author=saxmatt --author=ryan` |
 | "all trac activity yesterday" | `--daysback=1` |
-| "jonsurrell's commits this month" | `--author=jonsurrell --daysback=30` |
+| "what <username> worked on this month" | `--author=<username> --daysback=30` |
 
 ## Instructions
 

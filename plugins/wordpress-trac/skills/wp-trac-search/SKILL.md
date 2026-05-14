@@ -6,7 +6,7 @@ description: >-
   tickets, filter by component (e.g., "HTML API", "Editor", "REST API"), or search by
   status, milestone, owner, reporter, type, or keywords. NOT for looking up a single
   ticket by number — use wp-trac-ticket for that. Example queries: "find open HTML API
-  tickets", "search for closed editor bugs", "tickets assigned to jonsurrell".
+  tickets", "search for closed editor bugs", "tickets assigned to <profile-name>".
 allowed-tools:
   - Bash(${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-search/scripts/search.php:*)
 argument-hint: <description of what to search for>

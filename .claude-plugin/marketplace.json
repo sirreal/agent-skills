@@ -11,8 +11,8 @@
     {
       "source": "./plugins/wordpress-trac",
       "name": "wordpress-trac",
-      "version": "4.0.0",
-      "description": "Tools for working with WordPress Trac tickets, changesets, and searches",
+      "version": "4.1.0",
+      "description": "Tools for working with WordPress Trac",
       "license": "GPL-2.0-or-later",
       "keywords": ["WordPress", "Trac", "Changeset", "ticket", "core"]
     },
