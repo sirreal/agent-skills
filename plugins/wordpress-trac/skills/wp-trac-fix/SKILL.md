@@ -22,6 +22,44 @@ Verify before starting:
 
 If any precondition fails, stop and report the missing piece. For envlite specifically, tell the user: "envlite was not found on `$PATH` — install it and ensure the `envlite` command is reachable, then re-run."
 
+## Phase −1 — Pre-flight
+
+Before creating any worktree, fetch the ticket and check whether the work has already been done. `envlite init` costs minutes; the checks below cost seconds.
+
+```bash
+git fetch upstream
+```
+
+Fetch the ticket via the `wp-trac-ticket` skill — the default mode returns metadata, description, attachments, changesets, comments, and any linked PRs in a single call. Carry the data forward into Phase A; do not re-fetch. PR contents are for awareness only (cite in the final report's `notes`); judging whether an existing PR resolves the ticket is not the worker's job.
+
+Evaluate two short-circuit patterns in order. If either matches, skip to Phase D and report; do not create a worktree.
+
+### ALREADY-FIXED — closed with a trunk changeset
+
+Pattern: `status=closed`, `resolution=fixed`, with a linked changeset.
+
+Verify the changeset is in trunk:
+
+```bash
+git log upstream/trunk --grep="#<ticket>" --oneline
+```
+
+Action: classify `ALREADY-FIXED`, name the changeset and commit SHA, exit.
+
+### BACKPORT-PENDING — reopened to request a backport
+
+Pattern, all of:
+- `status=reopened`
+- The reopening comment matches "Reopening … to request backport[ing] [<changeset>] to the <X.Y> branch" or close variant.
+- The referenced changeset is in `upstream/trunk` (verify as above).
+- No substantive activity *after* the backport-request comment. "Substantive" = new repro, new attached patch, regression report, a tester reporting the backport doesn't apply, or any other substantive evidence that the ticket is not complete. Bookkeeping (milestone changes, owner changes, version bumps) and tester comments confirming the existing fix works don't count — even when formatted as full test reports with environment blocks, screenshots, or before/after artifacts. Judge by the conclusion, not the formality.
+
+Action: classify `BACKPORT-PENDING`, name the changeset, exit. Backports to stable branches are committer-only and out of scope for the worker flow.
+
+### When neither matches
+
+Proceed to Phase 0. Phase A re-reads the ticket critically, focused on repro setup.
+
 ## Phase 0 — Setup
 
 Create a per-ticket worktree forked from `upstream/trunk` and initialize envlite. The slug is a kebab-case summary of the bug (1–4 words, e.g. `datepicker-footer-l10n`).
@@ -40,9 +78,9 @@ envlite init runs `npm ci`, `npm run build:dev`, and `composer install` — minu
 
 ## Phase A — Read the ticket
 
-Fetch the ticket via the `wp-trac-ticket` skill. The default mode returns everything you need — description, attachments, changesets, comments, and any linked pull requests — in a single call.
+The ticket has already been fetched in Phase −1. Re-read it critically, focused on repro setup — the entire ticket, not only the comments.
 
-Read critically — the entire ticket, not only the comments. Descriptions, sample code, and commenter conclusions are all unreliable; they may be wrong, stale, or written without ever being run. Conversely, comments that *look* dismissable (a patch that didn't apply, a confused author) often contain load-bearing environment details. Read every comment for its evidence, separately from its conclusion.
+Descriptions, sample code, and commenter conclusions are all unreliable; they may be wrong, stale, or written without ever being run. Conversely, comments that *look* dismissable (a patch that didn't apply, a confused author) often contain load-bearing environment details. Read every comment for its evidence, separately from its conclusion.
 
 - "Reproduction report" comments may have tested an adjacent scenario, not the actual claim. Confirm what the ticket claims is broken before accepting any commenter's conclusion. Note meaningful discrepancies in the report's notes field.
 - Sample code in the description may not run as written. If a transplanted snippet throws a fatal error, the snippet is broken — that is NOT evidence the underlying bug is absent. Fix the snippet, retry, then decide. See `references/repro-strategies.md` for common snippet-failure modes.
@@ -80,6 +118,8 @@ After Phase B, classify the outcome:
   - Demonstrated execution of the codepath the ticket describes with no failure (add a probe; confirm it fires), or
   - Two strategies attempted, both produced no failure under conditions matching the ticket.
 - **INCONCLUSIVE** — neither reproduced nor confidence-grade negative evidence within ~20 wall-clock minutes. Distinct from NOT-REPRODUCIBLE: do not claim the bug is absent.
+- **ALREADY-FIXED** — short-circuited in Phase −1; the fix is already in `upstream/trunk`.
+- **BACKPORT-PENDING** — short-circuited in Phase −1; ticket is reopened only to request a backport to a stable branch.
 
 ### Repro evidence (mandatory)
 
@@ -150,6 +190,16 @@ verification:    <command + observed result, OR manual recipe + observed result>
 test:            <path to test file | waiver: <reason>>
 files changed:   <list | none>
 notes:           <≤3 lines on edge cases, surprises, reviewer caveats>
+```
+
+For Phase −1 short-circuit classifications (`ALREADY-FIXED`, `BACKPORT-PENDING`), use this template instead — no worktree was created and most fields don't apply:
+
+```
+classification: <ALREADY-FIXED | BACKPORT-PENDING>
+ticket:         #<N>
+evidence:       <changeset [NNNNN] verified in upstream/trunk>
+worktree:       not created
+notes:          <≤3 lines: post-reopen activity considered, related open PRs (if any), anything the user should re-check>
 ```
 
 ## Additional resources
