@@ -47,13 +47,25 @@ foreach ($panel['all'] as $t) {
         continue;
     }
     $j = json_decode(file_get_contents($path), true);
-    if (!is_array($j) || !isset($j['score'])) {
+    // A valid verdict must carry the full schema described in judge-prompt.md.
+    // Accepting partial JSON (e.g. just `{"score": 10}`) would let an empty
+    // gap-array fall through to the perfect-round path, falsely converging
+    // the harness on a verdict the judge never actually produced.
+    $valid = is_array($j)
+        && isset($j['ticket'], $j['score'])
+        && (string)$j['ticket'] === (string)$t
+        && is_int($j['score'])
+        && $j['score'] >= 0 && $j['score'] <= 10
+        && is_array($j['missing_required']  ?? null)
+        && is_array($j['missing_important'] ?? null)
+        && is_array($j['noise_present']     ?? null);
+    if (!$valid) {
         $missing[] = $t;
         continue;
     }
     $scores[] = $j;
     foreach (['missing_required', 'missing_important', 'noise_present'] as $tier) {
-        foreach (($j[$tier] ?? []) as $item) {
+        foreach ($j[$tier] as $item) {
             $key = strtolower(trim($item));
             $gap_freq[$tier][$key] = ($gap_freq[$tier][$key] ?? 0) + 1;
         }
