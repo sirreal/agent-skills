@@ -437,14 +437,19 @@ if ($comments === []) {
 
 // ---- Render Pull Requests ----
 echo "## Pull Requests\n\n";
+// A failed PR fetch means the output is incomplete. Exit non-zero so callers
+// that record the output (e.g. the eval harness) treat this as a real
+// failure rather than caching a half-rendered ticket as a successful run.
 if ($pr_code < 200 || $pr_code >= 300) {
+    fwrite(STDERR, "Error: Could not fetch pull requests for #{$ticket_num} (HTTP {$pr_code})\n");
     echo "_Could not fetch pull requests (HTTP {$pr_code})._\n";
-    exit(0);
+    exit(1);
 }
 $prs = json_decode($pr_body, true);
 if (!is_array($prs)) {
+    fwrite(STDERR, "Error: Could not parse pull request response for #{$ticket_num}\n");
     echo "_Could not parse pull request response._\n";
-    exit(0);
+    exit(1);
 }
 if (count($prs) === 0) {
     echo "_No pull requests found._\n";
