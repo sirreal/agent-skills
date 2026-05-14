@@ -58,7 +58,11 @@ Items that should NOT appear in CLI output. Each occurrence is a −1.
 - Duplicate content (description echoed in a summary line, the same URL
   rendered twice in adjacent metadata fields).
 - Slackbot mention comments ("This ticket was mentioned in Slack...").
-- Prbot-authored scaffolding comments (duplicates the PR endpoint).
+- Prbot-authored scaffolding comments — only the pure-scaffolding form
+  ("This ticket was mentioned in PR #N…") counts as noise. The CLI
+  intentionally re-attributes prbot-FORWARDED GitHub comments
+  ("@user commented on PR #N: …prose") to the real GitHub user and
+  strips the forwarding preamble; those comments are NOT noise.
 - Raw Trac wiki syntax that did not convert to markdown: `{{{`, `}}}`,
   `[[BR]]`, `''italic''`, `=== heading ===`, `[wiki:Foo]`.
 - Long URLs duplicated in a comment body when already present in a
@@ -79,6 +83,10 @@ penalize either way.
   CLI doesn't need to surface them).
 - The reporter's full name vs. login (either is fine).
 - Exact whitespace and line-break preservation.
+- A PR's GitHub `mergeable_state` (e.g. the "Merge conflicts" badge on the
+  Trac page) is **distinct** from its GitHub Actions CI `check_runs` status.
+  The CLI surfaces CI status; a CI-success PR with merge conflicts is not
+  a wrong CI report.
 
 ## Judge output format
 

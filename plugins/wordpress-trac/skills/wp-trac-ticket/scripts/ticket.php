@@ -168,6 +168,15 @@ $convert_wiki = function (string $text): string {
         },
         $text
     );
+    // Trac italic markup: ''text'' → *text*. Use a lazy match so a paragraph
+    // with multiple italic runs doesn't collapse into a single span. The
+    // pattern requires non-empty content and refuses to start/end on a quote
+    // so it doesn't eat real apostrophes.
+    $text = preg_replace(
+        "/''((?:[^']|'(?!'))+?)''/",
+        '*$1*',
+        $text
+    );
     return $text;
 };
 $segments = preg_split('/(^```[^\n]*\n)/m', $description, -1, PREG_SPLIT_DELIM_CAPTURE);
