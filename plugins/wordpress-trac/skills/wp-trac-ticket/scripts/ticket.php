@@ -263,35 +263,10 @@ foreach ($xml->channel->item as $item) {
         continue;
     }
 
-    // Changeset auto-comment: anchored "In <a class=changeset>[N]</a>:" at start.
-    // Anchoring avoids misclassifying regular comments that happen to mention a
-    // changeset link inline (e.g. "fixed in [59369]" inside prose).
-    if (preg_match(
-        '#^\s*<p>\s*In\s*<a\s+class="changeset"\s+href="([^"]+)"[^>]*>\[?(\d+)\]?</a>\s*:?\s*</p>\s*#i',
-        $rawDesc,
-        $cm
-    )) {
-        $cs_href = $cm[1];
-        $cs_num  = $cm[2];
-        if (str_starts_with($cs_href, '/')) {
-            $cs_href = "https://core.trac.wordpress.org{$cs_href}";
-        }
-        $rest = substr($rawDesc, strlen($cm[0]));
-        $msg = trim(convertXHTMLToMarkdown($rest));
-        $changesets[] = [
-            'number' => $cs_num,
-            'url'    => $cs_href,
-            'author' => $author,
-            'date'   => $date,
-            'msg'    => $msg,
-        ];
-        continue;
-    }
-
-    // Field-change OR comment: detect and strip a leading field-change <ul>
-    // from the raw HTML without DOM-parsing first, so that <pre> blocks
-    // containing literal PHP open/close tags survive intact for
-    // convertXHTMLToMarkdown's own pre-aware pipeline.
+    // Pre-pass: strip a leading Trac field-change <ul> from the raw HTML
+    // without DOM-parsing first, so that <pre> blocks containing literal PHP
+    // open/close tags survive intact for convertXHTMLToMarkdown's own
+    // pre-aware pipeline.
     //
     // Trac's field-change markup is structurally rigid:
     //   <ul>
@@ -302,13 +277,16 @@ foreach ($xml->channel->item as $item) {
     // can also start with <strong> (bold labels), so matching the structure
     // alone is not enough — we additionally require every <li>'s field name
     // to be a known Trac field, and the <ul> body to contain only such items.
+    //
+    // This must run before the changeset check because a commit that closes
+    // a ticket emits a field-change <ul> *and* an "In [N]:" paragraph in the
+    // same RSS item.
     $known_fields = [
         'cc', 'component', 'description', 'focuses', 'keywords', 'milestone',
         'owner', 'priority', 'reporter', 'resolution', 'severity', 'status',
         'summary', 'type', 'version',
     ];
     $field_changes = [];
-    $body_input = $rawDesc;
 
     if (preg_match('~^\s*<ul(?:\s[^>]*)?>(.*?)</ul>\s*~is', $rawDesc, $um)) {
         $ul_body  = $um[1];
@@ -336,12 +314,39 @@ foreach ($xml->channel->item as $item) {
                         '/\s+/', ' ', trim($entry)
                     );
                 }
-                $body_input = substr($rawDesc, strlen($um[0]));
+                $rawDesc = substr($rawDesc, strlen($um[0]));
             }
         }
     }
 
-    $body_md = trim(convertXHTMLToMarkdown($body_input));
+    // Changeset auto-comment: anchored "In <a class=changeset>[N]</a>:" at the
+    // start of the (post-field-change-strip) description. Anchoring avoids
+    // misclassifying regular comments that happen to mention a changeset link
+    // inline (e.g. "fixed in [59369]" inside prose).
+    if (preg_match(
+        '#^\s*<p>\s*In\s*<a\s+class="changeset"\s+href="([^"]+)"[^>]*>\[?(\d+)\]?</a>\s*:?\s*</p>\s*#i',
+        $rawDesc,
+        $cm
+    )) {
+        $cs_href = $cm[1];
+        $cs_num  = $cm[2];
+        if (str_starts_with($cs_href, '/')) {
+            $cs_href = "https://core.trac.wordpress.org{$cs_href}";
+        }
+        $rest = substr($rawDesc, strlen($cm[0]));
+        $msg = trim(convertXHTMLToMarkdown($rest));
+        $changesets[] = [
+            'number'  => $cs_num,
+            'url'     => $cs_href,
+            'author'  => $author,
+            'date'    => $date,
+            'msg'     => $msg,
+            'changes' => $field_changes,
+        ];
+        continue;
+    }
+
+    $body_md = trim(convertXHTMLToMarkdown($rawDesc));
 
     if ($field_changes === [] && $body_md === '') {
         continue;
@@ -378,6 +383,9 @@ if ($changesets !== []) {
     foreach ($changesets as $c) {
         echo "### [{$c['number']}] by {$c['author']} on {$c['date']}\n\n";
         echo "{$c['url']}\n\n";
+        if (!empty($c['changes'])) {
+            echo "_" . implode('; ', array_values($c['changes'])) . "_\n\n";
+        }
         if ($c['msg'] !== '') {
             echo "{$c['msg']}\n\n";
         }
