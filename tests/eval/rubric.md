@@ -40,7 +40,9 @@ Context that materially aids comprehension but isn't itself the data.
   (e.g. "status changed from assigned to closed" associated with comment:9).
   **Keyword-field changes are excluded by design** — do not flag missing
   "keywords changed: has-patch added" entries.
-- Comment numbers (`comment:N`) on each comment.
+- Comment numbers (`comment:N`) on each comment. **Changeset auto-comments
+  are excluded** — they are surfaced in their own Changesets section keyed
+  by `[N]`, and the redundant `comment:N` is intentionally dropped.
 - Dates on comments / attachments / changesets.
 - Author attribution on each item (comment author, attachment uploader,
   changeset committer).

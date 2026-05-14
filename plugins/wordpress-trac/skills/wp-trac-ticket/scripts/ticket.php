@@ -149,14 +149,26 @@ $description = preg_replace('/^\}\}\}\r?$/m', '```', $description);
 // Split on fence markers so the heading regex never rewrites lines like
 // `== separator ==` that appear inside a code block. Segments at odd indexes
 // are inside a fenced block and are left untouched.
-$convert_headings = function (string $text): string {
-    return preg_replace_callback(
+$convert_wiki = function (string $text): string {
+    // Trac wiki headings: `= H1 =`, `== H2 ==`, ..., `===== H5 =====`.
+    $text = preg_replace_callback(
         '/^(={1,5})\s+(.+?)\s*=*\s*$/m',
         function ($m) {
             return str_repeat('#', strlen($m[1])) . ' ' . $m[2];
         },
         $text
     );
+    // Trac [[Image(src, ...options)]] macro → markdown image. We keep only the
+    // first argument (the source) and discard size/alt options; the source is
+    // either an attachment filename or a URL, both of which Markdown handles.
+    $text = preg_replace_callback(
+        '/\[\[Image\(([^,)]+)(?:,[^)]*)?\)\]\]/i',
+        function ($m) {
+            return '![](' . trim($m[1]) . ')';
+        },
+        $text
+    );
+    return $text;
 };
 $segments = preg_split('/(^```[^\n]*\n)/m', $description, -1, PREG_SPLIT_DELIM_CAPTURE);
 $in_fence = false;
@@ -166,7 +178,7 @@ foreach ($segments as $i => $seg) {
         continue;
     }
     if (!$in_fence) {
-        $segments[$i] = $convert_headings($seg);
+        $segments[$i] = $convert_wiki($seg);
     }
 }
 $description = implode('', $segments);

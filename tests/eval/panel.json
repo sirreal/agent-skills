@@ -17,9 +17,9 @@
       "note": "Closed (fixed) Editor defect, 2 changesets via In-[N] auto-comments. Tests changeset extraction and resolution surfacing."
     },
     {
-      "ticket": 65167,
-      "strata": "closed-duplicate",
-      "note": "Closed as duplicate, sparse discussion. Tests that resolution is surfaced even when content volume is low."
+      "ticket": 65133,
+      "strata": "closed-wiki-macros-multi-changeset",
+      "note": "Closed via two changesets after a reopen, description contains a [[Image(URL)]] wiki macro. Tests image-macro conversion and status churn across multiple closing commits."
     },
     {
       "ticket": 64977,
