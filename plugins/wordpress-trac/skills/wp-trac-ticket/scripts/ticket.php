@@ -288,86 +288,60 @@ foreach ($xml->channel->item as $item) {
         continue;
     }
 
-    // Field-change OR comment: split first <ul> (change list) from body.
-    $doc = @Dom\HTMLDocument::createFromString("<div>{$rawDesc}</div>", LIBXML_HTML_NOIMPLIED);
-    $root = $doc?->getElementsByTagName('div')->item(0);
-
+    // Field-change OR comment: detect and strip a leading field-change <ul>
+    // from the raw HTML without DOM-parsing first, so that <pre> blocks
+    // containing literal PHP open/close tags survive intact for
+    // convertXHTMLToMarkdown's own pre-aware pipeline.
+    //
+    // Trac's field-change markup is structurally rigid:
+    //   <ul>
+    //     <li><strong>field</strong>: oldval → newval</li>
+    //     ...
+    //   </ul>
+    // where `field` is one of a fixed set of ticket fields. Wiki bullet lists
+    // can also start with <strong> (bold labels), so matching the structure
+    // alone is not enough — we additionally require every <li>'s field name
+    // to be a known Trac field, and the <ul> body to contain only such items.
+    $known_fields = [
+        'cc', 'component', 'description', 'focuses', 'keywords', 'milestone',
+        'owner', 'priority', 'reporter', 'resolution', 'severity', 'status',
+        'summary', 'type', 'version',
+    ];
     $field_changes = [];
-    $body_html = '';
+    $body_input = $rawDesc;
 
-    if ($root !== null) {
-        $first_ul_consumed = false;
-        foreach ($root->childNodes as $child) {
-            $is_field_change_ul = false;
-            if (!$first_ul_consumed
-                && $child->nodeType === XML_ELEMENT_NODE
-                && strtolower($child->localName) === 'ul'
-            ) {
-                // Trac field-change markup is always <li><strong>field</strong>...</li>.
-                // A comment that happens to start with a wiki bullet list also
-                // produces a leading <ul>, but those <li>s do NOT start with
-                // <strong>. Probe before consuming so we don't swallow body lists.
-                $is_field_change_ul = true;
-                $saw_li = false;
-                foreach ($child->childNodes as $li) {
-                    if ($li->nodeType !== XML_ELEMENT_NODE) continue;
-                    if (strtolower($li->localName) !== 'li') continue;
-                    $saw_li = true;
-                    $first_elem = null;
-                    foreach ($li->childNodes as $sc) {
-                        if ($sc->nodeType === XML_ELEMENT_NODE) {
-                            $first_elem = $sc;
-                            break;
-                        }
-                        if ($sc->nodeType === XML_TEXT_NODE
-                            && trim($sc->textContent) !== ''
-                        ) {
-                            break;
-                        }
-                    }
-                    if ($first_elem === null
-                        || strtolower($first_elem->localName) !== 'strong'
-                    ) {
-                        $is_field_change_ul = false;
-                        break;
-                    }
-                }
-                if (!$saw_li) {
-                    $is_field_change_ul = false;
+    if (preg_match('~^\s*<ul(?:\s[^>]*)?>(.*?)</ul>\s*~is', $rawDesc, $um)) {
+        $ul_body  = $um[1];
+        $li_re    = '~<li(?:\s[^>]*)?>\s*<strong>([^<]+)</strong>(.*?)</li>~is';
+        $count    = preg_match_all($li_re, $ul_body, $lis, PREG_SET_ORDER);
+        $residual = trim(preg_replace($li_re, '', $ul_body));
+        if ($count > 0 && $residual === '') {
+            $all_known = true;
+            foreach ($lis as $m) {
+                $field = strtolower(trim($m[1]));
+                if (!in_array($field, $known_fields, true)) {
+                    $all_known = false;
+                    break;
                 }
             }
-
-            if ($is_field_change_ul) {
-                foreach ($child->childNodes as $li) {
-                    if ($li->nodeType !== XML_ELEMENT_NODE) continue;
-                    if (strtolower($li->localName) !== 'li') continue;
-                    $strong_text = '';
-                    foreach ($li->childNodes as $sc) {
-                        if ($sc->nodeType === XML_ELEMENT_NODE
-                            && strtolower($sc->localName) === 'strong'
-                        ) {
-                            $strong_text = strtolower(trim($sc->textContent));
-                            break;
-                        }
-                    }
-                    if ($strong_text === '') continue;
-                    if ($strong_text === 'keywords') continue;
-                    $field_changes[$strong_text] = preg_replace(
-                        '/\s+/', ' ', trim($li->textContent)
+            if ($all_known) {
+                foreach ($lis as $m) {
+                    $field = strtolower(trim($m[1]));
+                    if ($field === 'keywords') continue;
+                    $entry = preg_replace('/<[^>]+>/', '', $m[0]);
+                    $entry = html_entity_decode(
+                        $entry, ENT_QUOTES | ENT_HTML5, 'UTF-8'
+                    );
+                    $field_changes[$field] = preg_replace(
+                        '/\s+/', ' ', trim($entry)
                     );
                 }
-                $first_ul_consumed = true;
-                continue;
-            }
-            if ($child->nodeType === XML_TEXT_NODE) {
-                $body_html .= htmlspecialchars($child->textContent, ENT_QUOTES);
-            } elseif ($child->nodeType === XML_ELEMENT_NODE) {
-                $body_html .= $doc->saveHTML($child);
+                $body_input = substr($rawDesc, strlen($um[0]));
             }
         }
     }
 
-    $body_md = trim(convertXHTMLToMarkdown($body_html));
+    $body_md = trim(convertXHTMLToMarkdown($body_input));
 
     if ($field_changes === [] && $body_md === '') {
         continue;
