@@ -21,8 +21,7 @@ Claude Code plugin marketplace repository. Contains plugins published under the 
 plugins/
 └── wordpress-trac/     # Individual plugin
     ├── .claude-plugin/plugin.json  # Plugin manifest
-    ├── commands/       # Command definitions (YAML frontmatter + instructions)
-    └── scripts/        # PHP executables called by commands
+    └── skills/         # One directory per skill (SKILL.md + scripts/)
 ```
 
 ## Development
@@ -31,10 +30,10 @@ plugins/
 
 **Test scripts directly:**
 ```bash
-./plugins/wordpress-trac/scripts/ticket.php 62345
-./plugins/wordpress-trac/scripts/changeset.php 59734
-./plugins/wordpress-trac/scripts/search.php "status=new component=Editor"
-./plugins/wordpress-trac/scripts/timeline.php --author=jonsurrell --daysback=14
+./plugins/wordpress-trac/skills/wp-trac-ticket/scripts/ticket.php 62345
+./plugins/wordpress-trac/skills/wp-trac-changeset/scripts/changeset.php 59734
+./plugins/wordpress-trac/skills/wp-trac-search/scripts/search.php "status=new component=Editor"
+./plugins/wordpress-trac/skills/wp-trac-timeline/scripts/timeline.php --author=jonsurrell --daysback=14
 ```
 
 **Test plugin locally:**
@@ -44,11 +43,11 @@ claude --plugin-dir ./plugins/wordpress-trac
 
 ## Plugin Patterns
 
-**Commands** use YAML frontmatter with `allowed-tools` restricting Bash to specific scripts via `${CLAUDE_PLUGIN_ROOT}`:
+**Skills** use YAML frontmatter with `allowed-tools` restricting Bash to specific scripts via `${CLAUDE_PLUGIN_ROOT}`:
 ```yaml
 ---
 allowed-tools:
-  - Bash(${CLAUDE_PLUGIN_ROOT}/scripts/ticket.php:*)
+  - Bash(${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-ticket/scripts/ticket.php:*)
 ---
 ```
 
