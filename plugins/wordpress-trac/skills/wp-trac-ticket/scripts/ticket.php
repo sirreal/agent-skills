@@ -71,11 +71,13 @@ if (!$short) {
     trac_apply_cookie($rss_ch);
     curl_multi_add_handle($mh, $rss_ch);
 
+    // The PR endpoint lives on api.wordpress.org, not core.trac.wordpress.org.
+    // Do NOT apply the Trac cookie here — CURLOPT_COOKIE is not host-scoped
+    // and would leak the trac_auth token to a different origin.
     $pr_ch = curl_init($pr_url);
     curl_setopt($pr_ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($pr_ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($pr_ch, CURLOPT_USERAGENT, 'wp-trac-ticket/2.0');
-    trac_apply_cookie($pr_ch);
     curl_multi_add_handle($mh, $pr_ch);
 }
 
@@ -143,13 +145,31 @@ $description = preg_replace_callback(
 $description = preg_replace('/^\}\}\}\r?$/m', '```', $description);
 // Trac wiki headings: `= H1 =`, `== H2 ==`, ..., `===== H5 =====`. Trailing
 // `=`s are optional. Map count → markdown `#`s.
-$description = preg_replace_callback(
-    '/^(={1,5})\s+(.+?)\s*=*\s*$/m',
-    function ($m) {
-        return str_repeat('#', strlen($m[1])) . ' ' . $m[2];
-    },
-    $description
-);
+//
+// Split on fence markers so the heading regex never rewrites lines like
+// `== separator ==` that appear inside a code block. Segments at odd indexes
+// are inside a fenced block and are left untouched.
+$convert_headings = function (string $text): string {
+    return preg_replace_callback(
+        '/^(={1,5})\s+(.+?)\s*=*\s*$/m',
+        function ($m) {
+            return str_repeat('#', strlen($m[1])) . ' ' . $m[2];
+        },
+        $text
+    );
+};
+$segments = preg_split('/(^```[^\n]*\n)/m', $description, -1, PREG_SPLIT_DELIM_CAPTURE);
+$in_fence = false;
+foreach ($segments as $i => $seg) {
+    if (preg_match('/^```/', $seg)) {
+        $in_fence = !$in_fence;
+        continue;
+    }
+    if (!$in_fence) {
+        $segments[$i] = $convert_headings($seg);
+    }
+}
+$description = implode('', $segments);
 
 // ---- Render metadata header ----
 echo "# Trac Ticket #{$ticket['id']}\n\n";
