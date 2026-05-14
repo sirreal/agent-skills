@@ -8,8 +8,10 @@
  *
  * Produces:
  *   tests/eval/runs/round-<NNN>/report.json
- *     {round, panel, scores:[{ticket,score,...}], totals, gap_frequency,
- *      perfect_round: bool, missing_judges:[ticket,...]}
+ *     {round, panel:[ticket,...], scores:{ticket: score,...},
+ *      gap_frequency:{missing_required, missing_important, noise_present},
+ *      missing_judges:[ticket,...], perfect_round: bool,
+ *      details:[{full judge verdict},...]}
  *
  * Exit code: 0 if every ticket scored 10 (perfect round); 1 otherwise.
  *
