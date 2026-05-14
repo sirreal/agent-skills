@@ -9,6 +9,9 @@ first) and produce a single JSON object on stdout. No other commentary.
 - `TICKET`: numeric ticket id, e.g. `62345`
 - `CLI_OUTPUT_PATH`: absolute path to a file containing the CLI's stdout for that ticket
 - `RUBRIC_PATH`: absolute path to `tests/eval/rubric.md`
+- `JUDGE_OUT_PATH`: absolute path where you MUST write the JSON verdict
+  (e.g. `tests/eval/runs/round-007/judges/62345.json`). The round aggregator
+  reads from this path — stdout is not consulted.
 
 ## Steps
 
@@ -29,7 +32,8 @@ first) and produce a single JSON object on stdout. No other commentary.
    each Required/Important item present on the page but missing from the CLI,
    record it. For each Noise item present in the CLI, record it.
 7. Compute the score with the formula in the rubric.
-8. Emit a single JSON object on stdout, nothing else.
+8. Write the JSON object below to `JUDGE_OUT_PATH` (use the Write tool). The
+   file must contain exactly one JSON object — no prose, no markdown fence.
 
 ## Output JSON schema
 
@@ -58,7 +62,8 @@ to fix.
 
 ## Do not
 
-- Do not chat with the orchestrator. Output JSON only.
+- Do not chat with the orchestrator. The only deliverable is the JSON file at
+  `JUDGE_OUT_PATH`.
 - Do not invent fields not in the schema.
 - Do not try to "fix" the CLI yourself — that's the patcher's job.
 - Do not score above 10 or below 0. Clamp.

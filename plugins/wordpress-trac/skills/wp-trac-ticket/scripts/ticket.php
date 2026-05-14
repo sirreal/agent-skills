@@ -172,6 +172,14 @@ $convert_wiki = function (string $text): string {
         },
         $text
     );
+    // Trac bold markup: '''text''' → **text**. Run before italic so the
+    // triple-quote runs aren't partially consumed by the italic pass (which
+    // would produce garbled output like `*'text*'` for `'''text'''`).
+    $text = preg_replace(
+        "/'''([^']+?)'''/",
+        '**$1**',
+        $text
+    );
     // Trac italic markup: ''text'' → *text*. Use a lazy match so a paragraph
     // with multiple italic runs doesn't collapse into a single span. The
     // pattern requires non-empty content and refuses to start/end on a quote
