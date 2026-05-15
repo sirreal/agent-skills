@@ -1,0 +1,91 @@
+Triaging 10 unique tickets (50255 appears twice in args). Results below.
+
+=== TRIAGE RESULT ===
+ticket:         #50255
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       PR #11793 open, CI success, APPROVED by apermo, updated 2026-05-12; title "REST API: Set `_edit_last` post meta when creating or updating posts" maps directly to the description's root cause (missing `_edit_last` on REST updates). No explicit ticket-number reference in PR title/body.
+recommendation: Review and land PR #11793; no fresh worker dispatch needed.
+notes:          Ticket appeared twice in args; triaged once.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65138
+classification: NEEDS-DISCUSSION
+confidence:     high
+evidence:       jorbin (comment:13, 2026-05-08) withdrew backport approval and said the merged changeset "needs to be reverted" after the decision not to ship RTC; ellatrix punted milestone to 7.1; tracking-style ticket aggregating many bugs.
+recommendation: Skip — direction (revert vs keep) and scope of this tracking ticket need committer alignment, not a worker dispatch.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65191
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Two open PRs (#11752, #11777), both CI success, both updated within last 30 days (2026-05-07/08), no CHANGES_REQUESTED reviews; SergeyBiryukov owns and set status=reviewing on 2026-05-15. PR #11752 title "Plugins: Update custom view counts when deleting a plugin" matches summary closely. No explicit ticket-number reference in PR titles.
+recommendation: Review the two competing PRs (overlap on delete fix + separator-CSS scope) and consolidate; do not start fresh.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #46058
+classification: NEEDS-INFO
+confidence:     high
+evidence:       Original report from 2020 on WP 5.0.3; jdeep (comment:2, 2026-05-08) reports unable to reproduce on 6.9 with Twenty Nineteen and asks reporter for current version, theme, caching, and plugin context.
+recommendation: Skip — wait for reporter to confirm reproduction on a current WP version.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #59272
+classification: NEEDS-INFO
+confidence:     high
+evidence:       shooper (2026-01-17) and jdeep (2026-05-08) both report unable to reproduce on current trunk/6.9.4 and ask reporter to confirm the issue still occurs; no PRs.
+recommendation: Skip — pending reporter confirmation that the bug still reproduces.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #50694
+classification: NEEDS-INFO
+confidence:     high
+evidence:       Keywords include `reporter-feedback` and `close`; realloc (comment:1, 2026-05-08) could not reproduce and recommends closing as a non-issue, noting username validation already prevents the scenario; no PRs.
+recommendation: Skip — awaiting reporter response before close.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #63017
+classification: PR-STALE
+confidence:     high
+evidence:       Only open PR #8409 last updated 2025-06-27 (~11 months stale vs today 2026-05-16); comment:14 (2026-02-20) flags scope creep and ticket was punted to Future Release coupled with #58302; CI green but no recent activity.
+recommendation: Skip a worker dispatch; revive PR #8409 or split off the small docs-only patch (attachment 63017-small-core-clarification.diff) before any fresh work.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #39651
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Open PR #11770 by Sukhendu2002, created and updated 2026-05-08, CI success, no CHANGES_REQUESTED; title "Fix: Show non-public post type labels in Find Posts modal" matches ticket summary verbatim in scope. No explicit ticket-number reference in PR title.
+recommendation: Review PR #11770 rather than dispatching a new worker.
+notes:          PR has no tests; reviewer may request them.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65204
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Open PR #11765 by ticket owner Takshil-Kunadia, created/updated 2026-05-07, CI success, no CHANGES_REQUESTED; title "Media: Add support for custom bulk actions in Media grid view" matches summary "Custom Bulk Actions missing from Grid View". No explicit ticket-number reference.
+recommendation: Review PR #11765; owner is the PR author, so dispatch a reviewer rather than a fresh worker.
+notes:          PR lacks tests; flag at review.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #48684
+classification: READY-TO-FIX
+confidence:     medium
+evidence:       Status=new, type=defect, keywords include `has-patch`; sabernhardt (comment:16, 2026-05-11) attached two candidate diffs (48684.wp-block.diff, 48684.exclude-components.diff) with clear rationale; no open PRs, no active multi-author disagreement, no recent repro/info request.
+recommendation: Dispatch a worker; pick one of sabernhardt's patches (likely the `.wp-block` selector) and submit as a PR.
+notes:          Bundled Theme (Twenty Twenty) CSS-only change; older patch link in PR 980 already established the contrast-selector pattern.
+===

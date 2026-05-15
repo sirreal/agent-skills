@@ -1,0 +1,100 @@
+I'll emit triage results for each ticket in the order requested.
+
+=== TRIAGE RESULT ===
+ticket:         #65044
+classification: PR-RESOLVES
+confidence:     high
+evidence:       status=reviewing, type=defect; open PR #11496 (CI success, updated 2026-05-14, no CHANGES_REQUESTED) title verbatim addresses get_post_custom_values() per ticket summary; owner westonruter said in comment:14 he will commit once trunk opens for 7.1.
+recommendation: Review PR #11496 — owner has stated intent to commit; do not dispatch worker.
+notes:          A second open PR #11640 has CHANGES_REQUESTED from westonruter and is disqualified.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #64260
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       status=reviewing, type=defect; only open PR #10537 has CHANGES_REQUESTED: westonruter (disqualifies PR-RESOLVES); author claims feedback addressed (comment:11, 2026-05-13) and westonruter set status to reviewing the next day — re-review pending, not stale (updated 2026-05-15).
+recommendation: Skip — owner is actively re-reviewing; worker dispatch is premature.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #64623
+classification: PR-STALE
+confidence:     medium
+evidence:       status=accepted, type=defect; PR #10927 last updated 2026-04-15 (~30 days) with CHANGES_REQUESTED from westonruter and joedolson; PR #9130 last updated 2026-04-09 (~36 days, no recent activity); ticket keywords include "changes-requested".
+recommendation: Revive an existing PR rather than start fresh — feedback from two reviewers needs addressing.
+notes:          Closed PR #10940 is unrelated noise.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65044
+classification: PR-RESOLVES
+confidence:     high
+evidence:       status=reviewing, type=defect; open PR #11496 (CI success, updated 2026-05-14, no CHANGES_REQUESTED) title verbatim addresses get_post_custom_values() per ticket summary; owner westonruter said in comment:14 he will commit once trunk opens for 7.1.
+recommendation: Review PR #11496 — owner has stated intent to commit; do not dispatch worker.
+notes:          Duplicate of earlier entry in this batch.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65050
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       status=assigned, type=defect; only open PR #11529 has CHANGES_REQUESTED: westonruter (disqualifies PR-RESOLVES); PR updated 2026-04-20 (~25 days, CI success — not stale by age); keywords=changes-requested; author hasn't pushed updates addressing feedback.
+recommendation: Skip — author needs to address westonruter's review before worker dispatch makes sense.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #56914
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement.
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          Active PR #10502 has APPROVED + CHANGES_REQUESTED reviews if a non-defect flow ever wants it.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #64155
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement.
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65027
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement.
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65039
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement.
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65134
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement; focuses=tests (pure test addition).
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65135
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement; focuses=tests (pure test addition).
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          n/a
+===
