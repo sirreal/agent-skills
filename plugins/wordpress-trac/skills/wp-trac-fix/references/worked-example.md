@@ -9,10 +9,9 @@ git fetch upstream
 git worktree add ../agent-fixes/50040 \
   -b fix/50040-datepicker-footer-l10n upstream/trunk
 cd ../agent-fixes/50040
-envlite up
 ```
 
-envlite init takes roughly 2–3 minutes on first run (npm ci + build:dev + composer install).
+Then launch `envlite up` as a background task. First run takes under 5 minutes (deps install + dev build + `php -S`). For this phpunit-only ticket, wait for `envlite up: environment ready` in its output before running tests.
 
 ## Phase A — Read the ticket
 
@@ -85,7 +84,7 @@ Stage files explicitly:
 git add src/wp-includes/default-filters.php tests/phpunit/tests/dependencies/scripts.php
 ```
 
-Critically, `git add -A` would include `.envlite/`, which must not be committed.
+Stage explicitly so untracked scratch artifacts (probe scripts, repro mu-plugins) don't get picked up.
 
 Commit:
 
@@ -107,7 +106,6 @@ See #50040.
 
 ## Lessons captured
 
-1. `envlite init` ran `npm ci` + `build:dev` for a phpunit-only ticket — minutes wasted. Future enhancement: a `--phpunit-only` envlite mode that skips Phases 2 and 3.
+1. `envlite up` ran the full setup (npm + build:dev + composer) for a phpunit-only ticket — minutes wasted that the server-start phase didn't recoup. Future enhancement: a `--phpunit-only` envlite mode that skips the JS build and serve phases.
 2. Trac comments must be read critically. "Reproduction reports" may have tested adjacent scenarios, not the actual bug.
 3. The mandatory repro-evidence statement caught the real-vs-tested mismatch in recent comments.
-4. Always `git add` files explicitly to avoid committing `.envlite/`.

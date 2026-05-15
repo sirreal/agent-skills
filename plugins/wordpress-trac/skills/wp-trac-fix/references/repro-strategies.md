@@ -2,7 +2,7 @@
 
 ## phpunit
 
-The default and fastest WP test runner. Located at `vendor/bin/phpunit` after envlite init.
+The default and fastest WP test runner. Located at `vendor/bin/phpunit` once envlite has printed `envlite up: environment ready`.
 
 ### Running
 
@@ -57,7 +57,7 @@ grunt qunit:compiled
 
 For specific test files, consult `Gruntfile.js` qunit targets.
 
-In the browser (for interactive debugging): after `envlite up`, navigate via a browser MCP to `http://127.0.0.1:PORT/tests/qunit/index.html`.
+In the browser (for interactive debugging): once envlite has printed its `PHP ... Development Server ... started` line, navigate via a browser MCP to `http://127.0.0.1:PORT/tests/qunit/index.html` (PORT is the one in that line).
 
 qunit tests live in `tests/qunit/`. They use jQuery QUnit conventions: `QUnit.test(...)`, `QUnit.module(...)`.
 
@@ -67,22 +67,11 @@ For browser-driven repro of UI behavior. Any MCP that drives a real browser work
 
 ### Setup
 
-1. Start envlite dev server backgrounded:
+envlite is already running in the background from Phase 0 (see SKILL.md). When you need the browser:
 
-```bash
-envlite up
-```
-
-Run via the Bash tool with `run_in_background: true`.
-
-2. Read the port:
-
-```bash
-cat .envlite/port
-```
-
-3. Navigate to `http://127.0.0.1:PORT/` via the browser MCP's navigate capability.
-4. Admin login (`admin` / `password`) at `/wp-login.php` when admin UI is needed.
+1. Wait for envlite's output to print `PHP X.Y.Z Development Server (http://127.0.0.1:<port>) started`. That URL is the dev server.
+2. Navigate to `http://127.0.0.1:<port>/` via the browser MCP's navigate capability.
+3. Admin login (`admin` / `password`) at `/wp-login.php` when admin UI is needed.
 
 ### Observe before inspecting
 

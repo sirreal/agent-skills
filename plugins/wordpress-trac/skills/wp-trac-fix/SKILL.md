@@ -24,19 +24,29 @@ If any precondition fails, stop and report the missing piece. For envlite specif
 
 ## Phase 0 — Setup
 
-Create a per-ticket worktree forked from `upstream/trunk` and initialize envlite. The slug is a kebab-case summary of the bug (1–4 words, e.g. `datepicker-footer-l10n`).
+Create a per-ticket worktree forked from `upstream/trunk` and launch envlite. The slug is a kebab-case summary of the bug (1–4 words, e.g. `datepicker-footer-l10n`).
 
 ```bash
 git fetch upstream
 git worktree add ../agent-fixes/<ticket> \
   -b trac-<ticket>/<slug> upstream/trunk
 cd ../agent-fixes/<ticket>
-envlite init --force
 ```
+
+Then launch `envlite up` as a background task. The single command installs JS/PHP deps, runs the dev build, writes config, and starts `php -S`. First run takes under 5 minutes; subsequent runs skip unchanged phases.
 
 > Note: the `../agent-fixes/<ticket>` path is hardcoded relative to the current checkout. If this skill is ever invoked from inside a harness-isolated worktree (e.g. dispatched by a `triage-trac`-style orchestrator that already provided isolation), skip the `git worktree add` and operate in place. Revisit this path convention when that integration lands.
 
-envlite init runs `npm ci`, `npm run build:dev`, and `composer install` — minutes on first init. All subsequent work occurs in this worktree. Never `cd` out of it; never switch branches inside it.
+All subsequent work occurs in this worktree. Never `cd` out of it; never switch branches inside it.
+
+### Readiness signals
+
+`envlite up` runs in the background; Phase A can read the ticket in parallel. Before any phase that touches the environment, wait for the right line in envlite's output:
+
+- For `phpunit` / `qunit`: wait for `envlite up: environment ready` — deps installed, build done.
+- For browser MCP: wait additionally for `PHP X.Y.Z Development Server (http://127.0.0.1:<port>) started` — only after this is HTTP actually serving.
+
+The URL is embedded in both lines; parse it from there. No need to read `.cache/envlite/port` directly.
 
 ## Phase A — Read the ticket
 
@@ -56,7 +66,7 @@ Pick a strategy from the matrix and attempt once before escalating.
 | Ticket signal | Strategy |
 |---|---|
 | PHP API behavior | phpunit |
-| Admin UI / front-end rendering / browser-specific | browser MCP via `envlite up` |
+| Admin UI / front-end rendering / browser-specific | browser MCP |
 | Block editor / JS module / JS function correctness | qunit (CLI; open in browser via a browser MCP for visual debugging) |
 | REST / Ajax endpoints | phpunit first; escalate to a browser MCP only if PHP harness cannot reach the codepath |
 | Multisite / cron / upgrade | phpunit (multisite group / cron tests / upgrade tests) |
@@ -64,7 +74,7 @@ Pick a strategy from the matrix and attempt once before escalating.
 
 "Browser MCP" here means any MCP that drives a real browser (Playwright MCP being one such tool). Pick whichever is available in the session.
 
-For browser-driven repro: run `envlite up --force` backgrounded, read port from `.envlite/port`, then drive `http://127.0.0.1:<port>/` via the browser MCP. Admin login: `admin` / `password`.
+For browser-driven repro: envlite is already running from Phase 0. Wait for the `PHP ... Development Server ... started` line in its output, then drive the URL printed on that line via the browser MCP. Admin login: `admin` / `password`.
 
 For phpunit: `vendor/bin/phpunit --filter <test_name>` from the worktree root.
 
@@ -134,7 +144,7 @@ Commit on the `trac-<ticket>/<slug>` branch with a WP-style message:
 See #<ticket>.
 ```
 
-Stage files explicitly (`git add <file1> <file2>`). Never `git add -A` — `.envlite/` and other generated artifacts must not be committed.
+Stage files explicitly (`git add <file1> <file2>`). Avoid `git add -A` — it can pick up scratch mu-plugins, probe scripts, or other untracked artifacts that shouldn't land in the fix branch.
 
 Produce the final report as the last message of the conversation, 250 words max:
 
