@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #64848
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Open PR #11236 (CI: success, approved by andrewserong, updated 2026-05-15) matches ticket scope; fix was already committed in [62347] and reverted in [62348] solely due to trunk being in 7.0-RC and ticket targeting milestone 7.1.
+recommendation: Do not dispatch a worker; the PR is the resolution and is waiting for trunk to open for 7.1 — committer action, not a fixable defect.
+notes:          Reopen reason is the 7.0-RC commit freeze, not a defect in the patch; revert is intentional.
+===

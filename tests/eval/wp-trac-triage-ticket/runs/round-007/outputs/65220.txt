@@ -1,0 +1,17 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Ticket #65220 has `Type: enhancement`, an open PR with CI success, and active design discussion in the comments. Walking the decision tree:
+
+- 1-3: status is `new`, not closed or reopened → no match.
+- 4 PR-RESOLVES: would match in isolation (open PR, CI success, updated 2026-05-12), but the ticket is an enhancement — the defect-fixing flow shouldn't engage regardless of PR state.
+- 6 NOT-DEFECT: `Type: enhancement` → match. This is the substantively correct stop; PR-RESOLVES presumes a defect.
+
+Also worth noting: `needs-design-feedback`-style discussion is active (Joen and westonruter raising design questions, fushar responding), reinforcing that this isn't a mechanical worker target.
+
+=== TRIAGE RESULT ===
+ticket:         #65220
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement; status=new; open PR #11786 (CI success, updated 2026-05-12) tied to an active design discussion (westonruter, Joen, fushar) about admin bar layout tradeoffs.
+recommendation: Skip — enhancement, out of scope for defect-fixing flow. If a human wants to engage, PR #11786 is the live thread and design feedback is the current blocker, not code.
+notes:          PR-RESOLVES would also match by signal alone, but NOT-DEFECT is the load-bearing reason to skip.
+===

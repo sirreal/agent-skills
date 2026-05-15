@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Fetched ticket. Open, defect, with a fresh PR (#11802, 3 days old, CI green) directly targeting the Vimeo signature-stripping issue. Matches PR-RESOLVES.
+
+=== TRIAGE RESULT ===
+ticket:         #54924
+classification: PR-RESOLVES
+confidence:     high
+evidence:       PR #11802 open, CI success, updated 2026-05-12 (3 days ago), title "Preserve query parameters in Vimeo video shortcode URLs" directly matches the reported signature-stripping bug; touches tests.
+recommendation: Review PR #11802 (https://github.com/WordPress/wordpress-develop/pull/11802) before dispatching a worker — likely just needs review/merge.
+notes:          n/a
+===

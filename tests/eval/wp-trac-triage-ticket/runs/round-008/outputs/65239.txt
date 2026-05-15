@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Ticket type is `enhancement`, not a defect — short-circuits at rule 4.
+
+=== TRIAGE RESULT ===
+ticket:         #65239
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement (gutenberg-merge to add new "states" block support from Gutenberg PR 76491); status=new, milestone 7.1.
+recommendation: Skip — out of scope for the defect-fixing flow.
+notes:          Open PR https://github.com/WordPress/wordpress-develop/pull/11828 (CI success, updated today) exists but rule 4 takes priority over PR-RESOLVES.
+===

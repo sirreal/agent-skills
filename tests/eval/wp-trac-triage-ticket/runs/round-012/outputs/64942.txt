@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Ticket #64942 has an open PR (#11825) with passing CI updated 2 days ago, scope matches.
+
+=== TRIAGE RESULT ===
+ticket:         #64942
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Open PR #11825 (CI: success, updated 2026-05-13) titled "Administration: Improve Dashboard widget drag-and-drop styling" matches ticket scope (dashboard widget paddings/margins)
+recommendation: Review PR #11825 (https://github.com/WordPress/wordpress-develop/pull/11825) before dispatching a worker
+notes:          Earlier PR #11824 by same author was closed same day, superseded by #11825
+===

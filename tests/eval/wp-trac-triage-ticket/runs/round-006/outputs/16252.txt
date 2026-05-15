@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #16252
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: feature request (not defect (bug)); also Keywords include needs-design-feedback and 15-year-old discussion remains unresolved on UI approach.
+recommendation: Skip — out of scope for the defect-fixing flow.
+notes:          n/a
+===

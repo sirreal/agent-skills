@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+PR #10898 is open with CI success but last updated 2026-02-18 (about 3 months ago). Keywords include `changes-requested` and `reporter-feedback`. Stale per the decision tree.
+
+=== TRIAGE RESULT ===
+ticket:         #64620
+classification: PR-STALE
+confidence:     high
+evidence:       PR #10898 open, CI success, last updated 2026-02-18 (~3 months ago, >30 days); keywords include `changes-requested` and `reporter-feedback`.
+recommendation: Revive PR #10898 — address requested changes rather than starting fresh.
+notes:          westonruter asked in comment:6 whether this duplicates #64087; worth checking before reviving.
+===

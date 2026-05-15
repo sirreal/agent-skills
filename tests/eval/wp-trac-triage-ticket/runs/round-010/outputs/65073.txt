@@ -1,0 +1,8 @@
+=== TRIAGE RESULT ===
+ticket:         #65073
+classification: ALREADY-FIXED
+confidence:     high
+evidence:       status=closed, resolution=fixed; wildworks confirmed in comment:17 (2026-05-09) the fix is present in 7.0 RC3 after the Gutenberg sync.
+recommendation: Skip — already fixed via upstream Gutenberg sync (PR WordPress/gutenberg#77336).
+notes:          n/a
+===

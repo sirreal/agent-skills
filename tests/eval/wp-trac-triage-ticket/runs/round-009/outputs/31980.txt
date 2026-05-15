@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Status `closed`, resolution `worksforme` → CLOSED-NON-FIXED (rule 2).
+
+=== TRIAGE RESULT ===
+ticket:         #31980
+classification: CLOSED-NON-FIXED
+confidence:     high
+evidence:       status=closed, resolution=worksforme; joedolson confirmed in comment:12 (2026-05-08) that the iOS double-tap issue is no longer reproducible
+recommendation: skip — ticket closed as worksforme, no further action needed
+notes:          n/a
+===

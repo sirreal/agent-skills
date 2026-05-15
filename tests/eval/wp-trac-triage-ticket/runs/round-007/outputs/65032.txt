@@ -1,0 +1,13 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Walking the decision tree: not closed (skip 1-2), not reopened (skip 3). PR #11582 is open, CI success, updated 2026-05-08 (within 30 days), scope matches — PR-RESOLVES matches. Stop here.
+
+Note: owner (audrasjb) is actively questioning whether the patch produces a visible difference (comment:19/21 on 2026-05-13/14), so this is contested but PR-RESOLVES still matches first.
+
+=== TRIAGE RESULT ===
+ticket:         #65032
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       PR #11582 open, CI success, updated 2026-05-08, scope (stable view-transition-name for #adminmenuwrap/#adminmenuback) directly matches the reported sidebar crossfade issue; two test reports confirm it works.
+recommendation: Review PR #11582 — owner is currently questioning whether the patch produces a visible improvement; don't dispatch a worker.
+notes:          Owner audrasjb (comment:19, comment:21 on 2026-05-13/14) says they see no difference before/after patch; two testers (comment:14, comment:15) report the fix works. Contested — committer judgment needed, not a fresh fix.
+===

@@ -1,0 +1,18 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+I'll triage this ticket against the decision tree.
+
+**Walkthrough:**
+- status=new (not closed, not reopened) → skip 1–3
+- type=defect (bug) → skip 4
+- PR #10537 open, CI success, but **Updated: 2026-04-08** = 36 days ago (today 2026-05-14), and review state is CHANGES_REQUESTED from westonruter → fails PR-RESOLVES "within 30 days" criterion
+- All open PRs are >30 days stale → matches PR-STALE
+- Note: comment:11 from 2026-05-13 claims the fix was just updated to address feedback, but the PR's Updated field doesn't reflect this — either premature claim or data lag
+
+=== TRIAGE RESULT ===
+ticket:         #64260
+classification: PR-STALE
+confidence:     medium
+evidence:       PR #10537 open with CI success but Updated 2026-04-08 (36 days ago) and CHANGES_REQUESTED from westonruter; comment:11 (2026-05-13) claims a fresh push but PR Updated field doesn't reflect it.
+recommendation: Revive PR #10537 — verify whether ioclaudio's claimed update actually landed, then re-request review from westonruter rather than starting a fresh fix.
+notes:          Author username on Trac is "ioclaudio" but GitHub is "ilclaudio" — same person; PR scope (log doing_it_wrong via debug.log) matches ticket cleanly.
+===

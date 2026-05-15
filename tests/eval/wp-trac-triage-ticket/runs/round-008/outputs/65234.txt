@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #65234
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type is `enhancement` (two additive changes to `core/get-user-info`); not a defect (bug).
+recommendation: Skip — out of scope for the defect-fixing flow. PR #11830 is open with passing CI and active owner (gziolo), so human review can proceed independently.
+notes:          n/a
+===

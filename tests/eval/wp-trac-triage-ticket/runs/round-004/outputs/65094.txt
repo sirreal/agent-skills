@@ -1,0 +1,10 @@
+Ticket is closed/fixed with two changesets (62255 trunk, 62266 backport to 7.0). Matches ALREADY-FIXED.
+
+=== TRIAGE RESULT ===
+ticket:         #65094
+classification: ALREADY-FIXED
+confidence:     high
+evidence:       status=closed, resolution=fixed; trunk fix [62255] and 7.0 backport [62266] both committed and reference "Fixes #65094".
+recommendation: Skip — no work remaining; fix shipped to trunk and backported to 7.0 branch.
+notes:          n/a
+===

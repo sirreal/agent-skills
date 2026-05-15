@@ -1,0 +1,10 @@
+Closed by reporter with `worksforme` after they could no longer reproduce. Matches CLOSED-NON-FIXED.
+
+=== TRIAGE RESULT ===
+ticket:         #55872
+classification: CLOSED-NON-FIXED
+confidence:     high
+evidence:       status=closed, resolution=worksforme; reporter self-closed in comment:5 (2026-03-27) saying they can no longer reproduce.
+recommendation: Skip permanently — no further action needed.
+notes:          n/a
+===

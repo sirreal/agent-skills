@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #36273
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Open PR #11821 by shrivastavanolo (created/updated 2026-05-13), CI success, title matches ticket scope ("Fix update_attached_file() stripping backslashes from Windows directory separators"); comment:4 confirms reproduction on 7.1-alpha.
+recommendation: Review PR #11821 (https://github.com/WordPress/wordpress-develop/pull/11821) before dispatching a worker; note PR touches no tests despite `needs-unit-tests` keyword.
+notes:          PR is a 1-line change (+1/-1) and ticket carries `needs-unit-tests` — reviewer may want to request a test.
+===

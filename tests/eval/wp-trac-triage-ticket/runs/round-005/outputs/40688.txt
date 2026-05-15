@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Ticket is closed with `resolution=worksforme` — matches CLOSED-NON-FIXED.
+
+=== TRIAGE RESULT ===
+ticket:         #40688
+classification: CLOSED-NON-FIXED
+confidence:     high
+evidence:       status=closed, resolution=worksforme; joedolson closed on 2026-05-08 citing no follow-up and likely browser-cache/non-core behavior.
+recommendation: Skip permanently — ticket closed as worksforme.
+notes:          n/a
+===

@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Ticket #47012 is type `enhancement`, not a defect — matches rule 6 (NOT-DEFECT).
+
+=== TRIAGE RESULT ===
+ticket:         #47012
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement (Summary: "Proposal: Simplify WordPress Admin Navigation"); also carries needs-design-feedback / dev-feedback keywords.
+recommendation: Skip — out of scope for the defect-fixing flow.
+notes:          n/a
+===

@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #65230
+classification: PR-RESOLVES
+confidence:     high
+evidence:       PR #11816 open, CI success, updated 2026-05-13 (2 days ago), title "Media: Redirect slug-based attachment URLs when attachment pages are disabled" directly matches ticket scope; has-patch + has-unit-tests keywords.
+recommendation: Review PR #11816 (https://github.com/WordPress/wordpress-develop/pull/11816) before dispatching a worker — author dd32 is also the reporter, CI is green, no reviews yet.
+notes:          n/a
+===

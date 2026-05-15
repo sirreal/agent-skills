@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Fetched the ticket. Status is `new`, type is `defect (bug)`. There's one open PR (#11804, "iAPI: align server-side negation truthiness with client side"), CI passing, updated 2026-05-13 — well within 30 days and scope clearly matches.
+
+=== TRIAGE RESULT ===
+ticket:         #62628
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Open PR #11804 "iAPI: align server-side negation truthiness with client side" (CI success, updated 2026-05-13) directly addresses the server/client negation divergence described in the ticket.
+recommendation: Review PR https://github.com/WordPress/wordpress-develop/pull/11804 before dispatching a worker; the fix is already in flight.
+notes:          PR does not touch tests — reviewer should ensure regression coverage for `'0'` and `[]` cases.
+===

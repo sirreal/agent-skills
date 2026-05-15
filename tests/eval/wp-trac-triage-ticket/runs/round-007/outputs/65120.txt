@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Type is `enhancement`, not `defect (bug)` — matches NOT-DEFECT.
+
+=== TRIAGE RESULT ===
+ticket:         #65120
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement (proposes adding new `wp_elements_block_supports_class_name` filter); Status: new; Keywords include `dev-feedback` with westonruter pushing back on the idea.
+recommendation: Skip — out of scope for the defect-fixing flow; needs maintainer decision on whether the filter is wanted.
+notes:          n/a
+===

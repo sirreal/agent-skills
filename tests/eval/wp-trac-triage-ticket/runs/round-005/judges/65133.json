@@ -1,0 +1,1 @@
+{"ticket":65133,"skill_classification":"ALREADY-FIXED","judge_classification":"ALREADY-FIXED","match":true,"score":10,"issues":[],"reasoning":"Ticket is status=closed, resolution=fixed, with changesets [62279] (trunk) and [62287] (7.0 backport) both citing 'Fixes #65133'. Branch 1 (ALREADY-FIXED) fires unambiguously; evidence is accurate and confidence (high) is appropriate."}

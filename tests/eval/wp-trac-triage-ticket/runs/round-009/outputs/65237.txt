@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Type is `enhancement`, not `defect (bug)` — short-circuits to NOT-DEFECT before PR-state checks per the priority order.
+
+=== TRIAGE RESULT ===
+ticket:         #65237
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement (test coverage addition for wp_ajax_fetch_list); not a defect.
+recommendation: Skip — out of scope for the defect-fix dispatch flow.
+notes:          Open PR #11827 with passing CI exists if a human reviewer wants to handle it.
+===

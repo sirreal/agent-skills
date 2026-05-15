@@ -1,0 +1,10 @@
+Ticket #64774 is `status=closed`, `resolution=worksforme`. The reporter confirmed they couldn't reproduce the issue anymore and closed it; other testers also couldn't reproduce. There's an open PR (#11172) but the ticket itself is closed as non-fix.
+
+=== TRIAGE RESULT ===
+ticket:         #64774
+classification: CLOSED-NON-FIXED
+confidence:     high
+evidence:       status=closed, resolution=worksforme; reporter audrasjb closed in comment:10 noting issue could no longer be reproduced and any remaining misalignment predates 7.0 and warrants a separate ticket
+recommendation: skip permanently — ticket closed as worksforme; open PR #11172 is moot unless a new ticket is opened for the pre-existing misalignment
+notes:          n/a
+===

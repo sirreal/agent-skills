@@ -1,0 +1,16 @@
+Triaging ticket #64999.
+
+Decision walkthrough:
+- Not closed → not ALREADY-FIXED or CLOSED-NON-FIXED.
+- `status=new` (not reopened) → not BACKPORT-PENDING.
+- Three open PRs (#11750, #11461, #11471) all with green CI and last-updated within 30 days; titles directly match the ticket's standardize-mobile-heights scope → PR-RESOLVES.
+- Confidence is medium: the ticket's own comments (15, 25, 27, 31) show that the scope is fluid — wildworks now considers utility classes (#65207) a prerequisite and proposes postponing to 7.0.1. A worker dispatching against any single PR risks landing partial work that the reporter no longer considers the right approach.
+
+=== TRIAGE RESULT ===
+ticket:         #64999
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Three open PRs (#11750 updated 2026-05-14, #11461 updated 2026-05-07, #11471 updated 2026-05-07) with green CI directly addressing the standardize-mobile-form-heights scope; one prior PR (#11497) already merged as [62294].
+recommendation: Review the open PRs (especially #11750 and #11461) rather than dispatching a fresh worker; coordinate with reporter on whether to land them now or wait on utility-class work in #65207.
+notes:          Reporter (comment:31, 2026-05-14) suggests this is non-critical and may be deferred to 7.0.1.
+===

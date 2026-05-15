@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #65059
+classification: NEEDS-INFO
+confidence:     medium
+evidence:       Keywords include `reporter-feedback`; description lacks step-by-step repro (vague "expand meta box" via LifterLMS plugin); poena (comment:2) asked whether this is a bug, when it changed, and what the expected behavior is — brianhogg's reply added context but didn't supply clean repro steps or define correct behavior.
+recommendation: Skip — wait for reporter to provide concrete reproduction steps and clarify expected vs. actual behavior.
+notes:          n/a
+===

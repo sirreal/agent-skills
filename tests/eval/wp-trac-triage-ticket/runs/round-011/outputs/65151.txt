@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #65151
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       Two competing patches from different authors (65151.diff by yusufmudagal, 65151-remove-overflow-hidden.diff by siliconforks); siliconforks explicitly asks "is it safe to remove this?" — unanswered design question; recent disagreement over whether this is a regression (jorbin/audrasjb concluded not a regression, moved to 7.1).
+recommendation: Skip dispatching a worker — needs human judgment on which fix approach to take and whether removing overflow:hidden is safe.
+notes:          n/a
+===

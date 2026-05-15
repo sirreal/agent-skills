@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Ticket is closed/fixed with three landed changesets (62334, 62337, 62338) including a 7.0 backport.
+
+=== TRIAGE RESULT ===
+ticket:         #65205
+classification: ALREADY-FIXED
+confidence:     high
+evidence:       status=closed, resolution=fixed; changesets [62334] (trunk), [62337] (cleanup), [62338] (7.0 backport) all by ellatrix/desrosj on 2026-05-08
+recommendation: Skip — RTC removal landed in trunk and was backported to the 7.0 branch
+notes:          n/a
+===

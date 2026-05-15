@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Ticket 65099 is `status=closed`, `resolution=fixed`, with changesets [62289] (trunk) and [62306] (7.0 backport) — backport already landed.
+
+=== TRIAGE RESULT ===
+ticket:         #65099
+classification: ALREADY-FIXED
+confidence:     high
+evidence:       status=closed, resolution=fixed; fixed in [62289] and backported to 7.0 in [62306]
+recommendation: skip — fix is committed and already backported
+notes:          n/a
+===

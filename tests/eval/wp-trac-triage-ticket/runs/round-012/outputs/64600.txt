@@ -1,0 +1,20 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Working through the decision tree:
+- Not closed → skip 1, 2
+- status=new → skip 3
+- Type is `defect (bug)` → skip 4
+- No PRs → skip 5, 6
+- Keywords: `has-patch` only; no needs-*-feedback flags → skip 7
+- Description has stack trace + offending line + suggested fix; most recent comment (May 13, within 30 days) confirms the issue rather than asking for repro → skip 8
+- → READY-TO-FIX
+
+The bug is mechanically obvious from the stack trace: `$meta['sizes']['full']['file']` is accessed without checking the 'full' key exists. A patch is attached. The original repro request (Feb) went unanswered, but a second reporter confirmed it in May.
+
+=== TRIAGE RESULT ===
+ticket:         #64600
+classification: READY-TO-FIX
+confidence:     medium
+evidence:       defect, status=new, has-patch keyword, attached patch from 2026-02-05, stack trace pinpoints media.php:4678, second reporter confirmed on 6.9.4 in May 2026
+recommendation: dispatch worker; existing patch (64600-fixed-undefined-array-key-issue.patch) is a starting reference but worker should verify against current trunk and add a regression test
+notes:          original repro request from comment:1 (Feb) was never answered by reporter, but the bug is clear from the stack trace
+===

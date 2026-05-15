@@ -1,0 +1,17 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Ticket #65235 fetched. Walking the decision tree:
+
+- Status `new` → not closed → skip 1, 2.
+- Not reopened → skip 3.
+- PR #11829 open, CI success, updated today (2026-05-14), title "Upload: Show 413 status error when server rejects upload as too large" matches scope exactly → **matches PR-RESOLVES**.
+
+Stop at first match per instructions. Noting that `Type:` is `enhancement`, which would have matched NOT-DEFECT at step 6 — relevant signal for the orchestrator.
+
+=== TRIAGE RESULT ===
+ticket:         #65235
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Open PR #11829 (CI success, updated 2026-05-14) titled "Upload: Show 413 status error when server rejects upload as too large" directly matches the ticket's request; ticket type is enhancement (not defect).
+recommendation: Review PR #11829 (https://github.com/WordPress/wordpress-develop/pull/11829) rather than dispatching a worker; note this is an enhancement, not a defect, so it is out of scope for the defect-fixing flow regardless.
+notes:          Type=enhancement would match NOT-DEFECT at step 6, but PR-RESOLVES is hit first per the stop-at-first-match rule.
+===

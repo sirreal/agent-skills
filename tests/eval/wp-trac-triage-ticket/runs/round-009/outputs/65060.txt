@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Ticket 65060 is closed/fixed with both the trunk fix [62232] and the 7.0 backport [62235] landed.
+
+=== TRIAGE RESULT ===
+ticket:         #65060
+classification: ALREADY-FIXED
+confidence:     high
+evidence:       status=closed, resolution=fixed; trunk fix [62232] and 7.0 backport [62235] both committed; PR #11550 merged/closed.
+recommendation: skip — ticket is fully resolved including the 7.0 backport.
+notes:          n/a
+===
