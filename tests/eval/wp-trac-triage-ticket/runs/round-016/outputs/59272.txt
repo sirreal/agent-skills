@@ -1,0 +1,103 @@
+I have all 10 tickets. Triaging now.
+
+**Notes for classification:**
+- 59272: status=new, last 2 comments (2026-01-17, 2026-05-08) ask reporter to confirm on latest WP version. No repro by testers. → NEEDS-INFO
+- 65138: status=new, RTC tracking ticket. jorbin (2026-05-08) withdrew backport approval, calling for revert after decision to not ship RTC; ellatrix punted to 7.1. Active multi-author disagreement. → NEEDS-DISCUSSION
+- 65191: status=reviewing, owner=SergeyBiryukov. Two open competing PRs (#11777, #11752), both CI success, both <30 days, both directly scope-match. → PR-RESOLVES, medium (reviewer must pick between two PRs)
+- 46058: status=new, 2026-05-08 comment asks reporter for environment/version confirmation; tester unable to reproduce. → NEEDS-INFO
+- 50694: status=assigned, keywords explicitly include `reporter-feedback close`; owner recommended closing pending reporter response. → NEEDS-INFO
+- 63017: PR #8409 last updated 2025-06-27 (~11 months ago, well past 30 days). Punted to Future Release. → PR-STALE
+- 39651: status=new, fresh PR #11770 (2026-05-08), CI success, title matches ticket summary topically but no explicit ticket# reference and no commenter confirmation. → PR-RESOLVES, medium
+- 65204: status=assigned, owner=takshil, PR #11765 by the same owner, CI success, title direct match. → PR-RESOLVES, high
+- 48684: status=new, no PR. Recent (2026-05-11) sabernhardt comment offers two competing CSS patches; poena (2024) had different approaches. Multiple proposed fixes without consensus. → NEEDS-DISCUSSION
+- 50255: status=assigned, owner=westonruter, PR #11793 (2026-05-11), CI success, APPROVED by apermo, title direct match to scope (`_edit_last` + REST API). → PR-RESOLVES, high
+
+=== TRIAGE RESULT ===
+ticket:         #59272
+classification: NEEDS-INFO
+confidence:     high
+evidence:       Status=new, no PR; shooper (2026-01-17) and jdeep (2026-05-08) both asked reporter to confirm reproducibility on current WP versions.
+recommendation: Skip — wait for reporter to confirm on latest release.
+notes:          Original report from WP 6.3.1; testers unable to reproduce on 7.0-alpha and 6.9.4.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65138
+classification: NEEDS-DISCUSSION
+confidence:     high
+evidence:       jorbin (2026-05-08) withdrew backport approval after RTC ship decision, saying "[62311] needs to be reverted"; ellatrix punted to 7.1; meta-tracker ticket for RTC bug sprint, not a single defect.
+recommendation: Skip — committer-level decision needed on revert vs. keep; not a single-fix dispatch.
+notes:          Tracking ticket spanning many bugs; punted to 7.1 (#65205).
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65191
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Two open PRs (#11777, #11752) both CI=success, updated 2026-05-07/08, no CHANGES_REQUESTED; both scope-match `deletePluginSuccess` custom group fix; owner SergeyBiryukov is reviewing.
+recommendation: Review the two competing PRs before dispatching a worker — reviewer needs to pick.
+notes:          PR #11777 also bundles a CSS separator fix; PR #11752 is the narrower delete-count fix.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #46058
+classification: NEEDS-INFO
+confidence:     high
+evidence:       Original report from 2020 (WP 5.0.3); jdeep (2026-05-08) unable to reproduce on 6.9 and asked reporter for version/theme/cache/plugin details.
+recommendation: Skip — wait for reporter to confirm on current version.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #50694
+classification: NEEDS-INFO
+confidence:     high
+evidence:       Keywords explicitly `reporter-feedback close`; owner realloc (2026-05-08) unable to reproduce — current username validation blocks email-as-username — and recommended closing.
+recommendation: Skip — pending reporter response; likely close as worksforme if no response.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #63017
+classification: PR-STALE
+confidence:     high
+evidence:       PR #8409 last updated 2025-06-27 (~11 months ago, >>30 days); ticket punted to Future Release pending merge with #58302; reporter (2026-02-20) noted scope-creep concerns.
+recommendation: Revive PR #8409 or coordinate with #58302/#57548/#47322 rather than starting fresh.
+notes:          A new narrower clarification patch (63017-small-core-clarification.diff) was attached 2026-05-08.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #39651
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Open PR #11770 (2026-05-08), CI=success, no CHANGES_REQUESTED; title "Fix: Show non-public post type labels in Find Posts modal" topically matches summary; no explicit #39651 reference visible and no commenter confirmation.
+recommendation: Review PR #11770 before dispatching a worker.
+notes:          Ticket open since 2017; punted to Future Release.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65204
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Open PR #11765 (2026-05-07) authored by ticket owner Takshil-Kunadia, CI=success, no CHANGES_REQUESTED; title "Media: Add support for custom bulk actions in Media grid view" is a verbatim scope match to summary.
+recommendation: Review PR #11765 before dispatching a worker.
+notes:          PR does not touch tests (+153/-2).
+===
+
+=== TRIAGE RESULT ===
+ticket:         #48684
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       No PR; recent comment by sabernhardt (2026-05-11) attaches two competing CSS approaches (`48684.wp-block.diff` vs `48684.exclude-components.diff`); poena (2024) explored multiple selectors with mixed results; no consensus on the right scope of the `:not()` exclusion.
+recommendation: Skip — CSS-approach decision needed before a worker can pick a patch.
+notes:          Ticket open since 2019; punted to Future Release.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #50255
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Open PR #11793 (2026-05-11), CI=success, APPROVED by apermo, no CHANGES_REQUESTED; title "REST API: Set `_edit_last` post meta when creating or updating posts" directly matches summary scope; touches tests.
+recommendation: Review PR #11793 before dispatching a worker.
+notes:          Owner westonruter; punted to Future Release pending warm-up.
+===

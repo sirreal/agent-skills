@@ -1,0 +1,91 @@
+I have all 10 tickets fetched. Triaging each per the decision tree. Note: 39651 listed twice; classified once.
+
+=== TRIAGE RESULT ===
+ticket:         #39651
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Status=new; open PR #11770 created/updated 2026-05-08, CI success, no reviews; PR title "Fix: Show non-public post type labels in Find Posts modal" topically matches ticket summary but lacks explicit ticket-number reference.
+recommendation: Review PR #11770 before dispatching a worker — scope match is title-based inference.
+notes:          Ticket appears twice in input list; same triage applies.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65138
+classification: NEEDS-DISCUSSION
+confidence:     high
+evidence:       Active multi-author disagreement (last 30 days): jorbin withdrew backport review and called for revert; decision not to ship RTC; ellatrix punted milestone 7.0→7.1; dmsnell/jorbin debating single tracking ticket vs many.
+recommendation: Skip — strategic decisions pending (revert? per-bug tickets?); not worker-dispatchable.
+notes:          Tracking/umbrella ticket for an RTC sprint rather than a single defect.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65191
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Status=reviewing; two competing open PRs #11777 and #11752 (both 2026-05-07/08, CI success, no CHANGES_REQUESTED); titles directly target the described filter gap.
+recommendation: Review which of #11777 vs #11752 to advance before dispatching a worker.
+notes:          Two near-simultaneous PRs from different authors — orchestrator must pick.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #46058
+classification: NEEDS-INFO
+confidence:     medium
+evidence:       7-year-old ticket against WP 5.0.3; jdeep (2026-05-08) could not reproduce on 6.9 and is explicitly asking the reporter for version/theme/cache/plugin details; no PR.
+recommendation: Skip — wait for reporter to confirm whether bug still exists on current WP.
+notes:          Description has 2019-era repro steps but they no longer reproduce — effective lack of current repro.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #59272
+classification: NEEDS-INFO
+confidence:     medium
+evidence:       Two testers (shooper 2026-01-17 on trunk, jdeep 2026-05-08 on 6.9.4) could not reproduce; both asking reporter to confirm; no PR.
+recommendation: Skip — wait for reporter to confirm on current WP.
+notes:          Original repro from 6.3.1 era doesn't hold on current versions.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #50694
+classification: NEEDS-INFO
+confidence:     high
+evidence:       Keywords include "reporter-feedback close"; owner realloc (2026-05-08) reports cannot reproduce because validation now rejects email-as-username and recommends close; no PR.
+recommendation: Skip — pending reporter response; likely candidate for worksforme/wontfix close.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #63017
+classification: PR-STALE
+confidence:     high
+evidence:       Open PR #8409 last updated 2025-06-27 (~10.5 months stale as of 2026-05-16); azaozz said "needs a bit more work"; punted to Future Release; alternative narrower patch attached 2026-05-08 by dpknauss.
+recommendation: Revive — decide whether to advance #8409 (removal scope) or the smaller 63017-small-core-clarification.diff (docs-only).
+notes:          Scope creep tension (linked to #58302/#57548/#47322) is part of why PR stalled.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65204
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Status=assigned to PR author takshil; open PR #11765 (2026-05-07, CI success, no reviews, +153/-2); title "Media: Add support for custom bulk actions in Media grid view" matches ticket summary topically; no CHANGES_REQUESTED.
+recommendation: Review PR #11765 before dispatching — scope match is title-based; PR lacks tests.
+notes:          Ticket has no explicit ticket-number reference in shown PR metadata; same author owns ticket and PR.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #48684
+classification: READY-TO-FIX
+confidence:     medium
+evidence:       No open PR; recent attached patches (2026-05-11 from sabernhardt: 48684.wp-block.diff and 48684.exclude-components.diff) propose two concrete selector approaches; no needs-*-feedback keywords; discussion is exploratory not contested.
+recommendation: Dispatch — worker can choose between the wp-block or exclude-components approach based on testing the listed scenarios (Media&Text upload button, nested inserter +).
+notes:          Two competing patch options exist; worker should validate against poena's 2024-01-11 test matrix.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #50255
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Status=assigned to westonruter; open PR #11793 (created 2026-05-11, updated 2026-05-12, CI success, has tests, APPROVED by apermo); title "REST API: Set _edit_last post meta when creating or updating posts" directly addresses the documented root cause.
+recommendation: Advance PR #11793 — already approved by a reviewer.
+notes:          Reviewer approval satisfies the scope-match signal.
+===

@@ -1,0 +1,13 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Triaging ticket #65223.
+
+Walking the tree: status=new (not closed/reopened), type=defect, no PRs. Description has detailed repro steps. Keywords `needs-patch has-test-info` don't match the NEEDS-DISCUSSION list, and there's no disagreement in comments. westonruter's note that "The actual work for this would need to be done in the Gutenberg repo" is a real complication for a wordpress-develop worker, but per the literal-priority rule it doesn't match any higher branch — flagging in notes.
+
+=== TRIAGE RESULT ===
+ticket:         #65223
+classification: READY-TO-FIX
+confidence:     medium
+evidence:       status=new, type=defect, no PRs, detailed repro steps and control test in description, keywords=needs-patch has-test-info, no disagreement in comments
+recommendation: Dispatch a worker, but expect limited progress in wordpress-develop — comment:2 from westonruter says the actual fix must land in the Gutenberg repo (see gutenberg/pull/77521 and wordpress-develop/pull/11779)
+notes:          Cross-repo fix; westonruter suggests fallback of treating FS_METHOD=ftpext like DISALLOW_FILE_MODS if a proper fix can't ship for 7.0
+===

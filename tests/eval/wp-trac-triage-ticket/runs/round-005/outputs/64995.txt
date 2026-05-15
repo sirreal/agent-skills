@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #64995
+classification: NEEDS-INFO
+confidence:     high
+evidence:       Status=new, Keywords=reporter-feedback; description lacks repro/env details; sabernhardt (comment:1) explicitly asked for browser/OS, plugin usage (Classic Editor?), version history, and clarifying repro questions — no reporter response since.
+recommendation: Skip — wait for reporter to respond with the requested details.
+notes:          n/a
+===

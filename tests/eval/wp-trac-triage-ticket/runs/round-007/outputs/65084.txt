@@ -1,0 +1,15 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Evaluating decision tree against the ticket data:
+- Status is `new` — rules 1, 2, 3 don't apply
+- Rule 4 PR-RESOLVES: Both PRs open, CI success, updated within 30 days (today 2026-05-14; #11668 updated 2026-05-04, #11590 updated 2026-04-30), titles match scope. **Matches.**
+
+Note: ticket Type is `enhancement` (would be NOT-DEFECT at rule 6), but decision tree says stop at first match.
+
+=== TRIAGE RESULT ===
+ticket:         #65084
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Two open PRs target this ticket: #11668 (CI success, CHANGES_REQUESTED then updated 2026-05-04 addressing feedback) and #11590 (CI success, APPROVED, updated 2026-04-30); both plausibly fix the "illegal characters" → "disallowed characters" copy change.
+recommendation: Review PR #11668 (the broader, test-bearing successor to #11590) and re-request review from dhruvang21; do not dispatch a worker.
+notes:          Type is `enhancement`, not `defect` — orchestrator may also skip on that basis (rule 6 NOT-DEFECT) regardless of PR status.
+===

@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Ticket is closed with `resolution=fixed` and has changeset [62351]. Rule 1 (ALREADY-FIXED) matches first; priority order is the contract.
+
+=== TRIAGE RESULT ===
+ticket:         #65200
+classification: ALREADY-FIXED
+confidence:     high
+evidence:       status=closed, resolution=fixed, fixed by [62351] on 2026-05-11 ("Tests: Add unit tests for `wp_heartbeat_set_suspension()`. ... Fixes #65200.")
+recommendation: skip — already fixed in trunk via [62351]
+notes:          Type is enhancement (would also be NOT-DEFECT), but ALREADY-FIXED is higher priority.
+===

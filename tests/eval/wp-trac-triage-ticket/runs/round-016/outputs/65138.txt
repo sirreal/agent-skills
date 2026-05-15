@@ -1,0 +1,111 @@
+Triaging 10 unique tickets (65138 was listed twice).
+
+**#65138** — Type defect, status new, but milestone punted from 7.0 to 7.1 after `jorbin` withdrew backport review and said "this needs to be reverted." Active multi-author discussion on direction (revert vs continue vs separate tickets). NEEDS-DISCUSSION.
+
+**#65191** — Two open PRs (#11777, #11752) updated 2026-05-07/08, CI green, no CHANGES_REQUESTED, both clearly scope-matched. PR-RESOLVES.
+
+**#46058** — No PRs. `jdeep` comment 2 (2026-05-08) asks reporter for current-version repro, theme, environment, plugins. NEEDS-INFO.
+
+**#59272** — No PRs. Two testers (shooper, jdeep) couldn't reproduce on 6.9.4/7.0-alpha and asked reporter to confirm. NEEDS-INFO.
+
+**#50694** — Keywords `reporter-feedback close`. Owner `realloc` couldn't reproduce, recommends closing. Waiting on reporter. NEEDS-INFO.
+
+**#63017** — Only open PR (#8409) last updated 2025-06-27, ~10 months ago. PR-STALE (rule 6 fires before rule 7 even though there's also active scope debate).
+
+**#39651** — Open PR #11770 created/updated 2026-05-08, CI green, title verbatim matches the issue. PR-RESOLVES.
+
+**#65204** — Open PR #11765 created/updated 2026-05-07, CI green, title matches ticket directly, authored by the ticket owner. PR-RESOLVES.
+
+**#48684** — No PRs, but multiple competing patches/approaches across years (poena 2024, sabernhardt 2026 with two alternative `.diff`s asking which approach to take). Design judgment required. NEEDS-DISCUSSION.
+
+**#50255** — Open PR #11793 created 2026-05-11, updated 2026-05-12, CI green, APPROVED by apermo (no CHANGES_REQUESTED), title addresses the exact cause identified. PR-RESOLVES.
+
+=== TRIAGE RESULT ===
+ticket:         #65138
+classification: NEEDS-DISCUSSION
+confidence:     high
+evidence:       jorbin (comment:13) withdrew backport review and stated the change "needs to be reverted"; ellatrix punted milestone 7.0 → 7.1 (comment:14); multi-author discussion on direction (revert vs continue, single-ticket vs split)
+recommendation: Hold for committer/lead direction (revert + sprint scope), do not dispatch worker
+notes:          Umbrella/tracking ticket for the RTC bug sprint, not a single defect
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65191
+classification: PR-RESOLVES
+confidence:     high
+evidence:       PRs #11777 and #11752 both open, CI success, updated 2026-05-07/08, no CHANGES_REQUESTED; titles ("Fix/plugins list status text delete counts", "Plugins: Update custom view counts when deleting a plugin") match ticket scope
+recommendation: Review and consolidate the two competing PRs before dispatching a worker
+notes:          Two parallel PRs solving the same issue — pick one or merge approaches
+===
+
+=== TRIAGE RESULT ===
+ticket:         #46058
+classification: NEEDS-INFO
+confidence:     high
+evidence:       jdeep (comment:2, 2026-05-08) could not reproduce on 6.9 and asked reporter for version/theme/cache/plugin details
+recommendation: Skip — wait for reporter to respond
+notes:          Original report from 2019 against 5.0.3; likely already addressed
+===
+
+=== TRIAGE RESULT ===
+ticket:         #59272
+classification: NEEDS-INFO
+confidence:     high
+evidence:       shooper (comment:1) and jdeep (comment:2, 2026-05-08) both could not reproduce on current trunk/6.9.4 and asked reporter to confirm
+recommendation: Skip — wait for reporter confirmation before any further work
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #50694
+classification: NEEDS-INFO
+confidence:     high
+evidence:       Keywords include `reporter-feedback close`; owner realloc (comment:1, 2026-05-08) could not reproduce and recommends closing as non-issue
+recommendation: Skip — awaiting reporter; if no response, close per owner's recommendation
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #63017
+classification: PR-STALE
+confidence:     high
+evidence:       Only open PR #8409 last updated 2025-06-27 (~10 months before 2026-05-15); recent ticket activity (2026-05-08) added a narrower alternative patch instead of advancing the PR
+recommendation: Revive PR #8409 or pivot to the narrower 63017-small-core-clarification.diff; resolve scope (full removal vs doc-only) before fixing
+notes:          Also has unresolved scope debate (rule 7 secondary signal)
+===
+
+=== TRIAGE RESULT ===
+ticket:         #39651
+classification: PR-RESOLVES
+confidence:     high
+evidence:       PR #11770 open, CI success, created/updated 2026-05-08, no CHANGES_REQUESTED; title "Fix: Show non-public post type labels in Find Posts modal" directly matches ticket summary
+recommendation: Review PR #11770 before dispatching a worker
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65204
+classification: PR-RESOLVES
+confidence:     high
+evidence:       PR #11765 open, CI success, created/updated 2026-05-07, no CHANGES_REQUESTED; authored by ticket owner takshil; title "Media: Add support for custom bulk actions in Media grid view" matches the ticket exactly
+recommendation: Review PR #11765 before dispatching a worker
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #48684
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       Multiple competing patch approaches across authors: poena (2024) tried `:not([class^="components"])`, sabernhardt (2026-05-11) attached two alternative diffs (`48684.wp-block.diff` vs `48684.exclude-components.diff`) asking which approach to take
+recommendation: Skip — need a maintainer to pick the selector strategy before implementation
+notes:          Long-running ticket (since 2019) with no PR yet
+===
+
+=== TRIAGE RESULT ===
+ticket:         #50255
+classification: PR-RESOLVES
+confidence:     high
+evidence:       PR #11793 open, CI success, updated 2026-05-12, APPROVED by apermo with no CHANGES_REQUESTED; title "REST API: Set `_edit_last` post meta when creating or updating posts" matches the exact cause diagnosed by kurtrank (comment:3)
+recommendation: Review PR #11793 (already approved) before dispatching a worker
+notes:          n/a
+===

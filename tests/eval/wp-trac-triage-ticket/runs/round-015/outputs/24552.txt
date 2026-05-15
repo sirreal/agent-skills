@@ -1,0 +1,100 @@
+All 10 unique tickets fetched. Emitting triage for each (24552 appears twice in input — I'll emit both as requested).
+
+=== TRIAGE RESULT ===
+ticket:         #24552
+classification: NEEDS-DISCUSSION
+confidence:     high
+evidence:       status=new but multiple recent repros say not reproducible (jackreichert comment:6 2016, r1k0 comment:9 2026-01-18, abhishekfdd comment:10 2026-05-08); the architectural "race" between A's unsaved keystrokes and B's takeover was explicitly declined in azaozz comment:3 (2013).
+recommendation: skip; committer should close as worksforme — abhishekfdd's comment:10 already lays out the closure rationale.
+notes:          residual A-clobbers-B concern tracked separately at #55659.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65245
+classification: NEEDS-DISCUSSION
+confidence:     high
+evidence:       ocean90 comment:1 and jonsurrell comment:3 (both 2026-05-15) agree the broken encoding originates in the api.wordpress.org credits endpoint, not in WP core; jonsurrell pinpointed the offending mb_convert_encoding line on meta trac.
+recommendation: skip; this needs to be moved to meta trac, not fixed in core.
+notes:          relevant file is meta:sites/trunk/api.wordpress.org/.../wp-credits.php:386.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65141
+classification: PR-RESOLVES
+confidence:     high
+evidence:       PR #11689 "Metabox container alignment classic editor" (open, CI success, updated 2026-05-14, APPROVED by audrasjb, no CHANGES_REQUESTED); TobiasBg comment:8 reopened to cover a related -4px margin which PR #11689 addresses; multiple positive test reports (jadavsanjay, khokansardar, darshitrajyaguru97).
+recommendation: commit PR #11689; trunk fix [62284] and 7.0 backport [62285] already landed — this PR completes the follow-up.
+notes:          keyword `commit` is set.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65051
+classification: PR-RESOLVES
+confidence:     high
+evidence:       PR #11530 title "$_REQUEST['term'] used unsanitized in user search query" is verbatim the ticket summary; open, CI success, updated 2026-04-20 (25 days), no CHANGES_REQUESTED; companion PR #11673 with unit tests is also open with CI success; multiple positive test reports (gaurangsondagar, liaison, vgnavada).
+recommendation: commit PR #11530 (fix) + PR #11673 (tests).
+notes:          milestone 7.1.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65233
+classification: BACKPORT-PENDING
+confidence:     high
+evidence:       status=reopened by wildworks comment:10 (2026-05-13) explicitly requesting backport of [62357] to 7.0; [62357] is in ## Changesets; subsequent activity is two tester confirmations (manhar, gaurangsondagar) that the fix works — bookkeeping, not substantive.
+recommendation: skip; awaits committer to merge [62357] to the 7.0 branch.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65218
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       PR #11798 "Upgrade/Install: Use a clean plugin slug for the plugin details URL on the Updates screen" (open, CI success, updated 2026-05-11, no reviews) matches the ticket topic; the ticket has no comments and the PR has no explicit Trac reference, so scope match is by topical overlap only.
+recommendation: review and commit PR #11798.
+notes:          confidence is medium per the scope-match rule (no verbatim title match nor explicit Trac reference).
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65214
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       PR #11785 "Refine the wording for backend editor" (open, CI success, updated 2026-05-09, no CHANGES_REQUESTED) closely matches the ticket title; however sabernhardt comment:3 (2026-05-11) pushes back on the term "backend editor" and proposes alternative wording, and also flags that the help text needs to account for filterable sections and the upcoming RTC opt-in (#64904).
+recommendation: review PR #11785, but resolve sabernhardt's wording feedback before committing — the one-line patch as-is doesn't reflect his suggestions.
+notes:          ui-copy debate; literal PR-RESOLVES criteria satisfied but the wording is contested.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65103
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       only core PR (#11611) was closed 2026-05-11 after westonruter comment:9 (2026-05-10) said the change must be made in Gutenberg; westonruter comment:11 (2026-05-11) opened GB PR#78136 with the adapted fix; no open core PRs remain.
+recommendation: skip; track GB PR#78136 — once merged and synced into core, the ticket can be closed. Not actionable by a core worker.
+notes:          priority is high, milestone 7.0.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #62722
+classification: NEEDS-DISCUSSION
+confidence:     high
+evidence:       `close` keyword on the ticket; SirLouen comment:17 (2025-06-18) reports dev-chat consensus (jorbin) that ABSPATH-direct-access errors are a server-side configuration concern, not a core priority; PR #8932 closed 2025-08-19 without merge; recent activity is just duplicate marking (ocean90 2025-11-21 x2, westonruter 2026-05-09).
+recommendation: skip; committer should close per the `close` keyword and dev-chat outcome.
+notes:          related/duplicate tickets: #61314, #61286, #61277, #61912, #55936, #58987, #63303, #64287, #63930, #65213, #63554.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #24552
+classification: NEEDS-DISCUSSION
+confidence:     high
+evidence:       (duplicate of earlier entry) status=new but recent repros confirm not reproducible (r1k0 comment:9 2026-01-18, abhishekfdd comment:10 2026-05-08); architectural race was explicitly declined in azaozz comment:3 (2013).
+recommendation: skip; committer should close as worksforme.
+notes:          duplicate of ticket #24552 entry above; residual concern at #55659.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #64696
+classification: NEEDS-DISCUSSION
+confidence:     high
+evidence:       active architectural discussion (comments through 2026-05-08) on one-table vs two-table schema, awareness storage (transients vs custom table vs object cache hybrid); ellatrix comment:173 (2026-05-08) punted milestone from 7.0 to 7.1 per #65205; peterwilsoncc comment:172 (2026-05-07) outlined a maintainer-led commit plan (GB PR#78045 + WP-Dev PR#11599) pending matt's approval; listed open PRs (#11067, #11002) are stale but real work is on a newer maintainer-owned PR.
+recommendation: skip; peterwilsoncc is actively driving this with a defined commit sequence. Not for a worker to pick up.
+notes:          see comment:172 for the planned commit sequence.
+===

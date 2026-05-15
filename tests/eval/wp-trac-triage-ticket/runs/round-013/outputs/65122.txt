@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #65122
+classification: READY-TO-FIX
+confidence:     low
+evidence:       status=new, type=defect, keywords=needs-patch, no PRs, no comments; description states the actual work lives in Gutenberg issue WordPress/gutenberg#77530.
+recommendation: Deprioritize — this is a tracking ticket whose implementation work lives in the Gutenberg repo; a core-only worker likely can't make progress here.
+notes:          No decision-tree branch covers "tracking ticket pointing at Gutenberg"; defaulting to READY-TO-FIX but flagging low confidence.
+===

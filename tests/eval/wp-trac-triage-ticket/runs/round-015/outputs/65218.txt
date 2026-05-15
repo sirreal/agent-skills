@@ -1,0 +1,100 @@
+All 10 unique tickets fetched. Emitting triage results in the order given (65218 appears twice).
+
+=== TRIAGE RESULT ===
+ticket:         #65218
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       PR #11798 open, CI success, updated 2026-05-11, no reviews; title "Upgrade/Install: Use a clean plugin slug for the plugin details URL on the Updates screen" matches ticket scope but does not reference the ticket number.
+recommendation: Review PR #11798 before dispatching; scope-match is judgment-based.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65245
+classification: READY-TO-FIX
+confidence:     low
+evidence:       Status=new, defect, has reproduction steps and screenshots, no PR, no patch. ocean90 (comment:1) suggests the bad encoding originates in the api.wordpress.org credits API, not core — fix may not live in this repo.
+recommendation: Dispatch with caveat that the fix likely belongs in api.wordpress.org rather than wordpress-develop; worker may bounce.
+notes:          ocean90 cc'd dd32 to investigate the API side.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65141
+classification: PR-RESOLVES
+confidence:     high
+evidence:       PR #11689 open, CI success, updated 2026-05-14, APPROVED by audrasjb; audrasjb (comment:16) explicitly says "I think we can go with PR11689"; PR address the negative -4px margin follow-up that the ticket was reopened for.
+recommendation: Review PR #11689 — it is approved and tested, ready to commit.
+notes:          Original fix [62284]/[62285] already merged to trunk and 7.0; this PR is the follow-up margin fix.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65051
+classification: PR-RESOLVES
+confidence:     high
+evidence:       PR #11530 open, CI success, updated 2026-04-20 (within 30 days), no CHANGES_REQUESTED; title verbatim matches ticket summary "$_REQUEST['term'] used unsanitized in user search query". Companion test PR #11673 also open, CI success, updated 2026-05-12.
+recommendation: Review PR #11530 (fix) plus PR #11673 (tests) before dispatching.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65233
+classification: BACKPORT-PENDING
+confidence:     high
+evidence:       Status=reopened; wildworks (comment:10) "Reopening #65233 to request backporting [62357] to the 7.0 branch"; [62357] present in Changesets; subsequent comments are tester reports confirming the existing fix works on 7.0 RC3 (bookkeeping, not substantive new activity).
+recommendation: Skip — backport is committer-only.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65218
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       PR #11798 open, CI success, updated 2026-05-11, no reviews; title "Upgrade/Install: Use a clean plugin slug for the plugin details URL on the Updates screen" matches ticket scope but does not reference the ticket number.
+recommendation: Review PR #11798 before dispatching; scope-match is judgment-based.
+notes:          Duplicate of first input entry.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65214
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       PR #11785 open with proposed wording, but sabernhardt (comment:3) pushes back on the "backend editor" phrasing, proposes alternative wording, and notes the string structure ("top section"/"the rest") may not fit when filters remove sections. No consensus on final wording.
+recommendation: Skip — UI-copy debate needs resolution before a fix lands.
+notes:          References related ticket #64904 (real-time collaboration opt-in).
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65103
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       Original PR #11611 closed 2026-05-11. westonruter (comment:11) moved the fix to a Gutenberg PR (gutenberg#78136) because the template lives there, and is awaiting fabiankaegy's confirmation that it resolves the observed issue. No open core PR.
+recommendation: Skip — fix is in Gutenberg repo, awaiting reporter confirmation; core can't act until upstream merges.
+notes:          High priority for 7.0; jorbin bumped priority because new 7.0 feature is broken.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #62722
+classification: NEEDS-DISCUSSION
+confidence:     high
+evidence:       Keyword `close` set; PR #8932 closed 2025-08-19; SirLouen (comment:17) reports dev-chat consensus that direct file access is server-side config, not a core concern, and ticket is "a close candidate"; multiple tickets marked as duplicates against this one.
+recommendation: Skip — project has effectively decided not to fix; close-as-wontfix is pending committer judgment.
+notes:          Duplicates: #63303, #64287, #63930, #65213.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #24552
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       Status=new, no PRs. Recent reproduction reports (jackreichert comment:6, r1k0 comment:9, abhishekfdd comment:10 against trunk/6.9) all confirm the originally-reported notice now appears; abhishekfdd explicitly suggests `worksforme` resolution. Residual race acknowledged as architectural and declined in comment:3.
+recommendation: Skip — needs committer judgment on closing as worksforme; nothing left to implement.
+notes:          Related architectural issue tracked separately in #55659.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #64696
+classification: NEEDS-DISCUSSION
+confidence:     high
+evidence:       Multiple competing open PRs (#11599 hybrid, #11348 transients+JIT, #11427 cache invalidation, #11067 awareness cache, #11002 suspend hook) from different authors proposing fundamentally different approaches (custom DB table vs transients vs hybrid vs hook suspension). ellatrix (comment:173) punted from 7.0 to 7.1 milestone pending direction.
+recommendation: Skip — architectural decision pending; peterwilsoncc (comment:172) outlined a commit process awaiting @matt's structural approval.
+notes:          Partial mitigation already landed in [62099].
+===

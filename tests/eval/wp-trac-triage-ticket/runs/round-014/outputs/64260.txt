@@ -1,0 +1,91 @@
+Triaging 10 unique tickets (64260 appeared twice). All fetched.
+
+=== TRIAGE RESULT ===
+ticket:         #64260
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       PR #10537 has CHANGES_REQUESTED: westonruter; author addressed feedback 2026-05-13, owner moved to status=reviewing 2026-05-14; review feedback unresolved (state not cleared).
+recommendation: Skip — awaiting committer re-review of updated PR; not appropriate for a fix-worker.
+notes:          PR is fresh and green; just needs reviewer to dismiss/approve.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #64623
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       Two open PRs with conflicting approaches (#10927 confirmation dialog, #9130 new-tab links); #10927 has CHANGES_REQUESTED from two reviewers; ticket has changes-requested keyword.
+recommendation: Skip — design direction contested between competing PRs.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65044
+classification: PR-RESOLVES
+confidence:     high
+evidence:       PR #11496 open, CI success, updated 2026-05-14, no CHANGES_REQUESTED; title verbatim-matches ticket summary; westonruter (owner) comment:14 "Once trunk is open for 7.1 commits, I can commit this."
+recommendation: Skip dispatch — committer has explicitly queued this PR for merge once trunk opens.
+notes:          Sibling PR #11640 has CHANGES_REQUESTED but #11496 is the canonical fix.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65050
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       PR #11529 has CHANGES_REQUESTED: westonruter unresolved; ticket keyword `changes-requested`; testers confirm patch works but reviewer's concerns not addressed.
+recommendation: Skip — awaiting author response to westonruter's change request (likely coding-standards).
+notes:          Trivial 1-line change; once review comments addressed, would flip to PR-RESOLVES.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #56914
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement.
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #64155
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement.
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65027
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement.
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65039
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement.
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65134
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement; focuses: tests.
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65135
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement; focuses: tests.
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          n/a
+===

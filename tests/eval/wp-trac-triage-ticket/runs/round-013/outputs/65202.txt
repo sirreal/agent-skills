@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #65202
+classification: ALREADY-FIXED
+confidence:     high
+evidence:       status=closed, resolution=fixed, changesets [62345] and [62346] by SergeyBiryukov on 2026-05-10 reference and fix the ticket.
+recommendation: Skip — already fixed in [62345] (follow-up [62346]).
+notes:          n/a
+===

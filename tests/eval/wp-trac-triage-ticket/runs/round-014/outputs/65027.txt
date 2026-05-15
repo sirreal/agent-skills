@@ -1,0 +1,114 @@
+I'll triage each ticket per the decision tree. Today is 2026-05-15.
+
+**Quick analysis:**
+
+- **#65027** — Type: enhancement → NOT-DEFECT (rule 4)
+- **#64260** — defect, status reviewing. PR #10537 has CHANGES_REQUESTED from westonruter, updated today (active iteration). Disqualified PR-RESOLVES. Not stale. → NEEDS-DISCUSSION (unresolved review feedback)
+- **#64623** — defect, accepted. PR #10927 has CHANGES_REQUESTED from 2 reviewers (last update 30 days ago, ticket keyword `changes-requested`); PR #9130 stale 36 days. → PR-STALE
+- **#65044** — defect, status reviewing. PR #11496 open, CI success, updated yesterday, no reviewer rejections, title matches ticket. Westonruter said he'll commit once trunk reopens. → PR-RESOLVES
+- **#65050** — defect, status assigned. PR #11529 has CHANGES_REQUESTED from westonruter, updated 25 days ago, no resolution. → NEEDS-DISCUSSION
+- **#56914** — Type: enhancement → NOT-DEFECT
+- **#64155** — Type: enhancement → NOT-DEFECT
+- **#65027** — duplicate in args
+- **#65039** — Type: enhancement → NOT-DEFECT
+- **#65134** — Type: enhancement → NOT-DEFECT
+- **#65135** — Type: enhancement → NOT-DEFECT
+
+=== TRIAGE RESULT ===
+ticket:         #65027
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type field is "enhancement", not "defect (bug)".
+recommendation: Skip — non-defect, out of scope for defect-fixing flow.
+notes:          PR #11472 exists with CHANGES_REQUESTED from joedolson.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #64260
+classification: NEEDS-DISCUSSION
+confidence:     low
+evidence:       PR #10537 has CHANGES_REQUESTED from westonruter; updated 2026-05-15 with author addressing feedback (comment:11) and westonruter taking ownership today (comment:12). Active review iteration, unresolved feedback.
+recommendation: Skip — let westonruter (now ticket owner) finish the review cycle on PR #10537.
+notes:          PR is actively iterating, not stale; just blocked on owner re-review.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #64623
+classification: PR-STALE
+confidence:     medium
+evidence:       PR #10927 last updated 2026-04-15 (30d) with CHANGES_REQUESTED from westonruter+joedolson and ticket keyword `changes-requested`; PR #9130 last updated 2026-04-09 (36d), no reviews. Last ticket comment 2026-03-12.
+recommendation: Skip — recommend reviving PR #10927 rather than starting fresh.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65044
+classification: PR-RESOLVES
+confidence:     high
+evidence:       PR #11496 open, CI success, updated 2026-05-14, no CHANGES_REQUESTED; PR title "Posts, Post Types: Fix missing array check in get_post_custom_values()" matches ticket summary verbatim. Westonruter (owner) said "Once trunk is open for 7.1 commits, I can commit this" (comment:14).
+recommendation: Skip dispatch — PR is committer-ready; orchestrator should review PR #11496 rather than start new work.
+notes:          Companion PR #11640 has CHANGES_REQUESTED but is the alternative, not blocker.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65050
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       PR #11529 has CHANGES_REQUESTED from westonruter (last updated 2026-04-20, 25d ago). Subsequent comments (gaurangsondagar, r1k0, yusufmudagal) are test confirmations; none address westonruter's review feedback. Unresolved review feedback.
+recommendation: Skip — author needs to respond to westonruter's change requests before re-dispatching.
+notes:          One-line fix (+1/-1) but blocked on reviewer's concerns being addressed.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #56914
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type field is "enhancement", not "defect (bug)".
+recommendation: Skip — non-defect, out of scope for defect-fixing flow.
+notes:          PR #10502 in active review with APPROVED+CHANGES_REQUESTED states.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #64155
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type field is "enhancement", not "defect (bug)".
+recommendation: Skip — non-defect, out of scope for defect-fixing flow.
+notes:          Milestone is "Future Release"; PR #10445 has CHANGES_REQUESTED from westonruter.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65027
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type field is "enhancement", not "defect (bug)".
+recommendation: Skip — non-defect, out of scope for defect-fixing flow.
+notes:          Duplicate ticket number in input args.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65039
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type field is "enhancement", not "defect (bug)".
+recommendation: Skip — non-defect, out of scope for defect-fixing flow.
+notes:          Two competing PRs (#11478, #11475); #11478 has APPROVED from westonruter but CHANGES_REQUESTED from desrosj.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65134
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type field is "enhancement", not "defect (bug)"; focus is `tests` (adding unit tests for got_mod_rewrite()).
+recommendation: Skip — non-defect, out of scope for defect-fixing flow.
+notes:          PR #11656 has CHANGES_REQUESTED from westonruter.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65135
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type field is "enhancement", not "defect (bug)"; focus is `tests` (adding unit tests for got_url_rewrite()).
+recommendation: Skip — non-defect, out of scope for defect-fixing flow.
+notes:          PR #11657 has CHANGES_REQUESTED from westonruter and failing CI.
+===

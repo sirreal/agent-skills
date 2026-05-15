@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #65236
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type is `enhancement` (test coverage addition), not `defect (bug)`; summary "Tests: Add unit tests for wp_ajax_nopriv_heartbeat()".
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          Open PR #11826 with green CI exists, but NOT-DEFECT short-circuits before PR-RESOLVES per priority order.
+===

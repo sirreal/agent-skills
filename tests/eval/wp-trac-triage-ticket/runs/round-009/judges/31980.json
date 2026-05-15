@@ -1,0 +1,1 @@
+{"ticket":31980,"skill_classification":"CLOSED-NON-FIXED","judge_classification":"CLOSED-NON-FIXED","match":true,"score":10,"issues":[],"reasoning":"Ticket is status=closed with resolution=worksforme, matching branch 2 exactly. Evidence correctly cites joedolson's comment:12 closing as worksforme, and recommendation to skip aligns with the branch's prescribed action."}

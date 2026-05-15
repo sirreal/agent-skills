@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #65229
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Open PR #11815 by dd32 (the reporter), CI success, updated 2026-05-13, approved by dmsnell, scope matches ticket exactly (+1/-1 IP address change).
+recommendation: Review and merge PR #11815 — https://github.com/WordPress/wordpress-develop/pull/11815 — no worker dispatch needed.
+notes:          n/a
+===

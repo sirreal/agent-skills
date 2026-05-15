@@ -1,0 +1,10 @@
+Working through the decision tree: ticket is `assigned` (not closed/reopened), defect type, has an open PR #11388 with CI success, updated today (2026-05-14), approved by the owner (gziolo), and the keyword `commit` is present. Classification is PR-RESOLVES.
+
+=== TRIAGE RESULT ===
+ticket:         #64977
+classification: PR-RESOLVES
+confidence:     high
+evidence:       PR #11388 open, CI success, updated 2026-05-14, APPROVED by owner gziolo; ticket has `commit` keyword and milestone 7.1; comment:13 confirms #11388 is the preferred patch (covers `get_locale()` via `get_bloginfo()` replacement, with tests).
+recommendation: Skip worker dispatch — review and land PR #11388 (https://github.com/WordPress/wordpress-develop/pull/11388); owner already approved and tagged for commit.
+notes:          Competing PR #11502 is narrower; gziolo prefers #11388. PRs #11492/#11498 are closed superseded drafts.
+===

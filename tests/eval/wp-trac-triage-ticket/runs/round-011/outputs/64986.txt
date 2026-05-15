@@ -1,0 +1,17 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Decision tree walk:
+- Not ALREADY-FIXED (status=reopened).
+- Not CLOSED-NON-FIXED.
+- BACKPORT-PENDING: comment:15 requests backport of [62353]; sign-off in comment:16 and backport [62355] landed. BUT comment:18 (timse201) re-reopened with substantive scope addition — `preview "%s"` still needs context. That's substantive activity after the backport request → does not match.
+- Not NOT-DEFECT (defect bug).
+- PR-RESOLVES: only open PR is #11407, last updated 2026-03-31 (~45 days ago). Fails recency.
+- PR-STALE: open PR #11407 exists, updated >30 days ago. Matches per literal rule, though the PR is superseded by merged [62353] and doesn't address the current reopen scope.
+
+=== TRIAGE RESULT ===
+ticket:         #64986
+classification: PR-STALE
+confidence:     medium
+evidence:       Open PR #11407 last updated 2026-03-31 (>30 days); other PRs closed. Reopened by timse201 (comment:18) for additional `preview "%s"` context not covered by merged [62353]/[62355]; audrasjb (comment:19) moved to 7.0.1 awaiting a patch.
+recommendation: Do not revive #11407 — it is superseded by [62353]. Current need is a fresh patch adding `_x()` context to `preview "%s"` occurrences; treat as ready-to-fix in spirit.
+notes:          Per priority order, PR-STALE matches literally even though the stale PR's scope is irrelevant to the current reopen reason.
+===

@@ -1,0 +1,8 @@
+=== TRIAGE RESULT ===
+ticket:         #10638
+classification: CLOSED-NON-FIXED
+confidence:     high
+evidence:       status=closed, resolution=worksforme; dd32 closed in 2011 noting it was a specific server environment issue not reproducible generally.
+recommendation: Skip permanently — closed as worksforme, not a defect to fix.
+notes:          n/a
+===

@@ -1,0 +1,91 @@
+Note: #64155 appears twice in the arguments — emitting once.
+
+=== TRIAGE RESULT ===
+ticket:         #64155
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type is "enhancement"; ticket requests stack traces in failed plugin update notifications, not a bug fix.
+recommendation: Skip — out of scope for defect-fixing flow (PR #10445 also has CHANGES_REQUESTED from westonruter).
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #64260
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       PR #10537 has CHANGES_REQUESTED from westonruter (disqualifies PR-RESOLVES); westonruter just set status=reviewing on 2026-05-14 with unresolved review feedback on the active PR.
+recommendation: Skip — review is in progress, await westonruter's next pass before dispatching.
+notes:          Author updated PR on 2026-05-13 to address prior feedback; reviewer may flip to approve soon.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #64623
+classification: PR-STALE
+confidence:     medium
+evidence:       Both open PRs have stagnated: #10927 last updated 2026-04-15 with CHANGES_REQUESTED from westonruter+joedolson; #9130 last updated 2026-04-09 (36 days) with no reviews. No comment activity since Feb 2026.
+recommendation: Recommend reviving #10927 (the lead PR) rather than dispatching fresh worker.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65044
+classification: PR-RESOLVES
+confidence:     high
+evidence:       PR #11496 (title matches ticket summary verbatim), open, CI success, updated 2026-05-14, no CHANGES_REQUESTED; westonruter explicitly stated in comment 14 "Once trunk is open for 7.1 commits, I can commit this."
+recommendation: Skip dispatching a worker; PR is committer-ready, waiting only for 7.1 trunk window.
+notes:          Sibling PR #11640 has CHANGES_REQUESTED but #11496 is the canonical fix.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65050
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       PR #11529 has CHANGES_REQUESTED from westonruter (disqualifies PR-RESOLVES); ticket keyword `changes-requested`; review feedback unresolved despite positive test reports from r1k0 and yusufmudagal.
+recommendation: Skip — await PR author addressing westonruter's change requests.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #56914
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type is "enhancement"; ticket proposes UX improvements to user-deletion screens.
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          PR #10502 has APPROVED from ocean90 but CHANGES_REQUESTED from joedolson (a11y); still in active review.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65027
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type is "enhancement"; ticket requests adding ID attributes to Settings API section headings.
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65039
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type is "enhancement"; ticket improves _doing_it_wrong messages with block-name context.
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          PR #11478 has APPROVED from westonruter but CHANGES_REQUESTED from desrosj.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65134
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type is "enhancement", focuses=tests; ticket adds unit tests for got_mod_rewrite().
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65135
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type is "enhancement", focuses=tests; ticket adds unit tests for got_url_rewrite().
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          PR #11657 has CI failure and CHANGES_REQUESTED from westonruter, but classification short-circuits at NOT-DEFECT.
+===

@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #65215
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Open PR #11790 by ticket owner westonruter, CI success, updated 2026-05-14 (today), title directly matches ticket scope (preload REST API responses for Connectors screen).
+recommendation: Review PR #11790 (https://github.com/WordPress/wordpress-develop/pull/11790) rather than dispatching a fresh worker.
+notes:          n/a
+===

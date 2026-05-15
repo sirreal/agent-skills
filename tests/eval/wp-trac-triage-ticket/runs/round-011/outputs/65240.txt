@@ -1,0 +1,18 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Fetched ticket 65240. Evaluating decision tree.
+
+- Not closed → skip ALREADY-FIXED, CLOSED-NON-FIXED.
+- Not reopened → skip BACKPORT-PENDING.
+- Type is `defect (bug)` → skip NOT-DEFECT.
+- PR #11835: open, CI success, updated 2026-05-14 (1 day ago), title "REST API: Guard against missing language_packs in create_item()" maps directly to the ticket's `array_map`/`$api->language_packs` defect.
+
+All PR-RESOLVES criteria are explicit.
+
+=== TRIAGE RESULT ===
+ticket:         #65240
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Open PR #11835 (CI: success, updated 2026-05-14) titled "REST API: Guard against missing language_packs in create_item()" directly addresses the unguarded array_map on $api->language_packs described in the ticket.
+recommendation: Review PR #11835 (https://github.com/WordPress/wordpress-develop/pull/11835) before dispatching a worker; note it does not touch tests, so a reviewer may want to request a regression test.
+notes:          n/a
+===

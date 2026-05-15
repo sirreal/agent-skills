@@ -1,0 +1,21 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Walking the decision tree:
+
+- Not closed → skip 1, 2
+- Reopened but no backport-request comment cites a changeset → skip 3
+- Type is `defect (bug)` → skip 4
+- No PRs → skip 5, 6
+- No `needs-*-feedback` keywords; recent comments (SirLouen 2025-07-02, jonsurrell 2026-05-12) agree the original issue is gone — no active disagreement → skip 7
+- Description has repro; recent comments are test reports, not requests for info → skip 8
+- Default → READY-TO-FIX
+
+Notable: keyword `close` plus jonsurrell's 2026-05-12 comment indicate the original bug is fixed since 4.4, but a related cosmetic defect remains (`"css".png` → `22css22.png`). A worker can attempt that residual issue.
+
+=== TRIAGE RESULT ===
+ticket:         #16191
+classification: READY-TO-FIX
+confidence:     medium
+evidence:       Reopened defect, no PRs, no needs-*-feedback keywords, no active disagreement; recent comments confirm original bug fixed but a residual cosmetic issue remains (quotes become literal "22" in filenames).
+recommendation: Dispatch worker; scope is the residual filename-sanitization issue (e.g. "css".png → 22css22.png) rather than the original undisplayable-file bug, which is already resolved.
+notes:          Keyword `close` and jonsurrell's comment:11 suggest the ticket itself is a candidate for closure once the residual issue is split off.
+===

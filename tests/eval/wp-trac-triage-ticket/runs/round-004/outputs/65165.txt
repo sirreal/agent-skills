@@ -1,0 +1,10 @@
+Triage analysis: ticket is accepted (not closed/reopened), is a defect, and has an open PR #11788 with CI success, last updated today (2026-05-14), and already approved. Scope (warn when `module_dependencies` used without footer/defer) matches the agreed-upon 7.0 plan in comments 10, 13, 14. Keywords include `needs-dev-note` but not any `needs-*-feedback` flag, so NEEDS-DISCUSSION doesn't apply.
+
+=== TRIAGE RESULT ===
+ticket:         #65165
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Open PR #11788 (CI success, approved by sirreal, updated 2026-05-14) implements the agreed _doing_it_wrong warning for module_dependencies without in_footer/defer per comments 10, 13, 14.
+recommendation: Review and merge PR #11788 (https://github.com/WordPress/wordpress-develop/pull/11788); no worker dispatch needed.
+notes:          needs-dev-note keyword tracks dev-note follow-up, not blocking discussion.
+===

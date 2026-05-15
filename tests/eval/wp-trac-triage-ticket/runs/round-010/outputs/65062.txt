@@ -1,0 +1,8 @@
+=== TRIAGE RESULT ===
+ticket:         #65062
+classification: ALREADY-FIXED
+confidence:     high
+evidence:       status=closed, resolution=fixed; changesets [62273] (trunk) and [62280] (7.0 branch backport) both reference "Fixes #65062". Backport was already completed.
+recommendation: Skip — fix already shipped and backported to 7.0.
+notes:          n/a
+===

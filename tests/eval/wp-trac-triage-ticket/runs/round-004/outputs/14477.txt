@@ -1,0 +1,10 @@
+Ticket #14477 is type `enhancement`, not `defect (bug)`.
+
+=== TRIAGE RESULT ===
+ticket:         #14477
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type field is "enhancement" (changed from defect to enhancement by nacin in comment:1, 2010-11-23); milestone "Future Release"; no PRs; status reopened with patch 14477.7.diff that doesn't apply cleanly to trunk per 2026-03-01 testing notes.
+recommendation: Skip — out of scope for defect-fixing flow. If revisited, requires patch rebase and design discussion on get_page_descendants() approach raised in comment:18.
+notes:          n/a
+===

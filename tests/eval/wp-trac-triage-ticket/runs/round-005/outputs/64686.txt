@@ -1,0 +1,21 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Ticket #64686 was reopened on 2026-05-08 after the original fix ([61729]) didn't fully resolve the issue in 7.0 RC3. Since reopen, multiple contributors are proposing different fix approaches with no consensus.
+
+Recent activity (all within last 30 days):
+- 369work: CSS-only restructure approach (comment 11)
+- wildworks: `:lang()` pseudo-class margin approach (comment 14), and explicitly disagrees with the wrap approach (comment 18)
+- sabernhardt: uploaded `64686.wrap.diff` allowing button text wrap (2026-05-13), and CHANGES_REQUESTED on the open PR
+- itzmekhokan: PR #11820 (open, CI green, but changes requested)
+- audrasjb: suggests punting to 7.0.1 and changing translations instead (today, 2026-05-14)
+- Milestone moved from 7.0 to 7.0.1 today
+
+There's an open PR with green CI updated within 30 days, which would suggest PR-RESOLVES — but it has CHANGES_REQUESTED and the discussion shows the approach itself is contested (wrap vs lang-based vs CSS layout vs translation workaround). NEEDS-DISCUSSION takes precedence.
+
+=== TRIAGE RESULT ===
+ticket:         #64686
+classification: NEEDS-DISCUSSION
+confidence:     high
+evidence:       Reopened 2026-05-08; four contributors propose different approaches (CSS layout, :lang() margins, button wrap, translation workaround); open PR #11820 has CHANGES_REQUESTED; milestone moved to 7.0.1 today with no agreed direction.
+recommendation: Skip — wait for committers to converge on an approach before any worker attempts a fix.
+notes:          Open PR #11820 exists but is contested; sabernhardt's wrap.diff is an alternate proposal, not a consensus.
+===

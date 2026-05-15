@@ -1,0 +1,120 @@
+I'll analyze each ticket and emit triage results. The user passed 65191 twice — I'll emit it twice.
+
+**#65191** — status=reviewing, two fresh open PRs (#11777, #11752) with CI success, no CHANGES_REQUESTED, both directly scoped to the bug. Sergey set to reviewing on 2026-05-15. → PR-RESOLVES.
+
+**#65138** — RTC sprint tracking ticket. Comment 13: backport review withdrawn, "needs to be reverted." Milestone punted 7.0→7.1. Open PR but the ticket-level direction is contested. → NEEDS-DISCUSSION.
+
+**#46058** — jdeep (2026-05-08) asks for repro confirmation, environment, plugins, theme, version. → NEEDS-INFO.
+
+**#59272** — Two reviewers (2026-01, 2026-05) unable to reproduce; asking reporter to confirm on current WP. → NEEDS-INFO.
+
+**#50694** — Keywords include `reporter-feedback close`; realloc unable to reproduce, asks for closure. → NEEDS-INFO.
+
+**#63017** — Open PR #8409 last updated 2025-06-27 (~11 months ago). → PR-STALE.
+
+**#39651** — Open PR #11770 (2026-05-08), CI success, no CHANGES_REQUESTED, title matches scope. → PR-RESOLVES.
+
+**#65204** — Open PR #11765 by same author as owner (takshil), CI success, fresh, title matches. → PR-RESOLVES.
+
+**#48684** — No PRs, only patches as attachments. No explicit needs-* keywords. Recent activity is sabernhardt proposing selectors, not disagreement. → READY-TO-FIX (but low confidence given the long history and unresolved selector choice).
+
+**#50255** — Open PR #11793, CI success, APPROVED by apermo, title matches ticket scope (REST API + _edit_last). → PR-RESOLVES.
+
+=== TRIAGE RESULT ===
+ticket:         #65191
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       status=reviewing; two open PRs (#11752 "Plugins: Update custom view counts when deleting a plugin", #11777) both CI=success, updated 2026-05-07/08, no CHANGES_REQUESTED; owner SergeyBiryukov set to reviewing on 2026-05-15
+recommendation: review PR #11752 first (scope verbatim); reconcile with #11777 before dispatching new worker
+notes:          two competing PRs — committer needs to pick one
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65138
+classification: NEEDS-DISCUSSION
+confidence:     high
+evidence:       jorbin (comment:13, 2026-05-08) withdrew backport review and said "this needs to be reverted"; ellatrix punted milestone 7.0→7.1; tracking ticket for RTC bug sprint where RTC was decided not to ship
+recommendation: skip — direction reversal in progress; do not dispatch worker
+notes:          see #65205 for punt context
+===
+
+=== TRIAGE RESULT ===
+ticket:         #46058
+classification: NEEDS-INFO
+confidence:     high
+evidence:       jdeep (comment:2, 2026-05-08) cannot reproduce on 6.9 and asks reporter for version, theme, object-cache, plugin context
+recommendation: skip — waiting on reporter response (ticket dates from 2019)
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #59272
+classification: NEEDS-INFO
+confidence:     high
+evidence:       shooper (2026-01-17) and jdeep (2026-05-08) both unable to reproduce; both asking reporter to confirm on current WP
+recommendation: skip — waiting on reporter; likely already fixed
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #50694
+classification: NEEDS-INFO
+confidence:     high
+evidence:       Keywords include `reporter-feedback close`; realloc (comment:1, 2026-05-08) cannot reproduce because username validation now rejects email-as-username, recommends closing
+recommendation: skip — awaiting reporter; closure pending
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #63017
+classification: PR-STALE
+confidence:     high
+evidence:       Open PR #8409 last updated 2025-06-27 (~11 months ago); recent ticket activity (2026-05-08 attachment by dpknauss) but PR untouched; milestone punted to Future Release
+recommendation: revive existing PR or coordinate with dpknauss's narrower patch and #58302 before fresh work
+notes:          scope creep — see related #58302, #57548, #47322
+===
+
+=== TRIAGE RESULT ===
+ticket:         #39651
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Open PR #11770 "Fix: Show non-public post type labels in Find Posts modal" created 2026-05-08, CI=success, no reviews, no CHANGES_REQUESTED; PR scope closely matches ticket summary but no explicit ticket-number reference
+recommendation: review PR #11770 before dispatching new worker
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65204
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Open PR #11765 "Media: Add support for custom bulk actions in Media grid view" by Takshil-Kunadia (same as ticket owner `takshil`), 2026-05-07, CI=success, no CHANGES_REQUESTED; owner-authored PR is strong scope-match signal
+recommendation: review PR #11765 before dispatching new worker
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #48684
+classification: READY-TO-FIX
+confidence:     low
+evidence:       No PRs; has-patch keyword; recent activity (sabernhardt comment:16, 2026-05-11) proposes two new diffs but no consensus reached on selector strategy; open since 2019, Future Release
+recommendation: dispatch worker but expect non-trivial selector choice (see sabernhardt's `:where(:not([class^="components-"]))` vs `.wp-block` proposals)
+notes:          could plausibly be NEEDS-DISCUSSION — multiple unresolved CSS approaches across years
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65191
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       status=reviewing; two open PRs (#11752, #11777) both CI=success, updated 2026-05-07/08, no CHANGES_REQUESTED; owner SergeyBiryukov set to reviewing on 2026-05-15
+recommendation: review PR #11752 first (scope verbatim); reconcile with #11777 before dispatching new worker
+notes:          duplicate of earlier entry in this batch
+===
+
+=== TRIAGE RESULT ===
+ticket:         #50255
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Open PR #11793 "REST API: Set `_edit_last` post meta when creating or updating posts" by Sukhendu2002, created 2026-05-11, CI=success, APPROVED by apermo; scope matches ticket focus (rest-api) and discussion (_edit_last not set via REST)
+recommendation: review PR #11793 (already approved by one reviewer) before dispatching new worker
+notes:          n/a
+===

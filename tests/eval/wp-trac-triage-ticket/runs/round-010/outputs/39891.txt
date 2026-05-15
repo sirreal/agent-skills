@@ -1,0 +1,8 @@
+=== TRIAGE RESULT ===
+ticket:         #39891
+classification: CLOSED-NON-FIXED
+confidence:     high
+evidence:       status=closed, resolution=worksforme; joedolson closed 2026-04-15 noting the issue can no longer be reproduced after the switch to block widgets and the 7.0 admin reskin.
+recommendation: Skip permanently — closed as worksforme.
+notes:          n/a
+===
