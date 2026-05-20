@@ -28,7 +28,7 @@ Create a per-ticket worktree forked from `upstream/trunk` and initialize envlite
 
 ```bash
 git fetch upstream
-git worktree add ../agent-fixes/<ticket> \
+git worktree add --no-track ../agent-fixes/<ticket> \
   -b trac-<ticket>/<slug> upstream/trunk
 cd ../agent-fixes/<ticket>
 envlite init --force

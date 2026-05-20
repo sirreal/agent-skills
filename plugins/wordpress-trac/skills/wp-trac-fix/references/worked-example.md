@@ -6,7 +6,7 @@ A complete walkthrough of the workflow against ticket #50040 (Localize the jQuer
 
 ```bash
 git fetch upstream
-git worktree add ../agent-fixes/50040 \
+git worktree add --no-track ../agent-fixes/50040 \
   -b fix/50040-datepicker-footer-l10n upstream/trunk
 cd ../agent-fixes/50040
 envlite up
