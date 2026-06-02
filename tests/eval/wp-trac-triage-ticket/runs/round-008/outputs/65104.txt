@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Ticket is closed with `resolution=fixed` and two changesets ([62268] to trunk, [62269] to 7.0 branch). Backport already merged — fully resolved.
+
+=== TRIAGE RESULT ===
+ticket:         #65104
+classification: ALREADY-FIXED
+confidence:     high
+evidence:       status=closed, resolution=fixed; changesets [62268] (trunk) and [62269] (7.0 branch backport) both committed by peterwilsoncc on 2026-04-27.
+recommendation: Skip — fix and backport are already merged.
+notes:          n/a
+===

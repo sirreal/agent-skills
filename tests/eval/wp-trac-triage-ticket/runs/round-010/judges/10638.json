@@ -1,0 +1,1 @@
+{"ticket":10638,"skill_classification":"CLOSED-NON-FIXED","judge_classification":"CLOSED-NON-FIXED","match":true,"score":10,"issues":[],"reasoning":"Ticket has status=closed and resolution=worksforme, which matches branch 2 (CLOSED-NON-FIXED) exactly. Evidence cites dd32's 2011 close comment accurately. Confidence high is appropriate as both load-bearing signals are explicit."}

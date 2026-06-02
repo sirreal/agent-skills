@@ -1,0 +1,8 @@
+=== TRIAGE RESULT ===
+ticket:         #65171
+classification: PR-RESOLVES
+confidence:     high
+evidence:       PR #11732 open, CI success, updated 2026-05-14, APPROVED by adamsilverstein, title and scope directly address the wp_check_post_lock_window/heartbeat race described in the ticket; PR touches tests.
+recommendation: Review and land PR #11732 (https://github.com/WordPress/wordpress-develop/pull/11732) rather than dispatching a fresh worker.
+notes:          Keywords still include needs-unit-tests, but the PR already touches tests — keyword likely stale.
+===

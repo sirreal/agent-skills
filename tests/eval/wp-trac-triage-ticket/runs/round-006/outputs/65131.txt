@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Ticket #65131 is closed/fixed with both trunk and 7.0 backport landed.
+
+=== TRIAGE RESULT ===
+ticket:         #65131
+classification: ALREADY-FIXED
+confidence:     high
+evidence:       status=closed, resolution=fixed; trunk fix [62291] by SergeyBiryukov on 2026-05-01 and 7.0 backport [62303] by peterwilsoncc on 2026-05-06 both cite "Fixes #65131".
+recommendation: Skip — no remaining work; spinner alignment was committed to trunk and merged to the 7.0 branch.
+notes:          n/a
+===

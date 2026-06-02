@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #65211
+classification: NEEDS-INFO
+confidence:     medium
+evidence:       Reproduction is contested — testers (sanayasir, wildworks) cannot reproduce on similar Studio+RC3+Edge setups; reporter narrowed it to WordPress Studio (not Local by Flywheel) and stated in comment:13 that the issue did not occur in 7.0RC4. No confirmed root cause, no PRs, and the reporter is asking whether to wait for the 7.0 release.
+recommendation: Skip — wait for reporter/others to confirm whether the bug still reproduces in 7.0 final; if not, this likely closes as worksforme rather than needing a fix.
+notes:          May be environment-specific to WordPress Studio rather than a core bug.
+===

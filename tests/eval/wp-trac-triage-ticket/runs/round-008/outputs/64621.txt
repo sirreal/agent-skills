@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #64621
+classification: NEEDS-INFO
+confidence:     high
+evidence:       Status=new, Keywords=reporter-feedback; description has no concrete repro steps and explicitly admits it's "full erratic" and "difficult to describe"; comment:1 from poena asks reporter to disable plugins one-by-one and provide video/screenshots; no reply from reporter.
+recommendation: Skip — wait for reporter to provide isolated repro (plugin-by-plugin bisect, video/screenshots).
+notes:          Likely a plugin (Pods / WooCommerce) interaction, not core; report mixes "custom fields" terminology with the Customize component, which itself suggests miscategorization.
+===

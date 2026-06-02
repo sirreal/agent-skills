@@ -1,0 +1,8 @@
+=== TRIAGE RESULT ===
+ticket:         #64066
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement (not defect (bug)); proposes changing default speculative loading eagerness from conservative to moderate.
+recommendation: Skip — out of scope for defect-fixing flow.
+notes:          n/a
+===

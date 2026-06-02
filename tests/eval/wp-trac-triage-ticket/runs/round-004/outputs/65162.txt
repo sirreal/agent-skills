@@ -1,0 +1,18 @@
+Evaluating the ticket against the decision tree.
+
+**Key signals:**
+- Status: `new`, Type: `defect (bug)`, Keywords: `reporter-feedback`
+- Open PR #11708 with failing CI, created 9 days ago (not stale by spirit of rule — too new)
+- Maintainer (poena) comment 2026-05-13 explicitly questions the premise and asks the reporter a direct question: "Do you have a suggestion specifically about changing the specificity?"
+- The `reporter-feedback` keyword is the canonical Trac signal that the ticket is awaiting reporter response
+
+Rules 1–3 don't apply (not closed, not reopened). Rule 4 (PR-RESOLVES) fails because CI is failed. Rule 5 (PR-STALE) is technically tempting because CI failed + no addressing comments, but the PR is only 9 days old — that's not abandonment, that's a PR still in flight. Rule 6 doesn't apply (it's a defect). Rule 7 doesn't apply (no dev-feedback keywords, not multi-author disagreement — just one maintainer questioning scope). Rule 8 fits: the maintainer has an unanswered question to the reporter, and the `reporter-feedback` keyword is explicit.
+
+=== TRIAGE RESULT ===
+ticket:         #65162
+classification: NEEDS-INFO
+confidence:     medium
+evidence:       Keywords include `reporter-feedback`; poena (comment:4, 2026-05-13) explicitly asks reporter "Do you have a suggestion specifically about changing the specificity?" and signals "no current plans to remove or update the defaults"; PR #11708 removes defaults entirely, which doesn't match the scope the maintainer is steering toward
+recommendation: Skip — wait for reporter to respond to poena's specificity question. PR #11708 likely needs rescoping rather than reviving; do not dispatch a worker until the reporter clarifies intent.
+notes:          Open PR exists but CI failed and its scope (full removal) is contested by the maintainer; not a PR-STALE case because PR is only 9 days old.
+===

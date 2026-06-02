@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Status is `closed`, resolution `worksforme` — classification 2 (CLOSED-NON-FIXED).
+
+=== TRIAGE RESULT ===
+ticket:         #60421
+classification: CLOSED-NON-FIXED
+confidence:     high
+evidence:       status=closed, resolution=worksforme; desrosj closed in comment:2 (2026-02-24) after no reporter-feedback for over a year.
+recommendation: Skip permanently — closed worksforme awaiting reporter feedback that never came.
+notes:          n/a
+===

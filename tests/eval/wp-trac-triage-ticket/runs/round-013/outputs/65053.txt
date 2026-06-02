@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Fetched ticket. Evaluating decision tree: not closed, not reopened, is a defect. PR #11585 is open, CI success, updated 4 days ago, approved by owner who said "This fix looks ready to me, I will get it committed for 7.1." Matches PR-RESOLVES.
+
+=== TRIAGE RESULT ===
+ticket:         #65053
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Open PR #11585, CI success, updated 2026-05-11, approved by owner adamsilverstein who stated in comment:17 "This fix looks ready to me, I will get it committed for 7.1."
+recommendation: Skip worker dispatch; the owner has approved the PR and intends to commit it for 7.1 — let the existing committer flow proceed.
+notes:          Keywords include `commit`; PR scope matches ticket directly.
+===

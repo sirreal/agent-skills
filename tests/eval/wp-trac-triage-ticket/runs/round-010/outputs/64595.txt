@@ -1,0 +1,10 @@
+Ticket 64595 is `Type: task (blessed)` with status `new` — Rule #4 NOT-DEFECT matches before any PR-state checks.
+
+=== TRIAGE RESULT ===
+ticket:         #64595
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type field is "task (blessed)", not "defect (bug)" — ticket exists as a tracking reference for routine Gutenberg ref package.json updates during the 7.0 cycle.
+recommendation: Skip — out of scope for the defect-fixing flow. No worker dispatch.
+notes:          n/a
+===

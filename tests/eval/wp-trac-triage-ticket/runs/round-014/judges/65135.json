@@ -1,0 +1,1 @@
+{"ticket":65135,"skill_classification":"NOT-DEFECT","judge_classification":"NOT-DEFECT","match":true,"score":10,"issues":[],"reasoning":"Ticket Type is 'enhancement' with focus 'tests' — branch 4 (NOT-DEFECT) fires before any PR-state branches per the tree's priority order. Evidence cites the load-bearing facts (type, focus, scope) accurately; high confidence is justified."}

@@ -1,0 +1,10 @@
+Ticket type is `enhancement`, not `defect (bug)` — matches rule #4 NOT-DEFECT.
+
+=== TRIAGE RESULT ===
+ticket:         #65089
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement (not defect); status=new; keywords needs-patch needs-design needs-design-feedback; scope is a multi-release migration of Dashicons → @wordpress/icons.
+recommendation: Skip — out of scope for defect-fixing flow. Also carries needs-design-feedback, so would need discussion even if it were a bug.
+notes:          n/a
+===

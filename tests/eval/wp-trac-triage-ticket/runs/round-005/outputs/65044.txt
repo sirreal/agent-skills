@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #65044
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Two open PRs match scope: #11640 (CI success, updated 2026-04-30, but CHANGES_REQUESTED by westonruter) and #11496 (CI success, updated 2026-04-20, no reviews). Both within 30 days.
+recommendation: Review PRs before dispatching worker — #11640 has CHANGES_REQUESTED feedback to address; committer (westonruter) is engaged. Worker should not start from scratch.
+notes:          Two parallel PRs by different authors for same fix; consolidation may be needed.
+===

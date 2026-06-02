@@ -1,0 +1,16 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Working through the decision tree on Trac #23562.
+
+- Not closed (status=reopened), so ALREADY-FIXED and CLOSED-NON-FIXED skip.
+- Reopened, but **not** for backporting — wildworks reopened it because r61757 introduced an unintended scrollbar regression, not to request a backport. BACKPORT-PENDING skips.
+- Type is defect (bug). NOT-DEFECT skips.
+- PR-RESOLVES: PR #11797 is open, CI success, updated 2026-05-12 (3 days ago), and explicitly cited in comment:66 as having the same changes as the attached diff addressing the scrollbar regression that caused the reopen. Plausible scope match — direct hit.
+
+=== TRIAGE RESULT ===
+ticket:         #23562
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Reopened by wildworks for an overflow/scrollbar regression from r61757; open PR #11797 (CI success, updated 2026-05-12) matches the attached 23562.increase-height.diff per comment:66.
+recommendation: Review PR #11797 (https://github.com/WordPress/wordpress-develop/pull/11797) before dispatching a worker — likely just needs review/test, not new work.
+notes:          Original fix r61757 already landed for the underlying voice-control issue; reopen scope is narrow (toolbar height to suppress scrollbar).
+===

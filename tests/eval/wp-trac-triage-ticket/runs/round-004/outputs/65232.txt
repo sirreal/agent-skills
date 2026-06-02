@@ -1,0 +1,17 @@
+Fetched ticket data. Now evaluating the decision tree.
+
+Walking through in order:
+- Not closed, so rules 1–2 don't match.
+- Not reopened, so rule 3 doesn't match.
+- Rule 4 (PR-RESOLVES): Two open PRs (#11834, #11833), both CI success, both created/updated 2026-05-14, both scoped to this exact feature. **Match.**
+
+Stopping here per "first match wins" — though I'll flag in notes that this is an `enhancement` (rule 6 would otherwise apply) and that two competing PRs exist.
+
+=== TRIAGE RESULT ===
+ticket:         #65232
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Two open PRs updated 2026-05-14 with CI success — #11834 (KarunyaChavan) and #11833 (itzmekhokan) — both implementing the proposed `fields` param + `site_health` field on `core/get-environment-info`.
+recommendation: Do not dispatch a worker. Review the two competing PRs and let the owner (gziolo) choose direction; comment:2/5/6 also flag an unresolved design question about caching full Site Health results vs. just aggregate counts.
+notes:          Type is `enhancement`, not `defect (bug)` — out of scope for defect-fixing dispatch regardless. Open design question about expanding the Site Health transient may need to land first.
+===

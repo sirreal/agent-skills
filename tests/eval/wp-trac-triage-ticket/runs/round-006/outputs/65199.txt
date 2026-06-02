@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #65199
+classification: ALREADY-FIXED
+confidence:     high
+evidence:       status=closed, resolution=fixed, fixed by changeset [62356] on 2026-05-13 (committed by SergeyBiryukov, props pbearne)
+recommendation: skip; cite changeset [62356]
+notes:          ticket type is enhancement (unit tests), not defect — would also classify NOT-DEFECT, but ALREADY-FIXED matches first
+===

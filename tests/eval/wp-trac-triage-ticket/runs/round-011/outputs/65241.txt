@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Fetched ticket. Reporter self-resolved (cpanel transfer changed table prefix — not a WordPress bug) and explicitly requested closure. Ticket is still `status=new` though, so CLOSED-NON-FIXED doesn't apply. No PRs, no committer-side action requested, no keyword flags. Falls through to the default.
+
+=== TRIAGE RESULT ===
+ticket:         #65241
+classification: READY-TO-FIX
+confidence:     low
+evidence:       status=new, type=defect, no PRs, no closed/resolution set; comment:2 from reporter says "cpanel transfer changed the table prefix causing all issues … issue resolved. please close"
+recommendation: Do not dispatch a worker — reporter self-resolved; a committer should close as worksforme/invalid. No code defect exists.
+notes:          Strict priority order yields READY-TO-FIX, but ticket is effectively closeable; cause was external (table prefix mismatch after host migration), not a WP defect.
+===

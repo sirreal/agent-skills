@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+The ticket's `Type:` field is explicitly `enhancement` (changed from `defect (bug)` by audrasjb on 2026-02-18, comment:13). That short-circuits the decision tree at step 6.
+
+=== TRIAGE RESULT ===
+ticket:         #64596
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type: enhancement (changed from defect to enhancement in comment:13 by audrasjb on 2026-02-18); status=assigned, milestone 7.1, owner justlevine.
+recommendation: Skip — out of scope for the defect-fixing flow. Enhancement work on nested ability namespaces is owned by justlevine for 7.1.
+notes:          Original fix [61602] was reverted by [62094]; PR #10929 (the revert) is merged-equivalent but stale (last update 2026-03-23). Active design discussion ongoing.
+===

@@ -1,0 +1,8 @@
+=== TRIAGE RESULT ===
+ticket:         #64934
+classification: NEEDS-DISCUSSION
+confidence:     high
+evidence:       Keywords include `needs-design-feedback`; comments show joedolson pinging @fabiankaegy/@joen for design opinion on whether contrast change is a regression, awaiting response since 2026-04-14.
+recommendation: Skip — design judgment required before any code fix.
+notes:          n/a
+===

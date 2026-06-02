@@ -1,0 +1,111 @@
+Triaging each ticket. Today is 2026-05-16.
+
+**#65204** — assigned defect, open PR #11765 by ticket owner, CI success, 9 days old, no CHANGES_REQUESTED. Title scope-matches.
+
+**#65138** — RTC tracking ticket; comment:13 withdrew backport review, comment:14 punted to 7.1 due to "decision to not ship RTC", needs revert. Multi-author disagreement.
+
+**#65191** — `reviewing` status, two competing open PRs from different authors, both fresh & green. SergeyBiryukov assigned and reviewing.
+
+**#46058** — comment:2 (2026-05-08) jdeep couldn't reproduce, asking for repro details on 6.9.
+
+**#59272** — comment:1 and comment:2 both ask for confirmation on latest WP; can't reproduce.
+
+**#50694** — `reporter-feedback` keyword, owner couldn't reproduce, asking to close.
+
+**#63017** — Open PR #8409 last updated 2025-06-27 (~11 months ago). Punted to Future Release.
+
+**#39651** — Open PR #11770 (2026-05-08), CI success, scope-matches ticket summary closely.
+
+**#48684** — Has-patch with two competing diffs from sabernhardt on 2026-05-11, no open PR. Discussion through years but no active multi-author disagreement.
+
+**#50255** — Open PR #11793 (2026-05-12), CI success, APPROVED by apermo, ticket owner westonruter assigned. PR sets `_edit_last` matching ticket scope.
+
+=== TRIAGE RESULT ===
+ticket:         #65204
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Open PR #11765 by ticket owner Takshil-Kunadia, CI success, updated 2026-05-07, no CHANGES_REQUESTED; title "Add support for custom bulk actions in Media grid view" matches ticket scope.
+recommendation: Review PR #11765 (https://github.com/WordPress/wordpress-develop/pull/11765) before dispatching a worker.
+notes:          Author is also the ticket reporter/owner; no explicit ticket-number reference in PR title.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65138
+classification: NEEDS-DISCUSSION
+confidence:     high
+evidence:       comment:13 (jorbin) withdrew backport review and said "needs to be reverted"; comment:14 (ellatrix) punted to 7.1 citing decision not to ship RTC; tracking ticket for many bugs.
+recommendation: Skip — direction unclear pending revert decision and RTC scope discussion.
+notes:          Tracking ticket; jorbin suggested splitting into per-bug tickets in comment:10.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65191
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Two open PRs (#11777, #11752) both fresh, CI success, no CHANGES_REQUESTED; SergeyBiryukov set status=reviewing on 2026-05-15; PR titles match ticket scope.
+recommendation: Review both PRs and let SergeyBiryukov pick — do not dispatch a worker to write a third.
+notes:          Two competing PRs from different authors; SergeyBiryukov already actively reviewing.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #46058
+classification: NEEDS-INFO
+confidence:     high
+evidence:       comment:2 (jdeep, 2026-05-08) could not reproduce on WP 6.9 with Twenty Nineteen; asked reporter for version, theme, object cache, plugin details.
+recommendation: Skip — wait for reporter (kg69design) to respond with current-version repro.
+notes:          Original report from 2019 against WP 5.0.3.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #59272
+classification: NEEDS-INFO
+confidence:     high
+evidence:       comment:1 (shooper) and comment:2 (jdeep, 2026-05-08) both unable to reproduce on current trunk/6.9.4; both asking reporter to confirm.
+recommendation: Skip — wait for reporter to confirm whether issue persists.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #50694
+classification: NEEDS-INFO
+confidence:     high
+evidence:       Keywords include `reporter-feedback close`; comment:1 (owner realloc, 2026-05-08) could not reproduce — username-as-email is now blocked at validation; recommends closing.
+recommendation: Skip — awaiting reporter feedback; on track for close as worksforme/invalid.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #63017
+classification: PR-STALE
+confidence:     high
+evidence:       Only open PR #8409 last updated 2025-06-27 (~11 months ago); milestone punted to Future Release in comment:13; comment:14 notes scope-creep frustration.
+recommendation: Recommend reviving PR #8409 (or the smaller 63017-small-core-clarification.diff from 2026-05-08) rather than starting fresh.
+notes:          Linked to broader rework via #58302, #57548, #47322.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #39651
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Open PR #11770 (2026-05-08), CI success, no CHANGES_REQUESTED; title "Show non-public post type labels in Find Posts modal" closely matches ticket summary.
+recommendation: Review PR #11770 (https://github.com/WordPress/wordpress-develop/pull/11770) before dispatching a worker.
+notes:          PR does not touch tests; no explicit ticket-number reference observed.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #48684
+classification: READY-TO-FIX
+confidence:     low
+evidence:       No open PR; has-patch with two competing diffs from sabernhardt (2026-05-11) offering different scoping approaches (`.wp-block` vs excluding `[class^="components-"]`); poena's 2024 analysis shows naive removal breaks nested-block contrast.
+recommendation: Dispatch worker to evaluate the two attached diffs and pick one; non-trivial CSS-specificity tradeoff.
+notes:          Bundled theme; could plausibly be NEEDS-DISCUSSION given multiple competing patch approaches.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #50255
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Open PR #11793 (updated 2026-05-12), CI success, APPROVED by apermo, no CHANGES_REQUESTED; ticket owner westonruter assigned; PR sets `_edit_last` in REST API which directly addresses the ticket's root cause.
+recommendation: Review PR #11793 (https://github.com/WordPress/wordpress-develop/pull/11793) — appears ready for committer landing.
+notes:          PR includes unit tests; no explicit ticket-number reference in title but scope match is tight.
+===

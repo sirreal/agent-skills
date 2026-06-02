@@ -1,0 +1,21 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Walking through the decision tree against ticket #64762:
+
+- **ALREADY-FIXED**: No — status is `reopened`.
+- **CLOSED-NON-FIXED**: No — not closed.
+- **BACKPORT-PENDING**: No — reopened by westonruter (comment:24) due to PHPStan/test failures in the original fix, not to request a backport. The revert backport ([62354]) has already been applied; ticket moved to 7.0.1 for "further development" of a new approach.
+- **NOT-DEFECT**: No — Type is `defect (bug)`.
+- **PR-RESOLVES**: Match — multiple open PRs with CI success updated within 30 days that propose alternatives for the 7.0.1 fix:
+  - #11354 (sabernhardt, updated 2026-05-07, CI success) — explicitly favored in comment:47 by wildworks
+  - #11267 (johnbillion, updated 2026-05-07, CI success)
+
+Today is 2026-05-15, both within the 30-day window. Scope plausibly matches (both target this exact ticket).
+
+=== TRIAGE RESULT ===
+ticket:         #64762
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Open PRs #11354 (sabernhardt) and #11267 (johnbillion) both updated 2026-05-07, CI success, propose alternative approaches for the 7.0.1 fix after [62025] was reverted in [62349]/[62354]; wildworks recommended #11354 in comment:47.
+recommendation: Review competing PRs (#11354 preferred per comment:47) rather than dispatching a worker — committer judgment needed to pick between approaches.
+notes:          Multiple competing PRs exist (#11354, #11267, #11255 just outside 30-day window); maintainers actively choosing direction for 7.0.1.
+===

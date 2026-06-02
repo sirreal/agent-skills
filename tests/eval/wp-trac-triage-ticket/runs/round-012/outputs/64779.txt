@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #64779
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       PR #11191 open, CI success, updated 2026-05-13 (within 30 days), scope matches ticket; active comments 7/8 debate whether fix is desired and earlier comment 6 noted draft + change requests
+recommendation: Review PR #11191 (https://github.com/WordPress/wordpress-develop/pull/11191) — resolve the design disagreement raised in comments 7–8 before dispatching a worker
+notes:          milestone 7.1; reporter mindctrl authored the PR
+===

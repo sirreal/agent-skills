@@ -1,0 +1,67 @@
+# Ground-truth labels for wp-trac-triage-ticket eval.
+# Each entry: ticket number, expected classification, label-confidence, notes.
+# label-confidence: "verified" = checked the ticket data directly;
+#                   "predicted" = assigned without verification (resolve before scoring).
+
+- ticket: 65140
+  expected: ALREADY-FIXED
+  label-confidence: verified
+  notes: |
+    status=closed, resolution=fixed; changeset 8a992285b5 ("Toolbar: Fix icon
+    colors in mobile layout.") in upstream/trunk.
+
+- ticket: 65233
+  expected: BACKPORT-PENDING
+  label-confidence: verified
+  notes: |
+    status=reopened; comment:10 explicitly requests backporting [62357] to 7.0;
+    [62357] (commit 860e5faee1) is in upstream/trunk; post-reopen comments 11–15
+    are bookkeeping + tester confirmations.
+
+- ticket: 65086
+  expected: NOT-DEFECT
+  label-confidence: verified
+  notes: |
+    type=enhancement; "Add action hooks to media modal attachment details
+    templates for field extensibility".
+
+- ticket: 65021
+  expected: NEEDS-INFO
+  label-confidence: verified
+  notes: |
+    Keywords include `reporter-feedback`; only comment is westonruter (2026-04-03)
+    asking reporter for minimal repro steps from a fresh install.
+
+- ticket: 65051
+  expected: PR-RESOLVES
+  label-confidence: verified
+  notes: |
+    Open PR #11530 (fix) + #11673 (tests), both CI=success, recently updated;
+    three testers confirmed; scope matches ticket.
+
+- ticket: 65083
+  expected: NOT-DEFECT
+  label-confidence: verified
+  notes: |
+    type=enhancement (Toolbar/Howdy redesign) with `needs-design-feedback`.
+    NOT-DEFECT fires before NEEDS-DISCUSSION in decision order, which is
+    correct for a defect-fixing flow — taxonomy decision worth revisiting
+    if the orchestrator ever wants to surface design-blocked tickets
+    distinctly from generic enhancements.
+
+- ticket: 65141
+  expected: PR-RESOLVES
+  label-confidence: verified
+  notes: |
+    Reopened for follow-up margin revert (not a backport). Open PR #11689,
+    CI=success, approved by audrasjb. Tests that BACKPORT-PENDING doesn't
+    false-fire on non-backport reopens.
+
+- ticket: 65159
+  expected: CLOSED-NON-FIXED
+  label-confidence: verified
+  notes: |
+    status=closed, resolution=worksforme. V1 (before CLOSED-NON-FIXED
+    branch existed) mis-classified as NEEDS-INFO with confidence=medium and
+    a self-aware `notes` flag of the gap. V2 added the branch and now
+    classifies correctly with confidence=high.

@@ -1,0 +1,20 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Decision tree walk:
+
+1. ALREADY-FIXED — status=new, no changesets. No.
+2. CLOSED-NON-FIXED — status=new. No.
+3. BACKPORT-PENDING — not reopened. No.
+4. NOT-DEFECT — Type field is literally `defect (bug)` (despite comment-level debate over whether it should be enhancement). No.
+5. PR-RESOLVES — PR #10507 open, CI success, but Updated 2025-11-12 (~6 months stale). No.
+6. PR-STALE — Open PR, last updated 2025-11-12 (>30 days). Match.
+
+PR exists with green CI but has sat idle since November 2025 while the ticket was punted twice (6.9 → 7.0 → 7.1). Most recent activity is gziolo pinging the PR author 2 days ago — exactly the "revive vs restart" situation.
+
+=== TRIAGE RESULT ===
+ticket:         #64209
+classification: PR-STALE
+confidence:     medium
+evidence:       Open PR #10507 (CI success) last updated 2025-11-12, ~6 months idle; milestone punted 6.9→7.0→7.1; gziolo pinged author 2026-05-13.
+recommendation: Revive PR #10507 rather than dispatching a fresh worker — author was just pinged and unresolved design questions (versioning vs `meta.deprecated` string, granular field deprecation) need addressing on the existing branch.
+notes:          Type=defect but multiple commenters argue this is an enhancement; classification still gated by stale-PR rule per priority order.
+===

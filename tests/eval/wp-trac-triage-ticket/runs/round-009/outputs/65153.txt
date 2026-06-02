@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #65153
+classification: PR-RESOLVES
+confidence:     high
+evidence:       PR #11680 is open, CI success, updated 2026-05-14, title matches ticket scope (transparent pseudo-element for active buttons in Windows High Contrast mode); recent comment endorses the approach
+recommendation: Review PR #11680 before dispatching a worker — author sabernhardt's patch appears ready and was just endorsed by a tester
+notes:          n/a
+===

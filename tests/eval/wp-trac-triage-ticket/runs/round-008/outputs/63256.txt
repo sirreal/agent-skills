@@ -1,0 +1,18 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+I'll walk through the decision tree against today (2026-05-14):
+
+1. ALREADY-FIXED — no, status is `reviewing`.
+2. CLOSED-NON-FIXED — no, not closed.
+3. BACKPORT-PENDING — no, status isn't `reopened`.
+4. NOT-DEFECT — no, `Type: defect (bug)`.
+5. PR-RESOLVES — three open PRs, all CI=success, but the most recent update is #11534 on 2026-04-09 (35 days ago). All three exceed the 30-day window.
+6. PR-STALE — matches: all open PRs are >30 days stale, but the ticket itself has had substantive discussion (March bug scrub, milestone moved to 7.1) and a fresh PR opened in April.
+
+=== TRIAGE RESULT ===
+ticket:         #63256
+classification: PR-STALE
+confidence:     medium
+evidence:       Three open PRs (#11534, #10634, #8668), all with CI success, but most recent update is #11534 on 2026-04-09 — 35 days ago, just past the 30-day window. Ticket discussion was active in March 2026 (bug scrub, milestone move to 7.1), but no PR has been touched since.
+recommendation: Revive — #11534 (null check, +46/-1, has tests) is the freshest candidate; cross-check against #10634 which the March bug scrub flagged as containing both the tests and an alternative implementation. Coordinate before dispatching a worker.
+notes:          Borderline PR-RESOLVES vs PR-STALE — #11534 is only 5 days past the cutoff. westonruter declined to finish for 7.0; owner audrasjb moved to 7.1.
+===

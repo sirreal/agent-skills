@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Status closed, resolution fixed, two changesets ([62238] trunk, [62240] 7.0 backport). Clear ALREADY-FIXED.
+
+=== TRIAGE RESULT ===
+ticket:         #65058
+classification: ALREADY-FIXED
+confidence:     high
+evidence:       status=closed, resolution=fixed, changesets [62238] (trunk) and [62240] (merged to 7.0 branch) by gziolo on 2026-04-16, PR #11544 merged with CI success.
+recommendation: Skip — fix already landed in trunk and backported to 7.0.
+notes:          n/a
+===

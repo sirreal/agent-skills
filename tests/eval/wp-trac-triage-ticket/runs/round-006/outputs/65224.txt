@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #65224
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Open PR #11809 by desrosj, CI success, updated 2026-05-12 (2 days ago), approved by westonruter, title "Support for testing unmerged upstream changes" matches ticket scope exactly
+recommendation: Review PR https://github.com/WordPress/wordpress-develop/pull/11809 before dispatching a worker; it appears ready to land
+notes:          Ticket Type is enhancement (not defect) — would otherwise be NOT-DEFECT, but PR-RESOLVES takes precedence per decision-tree ordering
+===

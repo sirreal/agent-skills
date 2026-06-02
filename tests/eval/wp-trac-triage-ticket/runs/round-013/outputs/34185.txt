@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #34185
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Open PR #11801 (CI success, updated 2026-05-12) titled "Tests: Preserve default excluded groups when using --exclude-group" plausibly addresses the --exclude-group failures reported in the ticket.
+recommendation: Review PR #11801 (https://github.com/WordPress/wordpress-develop/pull/11801) before dispatching a worker; the PR scope matches one stated symptom (default groups not preserved) but reviewer should confirm it also resolves the "Database is dead" termination.
+notes:          n/a
+===

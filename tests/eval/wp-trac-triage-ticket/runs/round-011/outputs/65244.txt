@@ -1,0 +1,9 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+=== TRIAGE RESULT ===
+ticket:         #65244
+classification: READY-TO-FIX
+confidence:     high
+evidence:       status=new, type=defect (bug), no PRs, no comments, description includes repro steps and expected/actual behavior; keywords=needs-patch
+recommendation: dispatch worker to attempt a fix
+notes:          n/a
+===

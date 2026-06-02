@@ -1,0 +1,11 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Both open PRs are stale (last updated ~52 days ago vs. today's 2026-05-14).
+
+=== TRIAGE RESULT ===
+ticket:         #64921
+classification: PR-STALE
+confidence:     high
+evidence:       Two open PRs (#11336 by owner westonruter, #11327 by mrmakadia94) both with CI success but last updated 2026-03-23 and 2026-03-22 — ~52 days ago, well past 30-day threshold.
+recommendation: Revive PR #11336 (owner's broader PreparedPost refactor) rather than dispatch a fresh worker; #11327 is the narrow id/post_parent fix and may be superseded.
+notes:          Keywords include needs-testing/needs-test-info/reporter-feedback; two reporters could not reproduce without the Easy Table of Contents plugin.
+===

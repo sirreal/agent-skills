@@ -1,0 +1,100 @@
+All ticket data fetched. Emitting triage results in input order.
+
+=== TRIAGE RESULT ===
+ticket:         #64696
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Open PR #11599 "RTC Hybrid: Table with awareness in object cache when available" by reporter peterwilsoncc, CI success, updated 2026-05-08, no CHANGES_REQUESTED; comment:172 from peterwilsoncc lays out commit process around this PR.
+recommendation: Review PR #11599 (hybrid: custom table + object-cache awareness) — final agreed approach for 7.1; backport branch PR also exists (#11639).
+notes:          Punted from 7.0 to 7.1 in comment:173. Multiple alternative PRs are now closed in favor of the hybrid.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65245
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       Recent comments (2026-05-15) from ocean90 and jonsurrell agree the issue lives on meta trac (api.wordpress.org credits endpoint), not core; no PRs.
+recommendation: Skip — close as wontfix/invalid or move to meta trac; not a core code defect.
+notes:          jonsurrell pinpointed the suspect line in meta trac wp-credits.php (mb_convert_encoding from-list ordering).
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65141
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Open PR #11689 "Metabox container alignment classic editor", CI success, updated 2026-05-14, APPROVED by audrasjb, no CHANGES_REQUESTED; audrasjb comment:16 "I think we can go with PR11689"; multiple recent test reports confirm fix.
+recommendation: Commit PR #11689 (reverts the leftover -4px margin from [61646] after [62284] removed the padding).
+notes:          Reopen was to address additional -4px margin revert, not a backport request.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65051
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Open PR #11530 "$_REQUEST['term'] used unsanitized in user search query" by reporter rajeshcpr — title verbatim matches ticket summary; CI success, updated 2026-04-20, no CHANGES_REQUESTED; companion test PR #11673 also open with CI success.
+recommendation: Review and commit PR #11530 (security/coding-standards fix); consider PR #11673 for test coverage.
+notes:          Multiple test reports confirm sanitization works; security impact is currently latent (empty result set) but valid hardening.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65233
+classification: BACKPORT-PENDING
+confidence:     high
+evidence:       status=reopened; comment:10 from wildworks "Reopening #65233 to request backporting [62357] to the 7.0 branch"; changeset [62357] is in ## Changesets; subsequent comments are only tester confirmations of the existing fix (bookkeeping per skill rules).
+recommendation: Skip — committer-only backport to 7.0 branch.
+notes:          n/a
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65218
+classification: PR-RESOLVES
+confidence:     medium
+evidence:       Open PR #11798 "Upgrade/Install: Use a clean plugin slug for the plugin details URL on the Updates screen", CI success, updated 2026-05-11, no CHANGES_REQUESTED; clearly addresses the ticket subject.
+recommendation: Review PR #11798.
+notes:          No ticket-number reference in PR title and no commenter has confirmed the PR resolves this ticket — scope match is judgment-based.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65214
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       Open PR #11785 exists but sabernhardt comment:3 substantively pushes back on the proposed wording ("I am not sure 'backend editor' would help") and proposes alternatives based on HelpHub article and a related ticket; ui-copy still being negotiated.
+recommendation: Skip — wording direction not yet agreed; needs ui-copy decision before any patch is committable.
+notes:          PR is from the reporter and may not be the final wording.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #65103
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       wp-develop PR #11611 closed 2026-05-11; westonruter comment:9 redirected the fix to Gutenberg repo, comment:11 opened Gutenberg PR #78136 and asked reporter to verify. No open core PR remains; fix lives upstream pending GB merge + core sync.
+recommendation: Skip — wait for Gutenberg PR #78136 to merge and propagate; no actionable core change right now.
+notes:          Priority bumped to high by jorbin (comment:7) because this breaks a 7.0 feature.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #62722
+classification: NEEDS-DISCUSSION
+confidence:     high
+evidence:       Keywords include "close"; comment:17 SirLouen reports dev-chat consensus that direct-file-access errors are not a core concern (jorbin: server-side config issue) and the ticket is a "close candidate"; PR #8932 closed 2025-08-19; no open PRs.
+recommendation: Skip — committer judgment needed to close as wontfix per dev-chat consensus.
+notes:          Multiple duplicates have been pointed at this ticket (#63303, #64287, #63930, #65213).
+===
+
+=== TRIAGE RESULT ===
+ticket:         #24552
+classification: NEEDS-DISCUSSION
+confidence:     medium
+evidence:       Recent reproduction reports (r1k0 comment:9 2026-01-18, abhishekfdd comment:10 2026-05-08) show the originally reported missing-notice issue is resolved on trunk; comment:10 explicitly recommends `worksforme`. Architectural "request to take over" handshake declined in comment:3 (2013).
+recommendation: Skip — close as worksforme per recent reproduction analysis; residual race is tracked separately in #55659.
+notes:          No PRs; long-dormant ticket with recent test-report-driven push to close.
+===
+
+=== TRIAGE RESULT ===
+ticket:         #64696
+classification: PR-RESOLVES
+confidence:     high
+evidence:       Duplicate of first entry — open PR #11599 "RTC Hybrid: Table with awareness in object cache when available" by reporter peterwilsoncc, CI success, updated 2026-05-08, no CHANGES_REQUESTED; commit process documented in comment:172.
+recommendation: Review PR #11599 — final hybrid approach for 7.1; backport branch PR #11639 also exists.
+notes:          Ticket appears twice in input list.
+===

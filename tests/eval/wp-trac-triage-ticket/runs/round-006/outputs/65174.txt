@@ -1,0 +1,19 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+Triaging ticket #65174 from the fetched data.
+
+Key signals:
+- `Type: enhancement` — not `defect (bug)`
+- `status=new`, no changesets
+- One open PR (#11722) with CI success, updated 2026-05-05 (9 days ago)
+- Active comment from westonruter today (2026-05-14) proposing to consolidate this and ~30 sibling tickets into umbrella #64894, with a question pending to @desrosj
+
+Decision: Although PR-RESOLVES fires earlier in the strict order (open PR, CI success, recent, scope matches), the ticket Type is `enhancement`, which is categorically out of scope for the defect-fixing orchestrator. NOT-DEFECT is the load-bearing classification — no worker should be dispatched regardless of PR state.
+
+=== TRIAGE RESULT ===
+ticket:         #65174
+classification: NOT-DEFECT
+confidence:     high
+evidence:       Type is "enhancement" (adding unit tests for update_recently_edited()); Focuses includes "tests"; not a defect.
+recommendation: Skip — out of scope for defect-fixing flow. Open PR #11722 exists with CI success, but consolidation into umbrella #64894 is currently being proposed (westonruter comment:3, 2026-05-14).
+notes:          Part of a batch of ~30 test-only tickets; pending decision on whether to consolidate under #64894.
+===
