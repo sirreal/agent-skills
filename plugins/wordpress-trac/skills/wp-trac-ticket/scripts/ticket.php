@@ -10,21 +10,7 @@
  */
 
 require_once __DIR__ . '/html-to-markdown.php';
-
-function trac_apply_cookie($ch): void {
-    $file = getenv('TRAC_COOKIE_FILE');
-    if ($file === false || $file === '') {
-        $home = getenv('XDG_CONFIG_HOME') ?: (getenv('HOME') . '/.config');
-        $file = $home . '/wp-trac/cookie';
-    }
-    if (!is_readable($file)) {
-        return;
-    }
-    $cookie = trim(file_get_contents($file));
-    if ($cookie !== '') {
-        curl_setopt($ch, CURLOPT_COOKIE, $cookie);
-    }
-}
+require_once __DIR__ . '/../../wp-trac-auth/scripts/lib/trac-auth.php';
 
 // Parse arguments
 $short = false;
@@ -110,7 +96,8 @@ if ($pr_ch !== null) {
 curl_multi_close($mh);
 
 if ($tsv_code < 200 || $tsv_code >= 300) {
-    fwrite(STDERR, "Error: Could not fetch ticket #{$ticket_num} (HTTP {$tsv_code})\n");
+    $hint = ($tsv_code === 401 || $tsv_code === 403) ? ' — ' . trac_auth_required_message() : '';
+    fwrite(STDERR, "Error: Could not fetch ticket #{$ticket_num} (HTTP {$tsv_code}){$hint}\n");
     exit(1);
 }
 
@@ -229,12 +216,13 @@ if ($short) {
 
 // ---- Parse RSS items into typed events ----
 if ($rss_code < 200 || $rss_code >= 300) {
-    fwrite(STDERR, "Error: Could not fetch ticket #{$ticket_num} discussion (HTTP {$rss_code})\n");
+    $hint = ($rss_code === 401 || $rss_code === 403) ? ' — ' . trac_auth_required_message() : '';
+    fwrite(STDERR, "Error: Could not fetch ticket #{$ticket_num} discussion (HTTP {$rss_code}){$hint}\n");
     exit(1);
 }
 $xml = simplexml_load_string($rss_body);
-if ($xml === false || !isset($xml->channel)) {
-    fwrite(STDERR, "Error: response for ticket #{$ticket_num} is not RSS — likely auth required (no cookie at \$TRAC_COOKIE_FILE, \$XDG_CONFIG_HOME/wp-trac/cookie, or ~/.config/wp-trac/cookie)\n");
+if (!trac_rss_is_authenticated($xml)) {
+    fwrite(STDERR, "Error: response for ticket #{$ticket_num} is not RSS — " . trac_auth_required_message() . "\n");
     exit(1);
 }
 
