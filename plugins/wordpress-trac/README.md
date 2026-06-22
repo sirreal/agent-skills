@@ -16,8 +16,14 @@ claude plugin install wordpress-trac@sirreal
 
 ## Authentication
 
-Trac filters some unauthenticated requests. To use your browser session, save
-the raw `Cookie:` request header to `~/.config/wp-trac/cookie`:
+Trac filters some unauthenticated requests, so the skills need your browser
+session cookie. The easiest way to set this up is to run the **`/wp-trac-auth`**
+skill, which walks you through it interactively, saves the cookie securely, and
+verifies it works. When any other skill hits an auth-required error, it defers
+to `/wp-trac-auth` and re-runs your command once you're logged in.
+
+You can also set the cookie up manually. Save the raw `Cookie:` request header
+to `~/.config/wp-trac/cookie`:
 
 1. Log in to <https://core.trac.wordpress.org/> in your browser.
 2. Open devtools → Network → click any request to `core.trac.wordpress.org`.
@@ -33,7 +39,7 @@ the raw `Cookie:` request header to `~/.config/wp-trac/cookie`:
 The path honors `$XDG_CONFIG_HOME` (so `$XDG_CONFIG_HOME/wp-trac/cookie` if
 set), and `$TRAC_COOKIE_FILE` overrides the location entirely. If the file is
 missing or empty, scripts run anonymously. Cookies expire with the browser
-session — re-paste when requests start failing.
+session — re-run `/wp-trac-auth` (or re-paste) when requests start failing.
 
 ## Demo
 
@@ -46,6 +52,18 @@ Tell me about trac ticket 30,000
 > The ticket is closed and was filed under the WordPress.org Site component. It's essentially a playful marker celebrating the project reaching 30,000 tickets, similar to how projects sometimes note round-number milestones. The reference to #30005 and Mike Nolan suggests there was some coordination around these milestone ticket numbers.
 
 ## Skills
+
+### `/wp-trac-auth`
+
+Set up or refresh WordPress Trac authentication. Checks your current cookie and,
+when it's missing or expired, walks you through copying the `Cookie:` request
+header from a logged-in browser session, saves it securely, and verifies it
+works. The other skills defer to this one automatically when a request fails
+with an auth-required error.
+
+```
+/wp-trac-auth
+```
 
 ### `/wp-trac-ticket <ticket-number>`
 

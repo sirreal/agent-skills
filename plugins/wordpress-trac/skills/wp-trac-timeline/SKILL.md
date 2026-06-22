@@ -46,3 +46,9 @@ Today's date is used to calculate dates. Convert relative dates to explicit para
 2. Calculate `--from` and `--daysback` from relative dates
 3. Run: !`echo "${CLAUDE_PLUGIN_ROOT}/skills/wp-trac-timeline/scripts/timeline.php"` [arguments]
 4. Present the timeline results
+
+## On auth failure
+
+If the script reports that auth is required (HTTP 403 / "run /wp-trac-auth"),
+invoke the `wp-trac-auth` skill to (re)authenticate, then re-run this command
+with the same arguments.

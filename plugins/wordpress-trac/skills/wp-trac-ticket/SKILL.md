@@ -58,3 +58,9 @@ The default mode then appends, in order:
   by most-recent update. Each shows number, title, state, author, URL,
   created/updated/closed dates, +/− line counts, whether tests are touched,
   CI status, and reviewer status.
+
+## On auth failure
+
+If the script reports that auth is required (HTTP 403 / "run /wp-trac-auth"),
+invoke the `wp-trac-auth` skill to (re)authenticate, then re-run this command
+with the same arguments.
