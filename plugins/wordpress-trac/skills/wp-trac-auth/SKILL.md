@@ -38,7 +38,9 @@ Tell the user to do the following, in their browser:
 2. Open devtools → **Network** tab.
 3. Reload, then click any request to `core.trac.wordpress.org`.
 4. In the request headers, find the **`Cookie:`** request header and copy its
-   full value (it includes `trac_auth`, `trac_form_token`, and a session cookie).
+   full value. When logged in it includes the WordPress.org SSO cookies
+   `wporg_logged_in` and `wporg_sec` (this Trac authenticates via those, not a
+   `trac_auth` cookie).
 5. Paste that value back here.
 
 ### 3. Save it
@@ -54,8 +56,9 @@ COOKIE
 ```
 
 - **exit 0**: saved and verified. If a Trac command triggered this, re-run it now.
-- **exit 2**: the value didn't look like a Trac cookie (no `trac_auth`). Ask the
-  user to re-copy the full `Cookie:` header and try again.
+- **exit 2**: the value didn't look like a logged-in Trac cookie (no
+  `wporg_logged_in` / `wporg_sec` / `trac_auth`). Make sure the user is logged
+  in at core.trac.wordpress.org, then re-copy the full `Cookie:` header.
 - **exit 5**: saved but still not authenticated — the cookie is likely expired.
   Ask the user to log in again, re-copy a fresh header, and retry.
 
@@ -63,7 +66,7 @@ COOKIE
 
 - **Never print the pasted cookie value back to the user or into any other
   output.** It is a live session token. The script only ever reports derived
-  facts (path, length, whether `trac_auth` is present, valid/expired).
+  facts (path, length, whether a login cookie is present, valid/expired).
 - The cookie is saved with restrictive permissions (file `0600`, dir `0700`) at
   the path resolved from `$TRAC_COOKIE_FILE` → `$XDG_CONFIG_HOME/wp-trac/cookie`
   → `~/.config/wp-trac/cookie`.

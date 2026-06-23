@@ -6,10 +6,12 @@
  * and the auth-required failure signal. Included by every Trac script so
  * they all honor the same resolution order and surface the same cue.
  *
- * The cookie holds the user's Trac session token (trac_auth). It is
- * host-scoped to core.trac.wordpress.org by convention: CURLOPT_COOKIE is
- * NOT host-scoped by curl, so only call trac_apply_cookie() on handles that
- * target Trac. Never apply it to other origins (e.g. api.wordpress.org).
+ * The cookie holds the user's logged-in Trac session. core.trac.wordpress.org
+ * authenticates via WordPress.org SSO cookies (wporg_logged_in / wporg_sec),
+ * not a vanilla-Trac trac_auth cookie. It is host-scoped to
+ * core.trac.wordpress.org by convention: CURLOPT_COOKIE is NOT host-scoped by
+ * curl, so only call trac_apply_cookie() on handles that target Trac. Never
+ * apply it to other origins (e.g. api.wordpress.org).
  */
 
 /**
@@ -43,6 +45,20 @@ function trac_apply_cookie($ch): void {
     if ($cookie !== '') {
         curl_setopt($ch, CURLOPT_COOKIE, $cookie);
     }
+}
+
+/**
+ * Whether a raw Cookie: header string looks like a logged-in Trac session.
+ *
+ * core.trac.wordpress.org uses WordPress.org SSO cookies (wporg_logged_in /
+ * wporg_sec), present only while logged in; a vanilla Trac would use trac_auth.
+ * This is a cheap sanity check for the save path — the live probe is the
+ * authoritative test of whether the cookie actually authenticates.
+ */
+function trac_cookie_has_login(string $cookie): bool {
+    return str_contains($cookie, 'wporg_logged_in')
+        || str_contains($cookie, 'wporg_sec')
+        || str_contains($cookie, 'trac_auth');
 }
 
 /**

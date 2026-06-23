@@ -40,7 +40,6 @@ function trac_probe(): bool {
     trac_apply_cookie($ch);
     $body = curl_exec($ch);
     $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
 
     if ($body === false || $code < 200 || $code >= 300) {
         return false;
@@ -64,10 +63,10 @@ if ($cmd === 'status') {
         exit(3);
     }
 
-    $has_auth = str_contains($cookie, 'trac_auth');
+    $has_login = trac_cookie_has_login($cookie);
     fwrite(STDOUT, "Cookie: present ({$path})\n");
     fwrite(STDOUT, '  length: ' . strlen($cookie) . " bytes\n");
-    fwrite(STDOUT, '  contains trac_auth: ' . ($has_auth ? 'yes' : 'no') . "\n");
+    fwrite(STDOUT, '  contains login cookie: ' . ($has_login ? 'yes' : 'no') . "\n");
 
     if (trac_probe()) {
         fwrite(STDOUT, "  status: valid (authenticated)\n");
@@ -87,10 +86,15 @@ if ($cmd === 'save') {
         fwrite(STDERR, "Error: no cookie provided on STDIN. Nothing written.\n");
         exit(2);
     }
-    if (!str_contains($cookie, 'trac_auth')) {
-        fwrite(STDERR, "Error: that does not look like a Trac cookie (missing trac_auth). "
-            . "Copy the full Cookie: request header from a logged-in core.trac.wordpress.org "
-            . "request. Nothing written.\n");
+    // core.trac.wordpress.org authenticates via WordPress.org SSO cookies
+    // (wporg_logged_in / wporg_sec), which are present only while logged in.
+    // A vanilla Trac install would use trac_auth instead. Accept any of them;
+    // the post-write probe below is the authoritative check.
+    if (!trac_cookie_has_login($cookie)) {
+        fwrite(STDERR, "Error: that does not look like a logged-in Trac cookie "
+            . "(no wporg_logged_in, wporg_sec, or trac_auth). Make sure you are "
+            . "logged in at core.trac.wordpress.org, then copy the full Cookie: "
+            . "request header. Nothing written.\n");
         exit(2);
     }
 
