@@ -38,8 +38,7 @@ function trac_probe(): bool {
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
     curl_setopt($ch, CURLOPT_USERAGENT, 'wp-trac-auth/1.0');
     trac_apply_cookie($ch);
-    $body = curl_exec($ch);
-    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    [$body, $code] = trac_curl_exec($ch);
 
     if ($body === false || $code < 200 || $code >= 300) {
         return false;

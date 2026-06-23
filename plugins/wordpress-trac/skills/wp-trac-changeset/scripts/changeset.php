@@ -30,8 +30,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($ch, CURLOPT_USERAGENT, 'wp-trac-changeset/1.0');
 trac_apply_cookie($ch);
-$html = curl_exec($ch);
-$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+[$html, $http_code] = trac_curl_exec($ch);
 unset($ch);
 
 if ($http_code < 200 || $http_code >= 300) {

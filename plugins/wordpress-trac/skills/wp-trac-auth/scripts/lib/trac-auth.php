@@ -48,6 +48,86 @@ function trac_apply_cookie($ch): void {
 }
 
 /**
+ * Backoff schedule, in seconds, for retrying transient Trac failures.
+ *
+ * Deliberately slow — Trac's bot challenge and brief outages clear on the
+ * order of seconds, and we would rather wait than hammer. Override with the
+ * $TRAC_BACKOFF env var (comma-separated seconds, e.g. "0" to retry once with
+ * no wait, useful in tests).
+ */
+function trac_backoff_delays(): array {
+    $env = getenv('TRAC_BACKOFF');
+    if ($env !== false && $env !== '') {
+        $parts = array_map('intval', explode(',', $env));
+        $parts = array_values(array_filter($parts, fn($n) => $n >= 0));
+        if ($parts !== []) {
+            return $parts;
+        }
+    }
+    return [2, 4, 8];
+}
+
+/**
+ * Whether a Trac response looks like a transient failure worth retrying.
+ *
+ * Retryable: a curl transport error (body === false), no HTTP response
+ * (code 0), server errors / rate limits (429, 5xx), or Trac's Cloudflare-style
+ * "Checking your browser" bot challenge (served as an HTML 403). A genuine
+ * auth filter or a real 404 is NOT transient and must not be retried.
+ *
+ * $body is the response body (or false on transport error); $code is the
+ * HTTP status from curl_getinfo(... CURLINFO_HTTP_CODE).
+ */
+function trac_is_transient($body, int $code): bool {
+    if ($body === false || $code === 0) {
+        return true;
+    }
+    if (in_array($code, [429, 500, 502, 503, 504], true)) {
+        return true;
+    }
+    if ($code === 403 && is_string($body) && str_contains($body, 'Checking your browser')) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Emit a retry notice to STDERR and sleep for the backoff delay at $attempt.
+ *
+ * Shared by trac_curl_exec() (single handle) and the parallel multi-handle
+ * fetch in ticket.php so both report retries identically. STDERR keeps the
+ * notice out of the data on STDOUT.
+ */
+function trac_backoff_wait(int $attempt, array $delays, int $code): void {
+    $wait = $delays[$attempt];
+    fwrite(STDERR, "Trac request transiently failed (HTTP {$code}); "
+        . "retrying in {$wait}s (attempt " . ($attempt + 1) . ' of '
+        . count($delays) . ")...\n");
+    sleep($wait);
+}
+
+/**
+ * Execute a Trac curl handle, retrying transient failures with slow
+ * exponential backoff (see trac_backoff_delays()). Returns [$body, $code].
+ *
+ * The handle MUST be configured with CURLOPT_RETURNTRANSFER so the body is
+ * available both to the caller and to trac_is_transient().
+ */
+function trac_curl_exec($ch): array {
+    $delays  = trac_backoff_delays();
+    $attempt = 0;
+    while (true) {
+        $body = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if (!trac_is_transient($body, $code) || $attempt >= count($delays)) {
+            return [$body, $code];
+        }
+        trac_backoff_wait($attempt, $delays, $code);
+        $attempt++;
+    }
+}
+
+/**
  * Whether a raw Cookie: header string looks like a logged-in Trac session.
  *
  * core.trac.wordpress.org uses WordPress.org SSO cookies (wporg_logged_in /

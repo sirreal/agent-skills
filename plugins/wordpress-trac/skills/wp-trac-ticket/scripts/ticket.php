@@ -37,15 +37,11 @@ $tsv_url = "https://core.trac.wordpress.org/ticket/{$ticket_num}?format=tab";
 $rss_url = "https://core.trac.wordpress.org/ticket/{$ticket_num}?format=rss";
 $pr_url  = "https://api.wordpress.org/dotorg/trac/pr/?trac=core&ticket={$ticket_num}";
 
-$tsv_stream = fopen('php://temp', 'r+');
 $tsv_ch = curl_init($tsv_url);
-curl_setopt($tsv_ch, CURLOPT_FILE, $tsv_stream);
+curl_setopt($tsv_ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($tsv_ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($tsv_ch, CURLOPT_USERAGENT, 'wp-trac-ticket/2.0');
 trac_apply_cookie($tsv_ch);
-
-$mh = curl_multi_init();
-curl_multi_add_handle($mh, $tsv_ch);
 
 $rss_ch = null;
 $pr_ch  = null;
@@ -55,45 +51,59 @@ if (!$short) {
     curl_setopt($rss_ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($rss_ch, CURLOPT_USERAGENT, 'wp-trac-ticket/2.0');
     trac_apply_cookie($rss_ch);
-    curl_multi_add_handle($mh, $rss_ch);
 
     // The PR endpoint lives on api.wordpress.org, not core.trac.wordpress.org.
     // Do NOT apply the Trac cookie here — CURLOPT_COOKIE is not host-scoped
-    // and would leak the trac_auth token to a different origin.
+    // and would leak the Trac session cookie to a different origin.
     $pr_ch = curl_init($pr_url);
     curl_setopt($pr_ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($pr_ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($pr_ch, CURLOPT_USERAGENT, 'wp-trac-ticket/2.0');
-    curl_multi_add_handle($mh, $pr_ch);
 }
 
-$running = null;
-do {
-    curl_multi_exec($mh, $running);
-    if ($running) {
-        curl_multi_select($mh);
+// Fetch all endpoints in parallel, retrying the whole batch with slow
+// exponential backoff while the required TSV resource fails transiently
+// (Trac bot challenge / brief outage). RSS and PR ride along each attempt.
+$handles = array_filter(['tsv' => $tsv_ch, 'rss' => $rss_ch, 'pr' => $pr_ch]);
+$delays  = trac_backoff_delays();
+$attempt = 0;
+$mh = curl_multi_init();
+$bodies = [];
+$codes  = [];
+while (true) {
+    foreach ($handles as $h) {
+        curl_multi_add_handle($mh, $h);
     }
-} while ($running > 0);
+    $running = null;
+    do {
+        curl_multi_exec($mh, $running);
+        if ($running) {
+            curl_multi_select($mh);
+        }
+    } while ($running > 0);
 
-$tsv_code = curl_getinfo($tsv_ch, CURLINFO_HTTP_CODE);
-curl_multi_remove_handle($mh, $tsv_ch);
+    foreach ($handles as $key => $h) {
+        $bodies[$key] = curl_multi_getcontent($h);
+        $codes[$key]  = curl_getinfo($h, CURLINFO_HTTP_CODE);
+    }
+    foreach ($handles as $h) {
+        curl_multi_remove_handle($mh, $h);
+    }
 
-$rss_body = null;
-$rss_code = null;
-if ($rss_ch !== null) {
-    $rss_body = curl_multi_getcontent($rss_ch);
-    $rss_code = curl_getinfo($rss_ch, CURLINFO_HTTP_CODE);
-    curl_multi_remove_handle($mh, $rss_ch);
-}
-
-$pr_body = null;
-$pr_code = null;
-if ($pr_ch !== null) {
-    $pr_body = curl_multi_getcontent($pr_ch);
-    $pr_code = curl_getinfo($pr_ch, CURLINFO_HTTP_CODE);
-    curl_multi_remove_handle($mh, $pr_ch);
+    if (!trac_is_transient($bodies['tsv'], $codes['tsv']) || $attempt >= count($delays)) {
+        break;
+    }
+    trac_backoff_wait($attempt, $delays, $codes['tsv']);
+    $attempt++;
 }
 curl_multi_close($mh);
+
+$tsv_body = $bodies['tsv'];
+$tsv_code = $codes['tsv'];
+$rss_body = $bodies['rss'] ?? null;
+$rss_code = $codes['rss'] ?? null;
+$pr_body  = $bodies['pr'] ?? null;
+$pr_code  = $codes['pr'] ?? null;
 
 if ($tsv_code < 200 || $tsv_code >= 300) {
     $hint = ($tsv_code === 401 || $tsv_code === 403) ? ' — ' . trac_auth_required_message() : '';
@@ -102,6 +112,8 @@ if ($tsv_code < 200 || $tsv_code >= 300) {
 }
 
 // Parse TSV
+$tsv_stream = fopen('php://temp', 'r+');
+fwrite($tsv_stream, (string) $tsv_body);
 rewind($tsv_stream);
 $headers = fgetcsv($tsv_stream, 0, "\t", '"', '');
 $values = fgetcsv($tsv_stream, 0, "\t", '"', '');

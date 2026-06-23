@@ -151,16 +151,13 @@ if (strpos($url, 'format=tab') === false) {
     $url .= (strpos($url, '?') !== false ? '&' : '?') . 'format=tab';
 }
 
-// Fetch query results, streaming to temp file
-$stream = fopen('php://temp', 'r+');
-
+// Fetch query results.
 $ch = curl_init($url);
-curl_setopt($ch, CURLOPT_FILE, $stream);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($ch, CURLOPT_USERAGENT, 'wp-trac-search/1.0');
 trac_apply_cookie($ch);
-curl_exec($ch);
-$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+[$body, $http_code] = trac_curl_exec($ch);
 unset($ch);
 
 if ($http_code < 200 || $http_code >= 300) {
@@ -170,6 +167,8 @@ if ($http_code < 200 || $http_code >= 300) {
 }
 
 // Parse TSV using fgetcsv which handles multiline quoted fields
+$stream = fopen('php://temp', 'r+');
+fwrite($stream, (string) $body);
 rewind($stream);
 $headers = fgetcsv($stream, 0, "\t", '"', '');
 
