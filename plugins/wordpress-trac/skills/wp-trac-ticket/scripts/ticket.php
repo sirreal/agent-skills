@@ -61,17 +61,21 @@ if (!$short) {
     curl_setopt($pr_ch, CURLOPT_USERAGENT, 'wp-trac-ticket/2.0');
 }
 
-// Fetch all endpoints in parallel, retrying the whole batch with slow
-// exponential backoff while the required TSV resource fails transiently
-// (Trac bot challenge / brief outage). RSS and PR ride along each attempt.
+// Fetch all endpoints in parallel, retrying transient failures (Trac bot
+// challenge / brief outage) with slow exponential backoff. Only handles whose
+// last result is still transient are re-fetched each attempt: a handle that
+// has succeeded keeps its first result, so a good RSS/PR body is never
+// clobbered by a later retry, and the cross-origin PR request is not re-issued
+// once it lands.
 $handles = array_filter(['tsv' => $tsv_ch, 'rss' => $rss_ch, 'pr' => $pr_ch]);
 $delays  = trac_backoff_delays();
 $attempt = 0;
-$mh = curl_multi_init();
-$bodies = [];
-$codes  = [];
+$bodies  = [];
+$codes   = [];
+$pending = $handles; // handles still needing a (re)fetch this round
 while (true) {
-    foreach ($handles as $h) {
+    $mh = curl_multi_init();
+    foreach ($pending as $h) {
         curl_multi_add_handle($mh, $h);
     }
     $running = null;
@@ -82,21 +86,27 @@ while (true) {
         }
     } while ($running > 0);
 
-    foreach ($handles as $key => $h) {
+    foreach ($pending as $key => $h) {
         $bodies[$key] = curl_multi_getcontent($h);
         $codes[$key]  = curl_getinfo($h, CURLINFO_HTTP_CODE);
-    }
-    foreach ($handles as $h) {
         curl_multi_remove_handle($mh, $h);
     }
+    curl_multi_close($mh);
 
-    if (!trac_is_transient($bodies['tsv'], $codes['tsv']) || $attempt >= count($delays)) {
+    // Keep only the handles that are still transient; settled ones (success or
+    // a permanent error) are done and retain their first result.
+    $pending = array_filter(
+        $pending,
+        fn($key) => trac_is_transient($bodies[$key], $codes[$key]),
+        ARRAY_FILTER_USE_KEY
+    );
+
+    if ($pending === [] || $attempt >= count($delays)) {
         break;
     }
-    trac_backoff_wait($attempt, $delays, $codes['tsv']);
+    trac_backoff_wait($attempt, $delays, $codes[array_key_first($pending)]);
     $attempt++;
 }
-curl_multi_close($mh);
 
 $tsv_body = $bodies['tsv'];
 $tsv_code = $codes['tsv'];
