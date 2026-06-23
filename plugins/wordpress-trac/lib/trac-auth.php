@@ -107,14 +107,18 @@ function trac_backoff_wait(int $attempt, array $delays, int $code): void {
 }
 
 /**
- * Execute a Trac curl handle, retrying transient failures with slow
- * exponential backoff (see trac_backoff_delays()). Returns [$body, $code].
+ * Execute a Trac curl handle, retrying transient failures with exponential
+ * backoff. Returns [$body, $code].
+ *
+ * Defaults to the slow data-fetch schedule (see trac_backoff_delays()). Pass
+ * $delays to override — e.g. the interactive auth probe uses a short schedule
+ * so it stays responsive while still surviving a momentary bot challenge.
  *
  * The handle MUST be configured with CURLOPT_RETURNTRANSFER so the body is
  * available both to the caller and to trac_is_transient().
  */
-function trac_curl_exec($ch): array {
-    $delays  = trac_backoff_delays();
+function trac_curl_exec($ch, ?array $delays = null): array {
+    $delays  = $delays ?? trac_backoff_delays();
     $attempt = 0;
     while (true) {
         $body = curl_exec($ch);

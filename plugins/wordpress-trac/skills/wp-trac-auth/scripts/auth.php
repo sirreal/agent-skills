@@ -38,7 +38,14 @@ function trac_probe(): bool {
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
     curl_setopt($ch, CURLOPT_USERAGENT, 'wp-trac-auth/1.0');
     trac_apply_cookie($ch);
-    [$body, $code] = trac_curl_exec($ch);
+    // This is an interactive check (status / save), so keep it responsive: one
+    // quick retry rides out a momentary bot challenge or blip — which would
+    // otherwise be misreported as an expired cookie — without the multi-second
+    // wait of the data-fetch schedule. A genuine expired-cookie 403 is not
+    // transient and returns immediately. $TRAC_BACKOFF still overrides for tests.
+    $env    = getenv('TRAC_BACKOFF');
+    $delays = ($env !== false && $env !== '') ? trac_backoff_delays() : [1];
+    [$body, $code] = trac_curl_exec($ch, $delays);
 
     if ($body === false || $code < 200 || $code >= 300) {
         return false;
