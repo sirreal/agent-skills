@@ -121,6 +121,16 @@ if ($tsv_code < 200 || $tsv_code >= 300) {
     exit(1);
 }
 
+// A filtered request can come back 200 with an HTML login page instead of a
+// 4xx. The TSV body always starts with the BOM or the `id` column header, so a
+// leading `<` means we got HTML, not TSV. Catch it here so --short (which never
+// fetches RSS and so skips the trac_rss_is_authenticated check) still surfaces
+// the auth hint instead of printing a ticket parsed from a login page.
+if (str_starts_with(ltrim((string) $tsv_body), '<')) {
+    fwrite(STDERR, "Error: response for ticket #{$ticket_num} is not TSV — " . trac_auth_required_message() . "\n");
+    exit(1);
+}
+
 // Parse TSV
 $tsv_stream = fopen('php://temp', 'r+');
 fwrite($tsv_stream, (string) $tsv_body);
