@@ -21,7 +21,7 @@
  * The cookie value is never echoed back. Only derived facts are reported.
  */
 
-require_once __DIR__ . '/lib/trac-auth.php';
+require_once __DIR__ . '/../../../lib/trac-auth.php';
 
 /**
  * Live probe: does the saved cookie authenticate against Trac?

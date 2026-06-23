@@ -6,7 +6,7 @@
  * Usage: changeset.php <changeset-number>
  */
 
-require_once __DIR__ . '/../../wp-trac-auth/scripts/lib/trac-auth.php';
+require_once __DIR__ . '/../../../lib/trac-auth.php';
 
 if ($argc < 2) {
     fwrite(STDERR, "Usage: changeset.php <changeset-number>\n");

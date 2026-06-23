@@ -10,7 +10,7 @@
  */
 
 require_once __DIR__ . '/html-to-markdown.php';
-require_once __DIR__ . '/../../wp-trac-auth/scripts/lib/trac-auth.php';
+require_once __DIR__ . '/../../../lib/trac-auth.php';
 
 // Parse arguments
 $short = false;
