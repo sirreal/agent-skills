@@ -21,3 +21,9 @@ When ready, run:
 ```
 
 Present the changeset information. If the commit message references ticket numbers (e.g., #12345), mention them.
+
+## On auth failure
+
+If the script reports that auth is required (HTTP 403 / "run /wp-trac-auth"),
+invoke the `wp-trac-auth` skill to (re)authenticate, then re-run this command
+with the same arguments.

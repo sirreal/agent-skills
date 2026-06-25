@@ -6,20 +6,7 @@
  * Usage: changeset.php <changeset-number>
  */
 
-function trac_apply_cookie($ch): void {
-    $file = getenv('TRAC_COOKIE_FILE');
-    if ($file === false || $file === '') {
-        $home = getenv('XDG_CONFIG_HOME') ?: (getenv('HOME') . '/.config');
-        $file = $home . '/wp-trac/cookie';
-    }
-    if (!is_readable($file)) {
-        return;
-    }
-    $cookie = trim(file_get_contents($file));
-    if ($cookie !== '') {
-        curl_setopt($ch, CURLOPT_COOKIE, $cookie);
-    }
-}
+require_once __DIR__ . '/../../../lib/trac-auth.php';
 
 if ($argc < 2) {
     fwrite(STDERR, "Usage: changeset.php <changeset-number>\n");
@@ -43,12 +30,12 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($ch, CURLOPT_USERAGENT, 'wp-trac-changeset/1.0');
 trac_apply_cookie($ch);
-$html = curl_exec($ch);
-$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+[$html, $http_code] = trac_curl_exec($ch);
 unset($ch);
 
 if ($http_code < 200 || $http_code >= 300) {
-    fwrite(STDERR, "Error: Could not fetch changeset r{$changeset_num} (HTTP {$http_code})\n");
+    $hint = ($http_code === 401 || $http_code === 403) ? ' — ' . trac_auth_required_message() : '';
+    fwrite(STDERR, "Error: Could not fetch changeset r{$changeset_num} (HTTP {$http_code}){$hint}\n");
     exit(1);
 }
 

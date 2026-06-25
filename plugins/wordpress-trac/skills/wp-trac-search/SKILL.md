@@ -48,3 +48,9 @@ When translating natural language to CLI arguments:
 4. Review results — try several different queries to find good results
 5. Try different combinations: broader/narrower searches, different text terms, with/without component filters
 6. Return the final results
+
+## On auth failure
+
+If the script reports that auth is required (HTTP 403 / "run /wp-trac-auth"),
+invoke the `wp-trac-auth` skill to (re)authenticate, then re-run this command
+with the same arguments.

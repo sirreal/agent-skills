@@ -1,0 +1,167 @@
+<?php
+/**
+ * Shared WordPress Trac authentication helpers.
+ *
+ * Single source of truth for cookie-file resolution, cookie application,
+ * and the auth-required failure signal. Included by every Trac script so
+ * they all honor the same resolution order and surface the same cue.
+ *
+ * The cookie holds the user's logged-in Trac session. core.trac.wordpress.org
+ * authenticates via WordPress.org SSO cookies (wporg_logged_in / wporg_sec),
+ * not a vanilla-Trac trac_auth cookie. It is host-scoped to
+ * core.trac.wordpress.org by convention: CURLOPT_COOKIE is NOT host-scoped by
+ * curl, so only call trac_apply_cookie() on handles that target Trac. Never
+ * apply it to other origins (e.g. api.wordpress.org).
+ */
+
+/**
+ * Resolve the cookie file path.
+ *
+ * Order: $TRAC_COOKIE_FILE (if set and non-empty) overrides everything;
+ * otherwise $XDG_CONFIG_HOME/wp-trac/cookie (if XDG_CONFIG_HOME set);
+ * otherwise ~/.config/wp-trac/cookie.
+ */
+function trac_cookie_path(): string {
+    $file = getenv('TRAC_COOKIE_FILE');
+    if ($file === false || $file === '') {
+        $home = getenv('XDG_CONFIG_HOME') ?: (getenv('HOME') . '/.config');
+        $file = $home . '/wp-trac/cookie';
+    }
+    return $file;
+}
+
+/**
+ * Apply the saved Trac cookie to a curl handle, if present.
+ *
+ * Silent no-op when the file is missing/unreadable/empty, so callers fall
+ * back to anonymous requests. Only call this on Trac-bound handles.
+ */
+function trac_apply_cookie($ch): void {
+    $file = trac_cookie_path();
+    if (!is_readable($file)) {
+        return;
+    }
+    $cookie = trim(file_get_contents($file));
+    if ($cookie !== '') {
+        curl_setopt($ch, CURLOPT_COOKIE, $cookie);
+    }
+}
+
+/**
+ * Backoff schedule, in seconds, for retrying transient Trac failures.
+ *
+ * Deliberately slow — Trac's bot challenge and brief outages clear on the
+ * order of seconds, and we would rather wait than hammer. Override with the
+ * $TRAC_BACKOFF env var (comma-separated seconds, e.g. "0" to retry once with
+ * no wait, useful in tests).
+ */
+function trac_backoff_delays(): array {
+    $env = getenv('TRAC_BACKOFF');
+    if ($env !== false && $env !== '') {
+        $parts = array_map('intval', explode(',', $env));
+        $parts = array_values(array_filter($parts, fn($n) => $n >= 0));
+        if ($parts !== []) {
+            return $parts;
+        }
+    }
+    return [2, 4, 8];
+}
+
+/**
+ * Whether a Trac response looks like a transient failure worth retrying.
+ *
+ * Retryable: a curl transport error (body === false), no HTTP response
+ * (code 0), server errors / rate limits (429, 5xx), or Trac's Cloudflare-style
+ * "Checking your browser" bot challenge (served as an HTML 403). A genuine
+ * auth filter or a real 404 is NOT transient and must not be retried.
+ *
+ * $body is the response body (or false on transport error); $code is the
+ * HTTP status from curl_getinfo(... CURLINFO_HTTP_CODE).
+ */
+function trac_is_transient($body, int $code): bool {
+    if ($body === false || $code === 0) {
+        return true;
+    }
+    if (in_array($code, [429, 500, 502, 503, 504], true)) {
+        return true;
+    }
+    if ($code === 403 && is_string($body) && str_contains($body, 'Checking your browser')) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Emit a retry notice to STDERR and sleep for the backoff delay at $attempt.
+ *
+ * Shared by trac_curl_exec() (single handle) and the parallel multi-handle
+ * fetch in ticket.php so both report retries identically. STDERR keeps the
+ * notice out of the data on STDOUT.
+ */
+function trac_backoff_wait(int $attempt, array $delays, int $code): void {
+    $wait = $delays[$attempt];
+    fwrite(STDERR, "Trac request transiently failed (HTTP {$code}); "
+        . "retrying in {$wait}s (attempt " . ($attempt + 1) . ' of '
+        . count($delays) . ")...\n");
+    sleep($wait);
+}
+
+/**
+ * Execute a Trac curl handle, retrying transient failures with exponential
+ * backoff. Returns [$body, $code].
+ *
+ * Defaults to the slow data-fetch schedule (see trac_backoff_delays()). Pass
+ * $delays to override — e.g. the interactive auth probe uses a short schedule
+ * so it stays responsive while still surviving a momentary bot challenge.
+ *
+ * The handle MUST be configured with CURLOPT_RETURNTRANSFER so the body is
+ * available both to the caller and to trac_is_transient().
+ */
+function trac_curl_exec($ch, ?array $delays = null): array {
+    $delays  = $delays ?? trac_backoff_delays();
+    $attempt = 0;
+    while (true) {
+        $body = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if (!trac_is_transient($body, $code) || $attempt >= count($delays)) {
+            return [$body, $code];
+        }
+        trac_backoff_wait($attempt, $delays, $code);
+        $attempt++;
+    }
+}
+
+/**
+ * Whether a raw Cookie: header string looks like a logged-in Trac session.
+ *
+ * core.trac.wordpress.org uses WordPress.org SSO cookies (wporg_logged_in /
+ * wporg_sec), present only while logged in; a vanilla Trac would use trac_auth.
+ * This is a cheap sanity check for the save path — the live probe is the
+ * authoritative test of whether the cookie actually authenticates.
+ */
+function trac_cookie_has_login(string $cookie): bool {
+    return str_contains($cookie, 'wporg_logged_in')
+        || str_contains($cookie, 'wporg_sec')
+        || str_contains($cookie, 'trac_auth');
+}
+
+/**
+ * Canonical auth-required hint. Emitted by every script when a Trac request
+ * comes back filtered/unauthenticated, so the agent has one reliable cue.
+ */
+function trac_auth_required_message(): string {
+    return 'likely auth required (no valid cookie at $TRAC_COOKIE_FILE, '
+        . '$XDG_CONFIG_HOME/wp-trac/cookie, or ~/.config/wp-trac/cookie) — '
+        . 'run /wp-trac-auth to (re)authenticate';
+}
+
+/**
+ * Whether a parsed Trac RSS response looks authenticated.
+ *
+ * When Trac filters an unauthenticated request it serves an HTML login page
+ * instead of RSS, so the body fails to parse as XML or lacks a <channel>.
+ * Pass the result of simplexml_load_string(); false means parse failed.
+ */
+function trac_rss_is_authenticated($xml): bool {
+    return $xml !== false && isset($xml->channel);
+}

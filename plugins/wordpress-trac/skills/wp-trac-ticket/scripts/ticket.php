@@ -10,21 +10,7 @@
  */
 
 require_once __DIR__ . '/html-to-markdown.php';
-
-function trac_apply_cookie($ch): void {
-    $file = getenv('TRAC_COOKIE_FILE');
-    if ($file === false || $file === '') {
-        $home = getenv('XDG_CONFIG_HOME') ?: (getenv('HOME') . '/.config');
-        $file = $home . '/wp-trac/cookie';
-    }
-    if (!is_readable($file)) {
-        return;
-    }
-    $cookie = trim(file_get_contents($file));
-    if ($cookie !== '') {
-        curl_setopt($ch, CURLOPT_COOKIE, $cookie);
-    }
-}
+require_once __DIR__ . '/../../../lib/trac-auth.php';
 
 // Parse arguments
 $short = false;
@@ -51,15 +37,11 @@ $tsv_url = "https://core.trac.wordpress.org/ticket/{$ticket_num}?format=tab";
 $rss_url = "https://core.trac.wordpress.org/ticket/{$ticket_num}?format=rss";
 $pr_url  = "https://api.wordpress.org/dotorg/trac/pr/?trac=core&ticket={$ticket_num}";
 
-$tsv_stream = fopen('php://temp', 'r+');
 $tsv_ch = curl_init($tsv_url);
-curl_setopt($tsv_ch, CURLOPT_FILE, $tsv_stream);
+curl_setopt($tsv_ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($tsv_ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($tsv_ch, CURLOPT_USERAGENT, 'wp-trac-ticket/2.0');
 trac_apply_cookie($tsv_ch);
-
-$mh = curl_multi_init();
-curl_multi_add_handle($mh, $tsv_ch);
 
 $rss_ch = null;
 $pr_ch  = null;
@@ -69,52 +51,89 @@ if (!$short) {
     curl_setopt($rss_ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($rss_ch, CURLOPT_USERAGENT, 'wp-trac-ticket/2.0');
     trac_apply_cookie($rss_ch);
-    curl_multi_add_handle($mh, $rss_ch);
 
     // The PR endpoint lives on api.wordpress.org, not core.trac.wordpress.org.
     // Do NOT apply the Trac cookie here — CURLOPT_COOKIE is not host-scoped
-    // and would leak the trac_auth token to a different origin.
+    // and would leak the Trac session cookie to a different origin.
     $pr_ch = curl_init($pr_url);
     curl_setopt($pr_ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($pr_ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($pr_ch, CURLOPT_USERAGENT, 'wp-trac-ticket/2.0');
-    curl_multi_add_handle($mh, $pr_ch);
 }
 
-$running = null;
-do {
-    curl_multi_exec($mh, $running);
-    if ($running) {
-        curl_multi_select($mh);
+// Fetch all endpoints in parallel, retrying transient failures (Trac bot
+// challenge / brief outage) with slow exponential backoff. Only handles whose
+// last result is still transient are re-fetched each attempt: a handle that
+// has succeeded keeps its first result, so a good RSS/PR body is never
+// clobbered by a later retry, and the cross-origin PR request is not re-issued
+// once it lands.
+$handles = array_filter(['tsv' => $tsv_ch, 'rss' => $rss_ch, 'pr' => $pr_ch]);
+$delays  = trac_backoff_delays();
+$attempt = 0;
+$bodies  = [];
+$codes   = [];
+$pending = $handles; // handles still needing a (re)fetch this round
+while (true) {
+    $mh = curl_multi_init();
+    foreach ($pending as $h) {
+        curl_multi_add_handle($mh, $h);
     }
-} while ($running > 0);
+    $running = null;
+    do {
+        curl_multi_exec($mh, $running);
+        if ($running) {
+            curl_multi_select($mh);
+        }
+    } while ($running > 0);
 
-$tsv_code = curl_getinfo($tsv_ch, CURLINFO_HTTP_CODE);
-curl_multi_remove_handle($mh, $tsv_ch);
+    foreach ($pending as $key => $h) {
+        $bodies[$key] = curl_multi_getcontent($h);
+        $codes[$key]  = curl_getinfo($h, CURLINFO_HTTP_CODE);
+        curl_multi_remove_handle($mh, $h);
+    }
+    curl_multi_close($mh);
 
-$rss_body = null;
-$rss_code = null;
-if ($rss_ch !== null) {
-    $rss_body = curl_multi_getcontent($rss_ch);
-    $rss_code = curl_getinfo($rss_ch, CURLINFO_HTTP_CODE);
-    curl_multi_remove_handle($mh, $rss_ch);
+    // Keep only the handles that are still transient; settled ones (success or
+    // a permanent error) are done and retain their first result.
+    $pending = array_filter(
+        $pending,
+        fn($key) => trac_is_transient($bodies[$key], $codes[$key]),
+        ARRAY_FILTER_USE_KEY
+    );
+
+    if ($pending === [] || $attempt >= count($delays)) {
+        break;
+    }
+    trac_backoff_wait($attempt, $delays, $codes[array_key_first($pending)]);
+    $attempt++;
 }
 
-$pr_body = null;
-$pr_code = null;
-if ($pr_ch !== null) {
-    $pr_body = curl_multi_getcontent($pr_ch);
-    $pr_code = curl_getinfo($pr_ch, CURLINFO_HTTP_CODE);
-    curl_multi_remove_handle($mh, $pr_ch);
-}
-curl_multi_close($mh);
+$tsv_body = $bodies['tsv'];
+$tsv_code = $codes['tsv'];
+$rss_body = $bodies['rss'] ?? null;
+$rss_code = $codes['rss'] ?? null;
+$pr_body  = $bodies['pr'] ?? null;
+$pr_code  = $codes['pr'] ?? null;
 
 if ($tsv_code < 200 || $tsv_code >= 300) {
-    fwrite(STDERR, "Error: Could not fetch ticket #{$ticket_num} (HTTP {$tsv_code})\n");
+    $hint = ($tsv_code === 401 || $tsv_code === 403) ? ' — ' . trac_auth_required_message() : '';
+    fwrite(STDERR, "Error: Could not fetch ticket #{$ticket_num} (HTTP {$tsv_code}){$hint}\n");
+    exit(1);
+}
+
+// A filtered request can come back 200 with an HTML login page instead of a
+// 4xx. The TSV body always starts with the BOM or the `id` column header, so a
+// leading `<` means we got HTML, not TSV. Catch it here so --short (which never
+// fetches RSS and so skips the trac_rss_is_authenticated check) still surfaces
+// the auth hint instead of printing a ticket parsed from a login page.
+if (str_starts_with(ltrim((string) $tsv_body), '<')) {
+    fwrite(STDERR, "Error: response for ticket #{$ticket_num} is not TSV — " . trac_auth_required_message() . "\n");
     exit(1);
 }
 
 // Parse TSV
+$tsv_stream = fopen('php://temp', 'r+');
+fwrite($tsv_stream, (string) $tsv_body);
 rewind($tsv_stream);
 $headers = fgetcsv($tsv_stream, 0, "\t", '"', '');
 $values = fgetcsv($tsv_stream, 0, "\t", '"', '');
@@ -229,12 +248,13 @@ if ($short) {
 
 // ---- Parse RSS items into typed events ----
 if ($rss_code < 200 || $rss_code >= 300) {
-    fwrite(STDERR, "Error: Could not fetch ticket #{$ticket_num} discussion (HTTP {$rss_code})\n");
+    $hint = ($rss_code === 401 || $rss_code === 403) ? ' — ' . trac_auth_required_message() : '';
+    fwrite(STDERR, "Error: Could not fetch ticket #{$ticket_num} discussion (HTTP {$rss_code}){$hint}\n");
     exit(1);
 }
 $xml = simplexml_load_string($rss_body);
-if ($xml === false || !isset($xml->channel)) {
-    fwrite(STDERR, "Error: response for ticket #{$ticket_num} is not RSS — likely auth required (no cookie at \$TRAC_COOKIE_FILE, \$XDG_CONFIG_HOME/wp-trac/cookie, or ~/.config/wp-trac/cookie)\n");
+if (!trac_rss_is_authenticated($xml)) {
+    fwrite(STDERR, "Error: response for ticket #{$ticket_num} is not RSS — " . trac_auth_required_message() . "\n");
     exit(1);
 }
 
